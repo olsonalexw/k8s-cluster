@@ -28,7 +28,7 @@ nodes:
     installDisk: "/dev/zvol/OlsonNAS/kube01"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/09dbcadc567d93b02a1610c70d651fadbe56aeac3aaca36bc488a38f3fffe99d
+    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -44,10 +44,10 @@ nodes:
           ip: "192.168.1.10"
   - hostname: "kube02"
     ipAddress: "192.168.1.12"
-    installDisk: "/dev/zvol/OlsonNAS/kube01_kube02"
+    installDisk: "/dev/zvol/OlsonNAS/kube02"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/09dbcadc567d93b02a1610c70d651fadbe56aeac3aaca36bc488a38f3fffe99d
+    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
@@ -63,10 +63,10 @@ nodes:
           ip: "192.168.1.10"
   - hostname: "kube03"
     ipAddress: "192.168.1.13"
-    installDisk: "/dev/zvol/OlsonNAS/kube01_kube02_kube03"
+    installDisk: "/dev/zvol/OlsonNAS/kube03"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/09dbcadc567d93b02a1610c70d651fadbe56aeac3aaca36bc488a38f3fffe99d
+    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
     controlPlane: true
     networkInterfaces:
       - deviceSelector:
