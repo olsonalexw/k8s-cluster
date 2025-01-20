@@ -4,12 +4,12 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   #- ./dashboard.yaml
-configMapGenerator:
-  - name: ban-html-page
-    files:
-      - ./ban/ban.html
-  - name: captcha-html-page
-    files:
-      - ./captcha/captcha.html
-generatorOptions:
-  disableNameSuffixHash: true
+# configMapGenerator:
+#   - name: ban-html-page
+#     files:
+#       - ./ban/ban.html
+#   - name: captcha-html-page
+#     files:
+#       - ./captcha/captcha.html
+# generatorOptions:
+#   disableNameSuffixHash: true
