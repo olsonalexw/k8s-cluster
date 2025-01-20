@@ -4,7 +4,7 @@ kind: Ingress
 metadata:
   name: flux-webhook
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-production
+    # cert-manager.io/cluster-issuer: letsencrypt-production # Used for non-wildcard
     external-dns.alpha.kubernetes.io/target: external.${SECRET_DOMAIN}
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
     traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-github-hooks@kubernetescrd"
@@ -25,4 +25,4 @@ spec:
   tls:
     - hosts:
         - *host
-      secretName: flux-webhook-production-tls
+      secretName: "${SECRET_DOMAIN/./-}-production-tls" # flux-webhook-production-tls # Used for non-wildcard
