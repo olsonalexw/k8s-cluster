@@ -10,8 +10,8 @@ spec:
       - name: network-traefik-middleware-secure-headers@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -25,8 +25,8 @@ spec:
       - name: network-traefik-middleware-secure-headers@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -40,7 +40,7 @@ spec:
       - name: network-traefik-middleware-secure-headers@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -54,8 +54,8 @@ spec:
       - name: network-traefik-middleware-secure-headers@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -69,8 +69,8 @@ spec:
       - name: network-traefik-middleware-secure-headers@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -82,8 +82,8 @@ spec:
       - name: network-traefik-middleware-secure-headers@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -97,8 +97,8 @@ spec:
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-authentik@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -113,8 +113,8 @@ spec:
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-authentik@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -127,8 +127,8 @@ spec:
       - name: network-traefik-middleware-secure-headers-authentik@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -143,8 +143,8 @@ spec:
       - name: network-traefik-middleware-secure-headers@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -158,8 +158,8 @@ spec:
       - name: network-traefik-middleware-secure-headers@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -173,8 +173,8 @@ spec:
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-notifiarr-ips@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -187,8 +187,8 @@ spec:
       - name: network-traefik-middleware-secure-headers-enclosed@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -203,8 +203,8 @@ spec:
       - name: network-traefik-middleware-secure-headers-nextcloud@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -218,8 +218,8 @@ spec:
       - name: network-traefik-middleware-secure-headers-collabora@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -232,8 +232,8 @@ spec:
       - name: network-traefik-middleware-secure-headers-obsidian@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -246,8 +246,8 @@ spec:
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-authelia@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
@@ -260,5 +260,5 @@ spec:
       - name: network-traefik-middleware-secure-headers-pterodactyl@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
       - name: network-traefik-middleware-blockuseragent@kubernetescrd
-      - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
-      - name: network-traefik-middleware-error-pages@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
