@@ -144,8 +144,8 @@ spec:
       limits:
         cpu: 1000m
         memory: 750M
-    experimental:
-      plugins:
+    # experimental:
+    #   plugins:
 #        ldapAuth:
 #          moduleName: "github.com/wiltonsr/ldapAuth"
 #          version: "v0.1.8"
@@ -155,9 +155,9 @@ spec:
         # bouncer:
         #   moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
         #   version: "v1.3.5"
-        traefik-plugin-blockuseragent:
-          moduleName: "github.com/agence-gaya/traefik-plugin-blockuseragent"
-          version: "v0.1.7"
+        # traefik-plugin-blockuseragent:
+        #   moduleName: "github.com/agence-gaya/traefik-plugin-blockuseragent"
+        #   version: "v0.1.7"
 
     # volumes:
     #   - name: crowdsec-bouncer-tls
