@@ -92,8 +92,7 @@ spec:
               - path: /
                 service:
                   identifier: app
-                  port: http
-
+                  port: http # means port 80
         tls:
           - hosts:
               - *host

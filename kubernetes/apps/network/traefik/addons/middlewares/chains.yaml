@@ -9,7 +9,7 @@ spec:
       - name: network-traefik-middleware-rate-limit@kubernetescrd
       - name: network-traefik-middleware-secure-headers@kubernetescrd
       - name: network-traefik-middleware-compress@kubernetescrd
-      - name: network-traefik-middleware-blockuseragent@kubernetescrd
+      # - name: network-traefik-middleware-blockuseragent@kubernetescrd
       # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
       # - name: network-traefik-middleware-error-pages@kubernetescrd
 ---
