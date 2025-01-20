@@ -82,7 +82,7 @@ spec:
       app:
         className: traefik-external
         annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-production
+          # cert-manager.io/cluster-issuer: letsencrypt-production
           external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
@@ -97,4 +97,4 @@ spec:
         tls:
           - hosts:
               - *host
-            secretName: "echo-server-production-tls"
+            secretName: "${SECRET_DOMAIN/./-}-production-tls" # "echo-server-production-tls"
