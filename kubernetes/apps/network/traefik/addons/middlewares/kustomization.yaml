@@ -7,7 +7,7 @@ resources:
   - ./chains.yaml
   - ./compress.yaml
   # - ./crowdsec.yaml
-  - ./errors.yaml
+  # - ./errors.yaml
   - ./ip.yaml
   - ./redirect.yaml
   - ./secure.yaml
