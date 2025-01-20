@@ -1,0 +1,356 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-rate-limit
+spec:
+  rateLimit:
+    average: 100
+    burst: 50
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-secure-headers
+spec:
+  headers:
+    accessControlAllowMethods:
+      - GET
+      - OPTIONS
+      - PUT
+      - POST
+    accessControlMaxAge: 100
+    accessControlAllowOriginListRegex:
+      - "https://(.*?)${SECRET_DOMAIN}"
+    hostsProxyHeaders:
+      - "X-Forwarded-Host"
+      - "X-Forwarded-For"
+      - "X-Forwarded-Proto"
+      - "X-GEO-City"
+      - "Cf-Connecting-Ip"
+      - "Cf-Ipcountry"
+    stsSeconds: 31536000
+    stsIncludeSubdomains: false
+    stsPreload: true
+    forceSTSHeader: true
+    customFrameOptionsValue: "allow-from https://${SECRET_DOMAIN}"
+    contentTypeNosniff: true
+    browserXssFilter: true
+    frameDeny: true
+    referrerPolicy: "same-origin"
+    contentSecurityPolicy: "upgrade-insecure-requests;"
+    customResponseHeaders:
+      permissionsPolicy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+      X-Frame-Options: "SAMEORIGIN"
+      X-Robots-Tag: "noindex,nofollow,noarchive,nosnippet,notranslate,noimageindex"
+      X-Permitted-Cross-Domain-Policies: "none"
+      X-Forwarded-Proto: "https"
+      City: X-GEO-City
+      X-Powered-By: ""
+      server: ""
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-secure-headers-nextcloud
+spec:
+  headers:
+    accessControlAllowMethods:
+      - GET
+      - OPTIONS
+      - PUT
+      - POST
+    accessControlMaxAge: 100
+    accessControlAllowOriginListRegex:
+      - "https://(.*?)${SECRET_DOMAIN}"
+    hostsProxyHeaders:
+      - "X-Forwarded-Host"
+      - "X-Forwarded-For"
+      - "X-Forwarded-Proto"
+      - "X-GEO-City"
+      - "Cf-Connecting-Ip"
+      - "Cf-Ipcountry"
+    stsSeconds: 31536000
+    stsIncludeSubdomains: false
+    stsPreload: true
+    forceSTSHeader: true
+    customFrameOptionsValue: "allow-from https://${SECRET_DOMAIN}"
+    contentTypeNosniff: true
+    browserXssFilter: true
+    frameDeny: true
+    referrerPolicy: "same-origin"
+    contentSecurityPolicy: "upgrade-insecure-requests;"
+    customResponseHeaders:
+      permissionsPolicy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+      X-Frame-Options: "SAMEORIGIN"
+      X-Robots-Tag: "noindex,nofollow"
+      X-Permitted-Cross-Domain-Policies: "none"
+      X-Forwarded-Proto: "https"
+      City: X-GEO-City
+      X-Powered-By: ""
+      server: ""
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-secure-headers-collabora
+spec:
+  headers:
+    accessControlAllowMethods:
+      - GET
+      - OPTIONS
+      - PUT
+      - POST
+    accessControlMaxAge: 100
+    accessControlAllowOriginListRegex:
+      - "https://(.*?)${SECRET_DOMAIN}"
+    hostsProxyHeaders:
+      - "X-Forwarded-Host"
+      - "X-Forwarded-For"
+      - "X-Forwarded-Proto"
+      - "X-GEO-City"
+      - "Cf-Connecting-Ip"
+      - "Cf-Ipcountry"
+    stsSeconds: 31536000
+    stsIncludeSubdomains: false
+    stsPreload: true
+    forceSTSHeader: true
+    customFrameOptionsValue: "allow-from https://${SECRET_DOMAIN}"
+    contentTypeNosniff: true
+    browserXssFilter: true
+    frameDeny: true
+    referrerPolicy: "same-origin"
+    contentSecurityPolicy: "upgrade-insecure-requests;"
+    customResponseHeaders:
+      permissionsPolicy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+      X-Robots-Tag: "noindex,nofollow"
+      X-Permitted-Cross-Domain-Policies: "none"
+      X-Forwarded-Proto: "https"
+      City: X-GEO-City
+      X-Powered-By: ""
+      server: ""
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-secure-headers-authentik
+spec:
+  headers:
+    accessControlAllowMethods:
+      - GET
+      - OPTIONS
+      - PUT
+      - POST
+    accessControlMaxAge: 100
+    accessControlAllowOriginListRegex:
+      - "https://(.*?)${SECRET_DOMAIN}"
+    hostsProxyHeaders:
+      - "X-Forwarded-Host"
+      - "X-Forwarded-For"
+      - "X-Forwarded-Proto"
+      - "X-GEO-City"
+      - "Cf-Connecting-Ip"
+      - "Cf-Ipcountry"
+    stsSeconds: 31536000
+    stsIncludeSubdomains: false
+    stsPreload: true
+    forceSTSHeader: true
+    customFrameOptionsValue: "allow-from https://${SECRET_DOMAIN}"
+    contentTypeNosniff: true
+    browserXssFilter: true
+    frameDeny: true
+    referrerPolicy: "same-origin"
+    contentSecurityPolicy: "default-src 'self';
+img-src https: http: data:;
+object-src 'none';
+style-src 'self' 'unsafe-inline';
+script-src 'self' 'unsafe-inline';"
+    customResponseHeaders:
+      permissionsPolicy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+      X-Frame-Options: "Deny"
+      X-Robots-Tag: "noindex,nofollow,noarchive,nosnippet,notranslate,noimageindex"
+      X-Permitted-Cross-Domain-Policies: "none"
+      X-Forwarded-Proto: "https"
+      City: X-GEO-City
+      X-Powered-By: ""
+      server: ""
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-secure-headers-enclosed
+spec:
+  headers:
+    accessControlAllowMethods:
+      - GET
+      - OPTIONS
+      - PUT
+      - POST
+    accessControlMaxAge: 100
+    accessControlAllowOriginListRegex:
+      - "https://(.*?)${SECRET_DOMAIN}"
+    hostsProxyHeaders:
+      - "X-Forwarded-Host"
+      - "X-Forwarded-For"
+      - "X-Forwarded-Proto"
+      - "X-GEO-City"
+      - "Cf-Connecting-Ip"
+      - "Cf-Ipcountry"
+    stsSeconds: 31536000
+    stsIncludeSubdomains: false
+    stsPreload: true
+    forceSTSHeader: true
+    customFrameOptionsValue: "allow-from https://${SECRET_DOMAIN}"
+    contentTypeNosniff: true
+    browserXssFilter: true
+    frameDeny: true
+    referrerPolicy: "same-origin"
+    contentSecurityPolicy: "default-src 'none'; img-src https://share.${SECRET_DOMAIN}/favicon.ico https://share.${SECRET_DOMAIN}/apple-touch-icon.png https://share.${SECRET_DOMAIN}/favicon-32x32.png https://share.${SECRET_DOMAIN}/favicon-16x16.png https://share.${SECRET_DOMAIN}/favicon.ico https://share.${SECRET_DOMAIN}/favicon-32x32.png https://share.${SECRET_DOMAIN}/favicon-16x16.png data:; object-src 'none'; style-src 'sha256-GHgLDAHqTZWxkg4HsAqhMYeQEHkmzabfPV33xbvv81c=' 'sha256-/x14XcETpOzmdorU4EMLKHzsjxaKX0QQopYdpLoykxU=' 'self'; script-src 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=' 'sha256-r/Fkz4K6Rz/IxARE386ycGSByLy4+Proa7383fh/C6M=' 'sha256-z3iCU6b9aaz006QJ+xIO0mSb4dcS8nEdf+HbgMVD/eg=' 'sha256-9prBWRjvkAJDKe1bHzVRMtMNe1zm0wAAOBMNe8nECf0=' 'self'; font-src https://fonts.bunny.net; manifest-src https://share.${SECRET_DOMAIN}/site.webmanifest; connect-src https://share.${SECRET_DOMAIN}; frame-ancestors 'none'; base-uri 'none'; form-action 'none';"
+    customResponseHeaders:
+      permissionsPolicy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+      X-Frame-Options: "Deny"
+      X-Robots-Tag: "noindex,nofollow,noarchive,nosnippet,notranslate,noimageindex"
+      X-Permitted-Cross-Domain-Policies: "none"
+      X-Forwarded-Proto: "https"
+      City: X-GEO-City
+      X-Powered-By: ""
+      server: ""
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-secure-headers-pterodactyl
+spec:
+  headers:
+    accessControlAllowMethods:
+      - GET
+      - OPTIONS
+      - PUT
+      - POST
+    accessControlMaxAge: 100
+    accessControlAllowOriginListRegex:
+      - "https://(.*?)${SECRET_DOMAIN}"
+    accessControlAllowHeaders:
+      - "Content-Type"
+      - "Authorization"
+    hostsProxyHeaders:
+      - "X-Forwarded-Host"
+      - "X-Forwarded-For"
+      - "X-Forwarded-Proto"
+      - "X-GEO-City"
+      - "Cf-Connecting-Ip"
+      - "Cf-Ipcountry"
+    stsSeconds: 31536000
+    stsIncludeSubdomains: false
+    stsPreload: true
+    forceSTSHeader: true
+    contentTypeNosniff: true
+    browserXssFilter: true
+    frameDeny: true
+    referrerPolicy: "same-origin"
+    contentSecurityPolicy: "upgrade-insecure-requests;"
+    customResponseHeaders:
+      permissionsPolicy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+      X-Frame-Options: "SAMEORIGIN"
+      X-Robots-Tag: "noindex,nofollow,noarchive,nosnippet,notranslate,noimageindex"
+      X-Permitted-Cross-Domain-Policies: "none"
+      X-Forwarded-Proto: "https"
+      City: X-GEO-City
+      X-Powered-By: ""
+      server: ""
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-secure-headers-shlink
+spec:
+  headers:
+    accessControlAllowMethods:
+      - GET
+      - OPTIONS
+      - PUT
+      - POST
+      - DELETE
+    accessControlMaxAge: 100
+    accessControlAllowOriginListRegex:
+      - "https://(.*?)${SECRET_DOMAIN}"
+    accessControlAllowHeaders:
+      - "Content-Type"
+      - "X-API-Key"
+    hostsProxyHeaders:
+      - "X-Forwarded-Host"
+      - "X-Forwarded-For"
+      - "X-Forwarded-Proto"
+      - "X-GEO-City"
+      - "Cf-Connecting-Ip"
+      - "Cf-Ipcountry"
+    stsSeconds: 31536000
+    stsIncludeSubdomains: false
+    stsPreload: true
+    forceSTSHeader: true
+    contentTypeNosniff: true
+    browserXssFilter: true
+    frameDeny: true
+    referrerPolicy: "same-origin"
+    contentSecurityPolicy: "upgrade-insecure-requests;"
+    customResponseHeaders:
+      permissionsPolicy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+      X-Frame-Options: "SAMEORIGIN"
+      X-Robots-Tag: "noindex,nofollow,noarchive,nosnippet,notranslate,noimageindex"
+      X-Permitted-Cross-Domain-Policies: "none"
+      X-Forwarded-Proto: "https"
+      City: X-GEO-City
+      X-Powered-By: ""
+      server: ""
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-secure-headers-obsidian
+spec:
+  headers:
+    accessControlAllowMethods:
+      - GET
+      - PUT
+      - POST
+      - HEAD
+      - DELETE
+    accessControlMaxAge: 3600
+    accessControlAllowOriginListRegex:
+      - "https://(.*?)${SECRET_DOMAIN}"
+      - "app://obsidian.md"
+      - "capacitor://localhost"
+      - "http://localhost"
+    accessControlAllowHeaders:
+      - "Accept"
+      - "Authorization"
+      - "Content-Type"
+      - "Origin"
+      - "Referer"
+    hostsProxyHeaders:
+      - "X-Forwarded-Host"
+      - "X-Forwarded-For"
+      - "X-Forwarded-Proto"
+      - "X-GEO-City"
+      - "Cf-Connecting-Ip"
+      - "Cf-Ipcountry"
+    stsSeconds: 31536000
+    stsIncludeSubdomains: false
+    stsPreload: true
+    forceSTSHeader: true
+    contentTypeNosniff: true
+    browserXssFilter: true
+    frameDeny: true
+    accessControlAllowCredentials: true
+    addVaryHeader: true
+    referrerPolicy: "same-origin"
+    contentSecurityPolicy: "upgrade-insecure-requests;"
+    customResponseHeaders:
+      permissionsPolicy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+      X-Frame-Options: "SAMEORIGIN"
+      X-Robots-Tag: "noindex,nofollow,noarchive,nosnippet,notranslate,noimageindex"
+      X-Permitted-Cross-Domain-Policies: "none"
+      X-Forwarded-Proto: "https"
+      City: X-GEO-City
+      X-Powered-By: ""
+      server: ""

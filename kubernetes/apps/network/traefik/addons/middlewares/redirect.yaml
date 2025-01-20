@@ -1,0 +1,36 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-redirect-checkmk
+spec:
+  redirectRegex:
+    regex: "^https?://checkmk.${SECRET_DOMAIN}/$$"
+    replacement: "https://checkmk.${SECRET_DOMAIN}/checkmk/"
+    permanent: true
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-redirect-nextcloud
+spec:
+  redirectRegex:
+    regex: "^https://(.*)/.well-known/(?:card|cal)dav"
+    replacement: "https://$${1}/remote.php/dav/"
+    permanent: true
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-plex-addprefix
+spec:
+  addPrefix:
+    prefix: "/web"
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-middleware-dashboard-addprefix
+spec:
+  addPrefix:
+    prefix: /dashboard
