@@ -18,7 +18,7 @@ includes:
   bootstrap: .taskfiles/bootstrap
   kubernetes: .taskfiles/kubernetes
   talos: .taskfiles/talos
-  template: .taskfiles/template
+  # template: .taskfiles/template
   flux: .taskfiles/flux
 
 tasks:
