@@ -6,7 +6,7 @@ resources:
   - ./auth.yaml
   - ./chains.yaml
   - ./compress.yaml
-  - ./crowdsec.yaml
+  # - ./crowdsec.yaml
   - ./errors.yaml
   - ./ip.yaml
   - ./redirect.yaml
