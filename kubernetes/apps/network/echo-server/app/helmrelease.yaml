@@ -80,13 +80,21 @@ spec:
             scrapeTimeout: 10s
     ingress:
       app:
-        className: external
+        className: traefik-external
         annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-production
           external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
+          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
         hosts:
-          - host: "{{ .Release.Name }}.${SECRET_DOMAIN}"
+          - host: &host "{{ .Release.Name }}.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
                   identifier: app
                   port: http
+
+        tls:
+          - hosts:
+              - *host
+            secretName: "echo-server-production-tls"
