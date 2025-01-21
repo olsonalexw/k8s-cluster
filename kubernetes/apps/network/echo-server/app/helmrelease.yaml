@@ -80,10 +80,10 @@ spec:
             scrapeTimeout: 10s
     ingress:
       app:
-        className: traefik-external
+        className: traefik-internal
         annotations:
           # cert-manager.io/cluster-issuer: letsencrypt-production
-          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
+          # external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}" # creates CNAME in Cloudflare, only useful if using traefik-external
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
         hosts:
