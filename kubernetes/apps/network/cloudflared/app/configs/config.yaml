@@ -3,10 +3,10 @@ originRequest:
   http2Origin: true
 
 ingress:
-  # - hostname: ${SECRET_DOMAIN}                                      # non-wildcard stuff I think
-  #   service: https://traefik-external.network.svc.cluster.local:443
-  #   originRequest:
-  #     originServerName: "external.${SECRET_DOMAIN}"
+  - hostname: ${SECRET_DOMAIN}
+    service: https://traefik-external.network.svc.cluster.local:443
+    originRequest:
+      originServerName: "external.${SECRET_DOMAIN}"
   - hostname: "*.${SECRET_DOMAIN}"
     service: https://traefik-external.network.svc.cluster.local:443
     originRequest:
