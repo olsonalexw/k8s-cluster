@@ -34,8 +34,8 @@ spec:
         maxSurge: 1
     autoscaling:
       enabled: true
-      minReplicas: 3
-      maxReplicas: 9
+      minReplicas: 1 # 3
+      maxReplicas: 1 # 9
       metrics:
       - type: Resource
         resource:
