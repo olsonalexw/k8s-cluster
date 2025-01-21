@@ -31,7 +31,7 @@ spec:
               repository: ghcr.io/mendhak/http-https-echo
               tag: 35
             env:
-              HTTP_PORT: &port 8080
+              HTTP_PORT: &port 80 # was 8080
               LOG_WITHOUT_NEWLINE: true
               LOG_IGNORE_PATH: /healthz
               PROMETHEUS_ENABLED: true
