@@ -69,7 +69,7 @@ spec:
         matchRule: Host(`ext-traefik.${SECRET_DOMAIN}`)
         entryPoints: ["websecure"]
         middlewares:
-          - name: chain-no-auth-restrict-networks@kubernetescrd # network-chain-authentik-restrict-networks@kubernetescrd
+          - name: network-chain-no-auth-restrict-networks@kubernetescrd # network-chain-authentik-restrict-networks@kubernetescrd
         services: [{"kind":"TraefikService","name":"api@internal"}]
         tls:
           secretName: "${SECRET_DOMAIN/./-}-staging-tls"
