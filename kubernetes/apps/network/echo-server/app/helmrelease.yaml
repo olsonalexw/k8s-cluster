@@ -82,7 +82,7 @@ spec:
       app:
         className: traefik-internal
         annotations:
-          # cert-manager.io/cluster-issuer: letsencrypt-production
+          cert-manager.io/cluster-issuer: letsencrypt-production
           # external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}" # creates CNAME in Cloudflare, only useful if using traefik-external
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
@@ -96,4 +96,4 @@ spec:
         tls:
           - hosts:
               - *host
-            secretName: "${SECRET_DOMAIN/./-}-staging-tls" # "echo-server-production-tls"
+            secretName: "echo-server-production-tls" # "${SECRET_DOMAIN/./-}-staging-tls" #
