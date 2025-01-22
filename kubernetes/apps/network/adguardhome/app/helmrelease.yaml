@@ -27,22 +27,22 @@ spec:
   values:
     controllers:
       adguardhome:
-        type: statefulset
-        statefulset:
-          volumeClaimTemplates:
-            - name: data
-              storageClass: nfs-csi
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 10Gi
-              advancedMounts:
-                app:
-                  - path: /opt/adguardhome/conf
-                    subPath: conf
-                  - path: /opt/adguardhome/work
-                    subPath: work
+        # type: statefulset
+        # statefulset:
+        #   volumeClaimTemplates:
+        #     - name: data
+        #       storageClass: nfs-csi
+        #       accessModes:
+        #         - ReadWriteOnce
+        #       resources:
+        #         requests:
+        #           storage: 10Gi
+        #       advancedMounts:
+        #         app:
+        #           - path: /opt/adguardhome/conf
+        #             subPath: conf
+        #           - path: /opt/adguardhome/work
+        #             subPath: work
                 # unbound:
                 #   - path: /opt/unbound/data
                 #     subPath: unbound
