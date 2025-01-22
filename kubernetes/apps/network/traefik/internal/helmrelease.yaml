@@ -72,7 +72,7 @@ spec:
           - name: network-chain-no-auth-restrict-networks@kubernetescrd
         services: [{"kind":"TraefikService","name":"api@internal"}]
         tls:
-          secretName: "${SECRET_DOMAIN/./-}-staging-tls"
+          secretName: "${SECRET_DOMAIN/./-}-production-tls"
 
 
     globalArguments:
