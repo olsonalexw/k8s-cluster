@@ -56,7 +56,7 @@ spec:
         value: "${TIMEZONE}"
     logs:
       general:
-        level: DEBUG
+        level: INFO
       access:
         enabled: true
     ingressClass:
