@@ -80,11 +80,11 @@ spec:
             scrapeTimeout: 10s
     ingress:
       app:
-        className: traefik-internal
+        className: traefik-external                                                                  # Decides if it's exposed to the internet (traefik-external)
         annotations:
-          # cert-manager.io/cluster-issuer: letsencrypt-production                    # Used in non-wildcard configuration
-          # external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"      # creates CNAME in Cloudflare, only useful if using traefik-external
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"               # was websecure
+          # cert-manager.io/cluster-issuer: letsencrypt-production                                   # Used in non-wildcard configuration
+          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"                       # creates CNAME in Cloudflare, only useful if using traefik-external
+          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
         hosts:
           - host: &host "{{ .Release.Name }}.${SECRET_DOMAIN}"
