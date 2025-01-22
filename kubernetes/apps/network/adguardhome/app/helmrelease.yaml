@@ -54,7 +54,7 @@ spec:
               tag: v0.108.0-b.62
             env:
               HTTP_PORT: &port 3000 # was 8080
-              TZ: ${TIMEZONE}
+              TZ: "${TIMEZONE}"
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -94,7 +94,7 @@ spec:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
         hosts:
-          - host: &host "{{ .Release.Name }}.${SECRET_DOMAIN}"
+          - host: &host "adguardhome.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
