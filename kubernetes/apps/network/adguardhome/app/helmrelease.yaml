@@ -17,13 +17,12 @@ spec:
   install:
     remediation:
       retries: 3
+    timeout: 10m
   upgrade:
     cleanupOnFail: true
     remediation:
       retries: 3
-  dependsOn:
-    - name: csi-driver-nfs
-      namespace: kube-system
+    timeout: 10m
   values:
     controllers:
       adguardhome:
@@ -68,14 +67,14 @@ spec:
                 path: /login.html
             securityContext:
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false  # Disabled for AdGuardHome to write data
+              readOnlyRootFilesystem: false
               capabilities:
                 drop: ["ALL"]
             resources:
               requests:
-                cpu: "100m"
+                cpu: "200m"
               limits:
-                memory: "256Mi"
+                memory: "512Mi"
     service:
       adguardhome:
         controller: adguardhome
