@@ -4,6 +4,8 @@ kind: PersistentVolume
 metadata:
   name: nfs-data
 spec:
+  capacity:
+    storage: 25Ti
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
