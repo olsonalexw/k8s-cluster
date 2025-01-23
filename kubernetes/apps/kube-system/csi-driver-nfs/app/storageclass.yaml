@@ -5,6 +5,7 @@ metadata:
   name: nfs-csi
 provisioner: nfs.csi.k8s.io
 parameters:
-  archiveOnDelete: "false"
+  server: 192.168.1.2
+  path: /mnt/OlsonNAS/docker
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
