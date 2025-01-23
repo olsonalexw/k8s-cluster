@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./storageclass.yaml
-  - ./py.yaml
+  - ./pv.yaml
