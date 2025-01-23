@@ -47,7 +47,6 @@ spec:
               tag: v0.108.0-b.62
               pullPolicy: IfNotPresent
             env:
-              HTTP_PORT: 3000
               TZ: "${TIMEZONE}"
             probes:
               liveness:
@@ -81,6 +80,12 @@ spec:
         ports:
           http:
             port: 3000
+          dns-udp:  # Add DNS UDP port
+            port: 53
+            protocol: UDP
+          dns-tcp:  # Add DNS-over-TLS TCP port
+            port: 853
+            protocol: TCP
     ingress:
       adguardhome:
         enabled: true
