@@ -7,5 +7,5 @@ provisioner: nfs.csi.k8s.io
 parameters:
   server: 192.168.1.2
   share: /mnt/OlsonNAS/docker
-reclaimPolicy: Retain
+reclaimPolicy: Delete # Set to Retain when working
 volumeBindingMode: Immediate
