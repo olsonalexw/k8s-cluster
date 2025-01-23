@@ -18,6 +18,7 @@ spec:
   values:
     controllers:
       main:
+        type: deployment
         strategy: Recreate
         containers:
           main:
@@ -26,31 +27,34 @@ spec:
               pullPolicy: IfNotPresent
               tag: 4.0.12.2823
             env:
-              TZ: America/Detroit
-              SONARR__INSTANCE_NAME: Sonarr
-              SONARR__PORT: 8989
-              SONARR__APPLICATION_URL: "https://sonarr.${SECRET_DOMAIN}"
-              SONARR__LOG_LEVEL: info
+              - name: TZ
+                value: "America/Detroit"
+              - name: SONARR__INSTANCE_NAME
+                value: "Sonarr"
+              - name: SONARR__PORT
+                value: "8989"
+              - name: SONARR__APPLICATION_URL
+                value: "https://sonarr.${SECRET_DOMAIN}"
+              - name: SONARR__LOG_LEVEL
+                value: "info"
             volumeMounts:
               - name: sonarr-config
-                mountPath: /config  # Configuration files
+                mountPath: /config
               - name: media-data
-                mountPath: /data    # Media files
+                mountPath: /data
         volumes:
           - name: sonarr-config
             persistentVolumeClaim:
-              claimName: sonarr-config-pvc  # Inline PVC for configuration files
+              claimName: sonarr-config-pvc
           - name: media-data
             persistentVolumeClaim:
-              claimName: nfs-data           # Existing PVC for media files
-
+              claimName: nfs-data
     service:
       main:
         controller: main
         ports:
           http:
             port: 8989
-
     ingress:
       main:
         enabled: true
@@ -68,7 +72,17 @@ spec:
           - hosts:
               - "sonarr.${SECRET_DOMAIN}"
             secretName: "${SECRET_DOMAIN/./-}-production-tls"
-
+    persistence:
+      config:
+        enabled: true
+        storageClass: nfs-csi
+        accessMode: ReadWriteOnce
+        size: 10Gi
+        mountPath: /config
+      media:
+        enabled: true
+        existingClaim: nfs-data
+        mountPath: /data
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -77,13 +91,95 @@ spec:
         fsGroup: 1001
         fsGroupChangePolicy: "Always"
 
-    persistence:
-      config:
-        enabled: true
-        storageClass: nfs-csi  # Use the nfs-csi storage class
-        accessMode: ReadWriteOnce
-        size: 10Gi
-        mountPath: /config
-      media:
-        enabled: true
-        existingClaim: nfs-data  # Use the existing PVC for media
+
+
+
+
+# apiVersion: helm.toolkit.fluxcd.io/v2beta1
+# kind: HelmRelease
+# metadata:
+#   name: sonarr
+#   namespace: media
+# spec:
+#   releaseName: sonarr
+#   interval: 15m
+#   chart:
+#     spec:
+#       chart: app-template
+#       version: 3.6.1
+#       sourceRef:
+#         kind: HelmRepository
+#         name: bjw-s
+#         namespace: flux-system
+#   values:
+#     controllers:
+#       main:
+#         strategy: Recreate
+#         containers:
+#           main:
+#             image:
+#               repository: ghcr.io/onedr0p/sonarr
+#               pullPolicy: IfNotPresent
+#               tag: 4.0.12.2823
+#             env:
+#               TZ: America/Detroit
+#               SONARR__INSTANCE_NAME: Sonarr
+#               SONARR__PORT: 8989
+#               SONARR__APPLICATION_URL: "https://sonarr.${SECRET_DOMAIN}"
+#               SONARR__LOG_LEVEL: info
+#             volumeMounts:
+#               - name: sonarr-config
+#                 mountPath: /config  # Configuration files
+#               - name: media-data
+#                 mountPath: /data    # Media files
+#         volumes:
+#           - name: sonarr-config
+#             persistentVolumeClaim:
+#               claimName: sonarr-config-pvc  # Inline PVC for configuration files
+#           - name: media-data
+#             persistentVolumeClaim:
+#               claimName: nfs-data           # Existing PVC for media files
+
+#     service:
+#       main:
+#         controller: main
+#         ports:
+#           http:
+#             port: 8989
+
+#     ingress:
+#       main:
+#         enabled: true
+#         className: traefik-internal
+#         annotations:
+#           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+#           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+#         hosts:
+#           - host: "sonarr.${SECRET_DOMAIN}"
+#             paths:
+#               - path: /
+#                 service:
+#                   port: http
+#         tls:
+#           - hosts:
+#               - "sonarr.${SECRET_DOMAIN}"
+#             secretName: "${SECRET_DOMAIN/./-}-production-tls"
+
+#     defaultPodOptions:
+#       securityContext:
+#         runAsNonRoot: true
+#         runAsUser: 1001
+#         runAsGroup: 1001
+#         fsGroup: 1001
+#         fsGroupChangePolicy: "Always"
+
+#     persistence:
+#       config:
+#         enabled: true
+#         storageClass: nfs-csi  # Use the nfs-csi storage class
+#         accessMode: ReadWriteOnce
+#         size: 10Gi
+#         mountPath: /config
+#       media:
+#         enabled: true
+#         existingClaim: nfs-data  # Use the existing PVC for media
