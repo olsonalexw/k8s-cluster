@@ -13,7 +13,7 @@ spec:
       version: 4.9.0
       sourceRef:
         kind: HelmRepository
-        name: csi-driver-nfs # Can I change this name?
+        name: csi-driver-nfs
         namespace: flux-system
   values:
     kubeletDir: /var/lib/kubelet
