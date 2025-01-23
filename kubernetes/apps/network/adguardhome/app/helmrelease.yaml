@@ -48,22 +48,6 @@ spec:
               pullPolicy: IfNotPresent
             env:
               TZ: "${TIMEZONE}"
-            # probes:
-            #   liveness:
-            #     enabled: true
-            #     type: HTTP
-            #     port: 3000
-            #     path: /login.html
-            #   readiness:
-            #     enabled: true
-            #     type: HTTP
-            #     port: 3000
-            #     path: /login.html
-            #   startup:
-            #     enabled: true
-            #     type: HTTP
-            #     port: 3000
-            #     path: /login.html
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false

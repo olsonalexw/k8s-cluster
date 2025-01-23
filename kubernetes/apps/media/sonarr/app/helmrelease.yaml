@@ -16,7 +16,7 @@ spec:
       interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: bjw-s-helm-charts
+        name: bjw-s
         namespace: flux-system
   values:
     controllers:
@@ -54,6 +54,7 @@ spec:
             paths:
               - path: /
                 service:
+                  identifier: main
                   port: http
         tls:
           - hosts:
@@ -71,12 +72,9 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: nfs-csi
-        accessMode: ReadWriteOnce
-        size: 2Gi
-        mountPath: /config
+        existingClaim: sonarr-config-pvc
       media:
         enabled: true
-        existingClaim: nfs-data
+        existingClaim: nfs-media-pvc
         globalMounts:
-          - path: /data
+          - path: /media
