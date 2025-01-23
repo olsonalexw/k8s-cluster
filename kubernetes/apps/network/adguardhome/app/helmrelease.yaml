@@ -78,8 +78,8 @@ spec:
       adguardhome:
         controller: adguardhome
         ports:
-          http:
-            port: 3000
+          http:     # Set to 3000 when setting up admin page
+            port: 80
           dns-udp:  # Add DNS UDP port
             port: 53
             protocol: UDP
