@@ -82,13 +82,18 @@ spec:
         annotations:
           io.cilium/lb-ipam-ips: "${IPAM_IP_ADGUARDHOME}"  # Use the IP from cluster-settings.yaml
         ports:
-          http:     # Set to 3000 when setting up admin page
-            port: 80
-          dns-udp:  # Add DNS UDP port
-            port: 53
+          dns-udp:
+            port: 53       # Add DNS UDP port
             protocol: UDP
-          dns-tcp:  # Add DNS-over-TLS TCP port
-            port: 853
+          dns-tcp:
+            port: 853      # Add DNS-over-TLS TCP port
+            protocol: TCP
+      adguardhome-webui:
+        controller: adguardhome
+        type: ClusterIP
+        ports:
+          http:
+            port: 80       # Set to 3000 when setting up admin page
             protocol: TCP
     ingress:
       adguardhome:
@@ -102,7 +107,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: adguardhome
+                  identifier: adguardhome-webui
                   port: http
         tls:
           - hosts:
