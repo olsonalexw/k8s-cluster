@@ -19,4 +19,4 @@ spec:
     kubeletDir: /var/lib/kubelet
     nfs:
       server: 192.168.1.2
-      path: /mnt/OlsonNAS/kubernetes/pvcs
+      path: /mnt/OlsonNAS/kubernetes/appdata

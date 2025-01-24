@@ -6,6 +6,18 @@ metadata:
 provisioner: nfs.csi.k8s.io
 parameters:
   server: 192.168.1.2
-  share: /mnt/OlsonNAS/kubernetes/pvcs
+  share: /mnt/OlsonNAS/kubernetes/appdata
+  subDir: "${pvc.metadata.namespace}/${pvc.metadata.name}"  # Use PVC namespace and name
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
+
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass
+# metadata:
+#   name: nfs-csi
+# provisioner: nfs.csi.k8s.io
+# parameters:
+#   server: 192.168.1.2
+#   share: /mnt/OlsonNAS/kubernetes/pvcs
+# reclaimPolicy: Retain
+# volumeBindingMode: Immediate

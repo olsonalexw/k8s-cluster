@@ -29,10 +29,10 @@ spec:
         type: statefulset
         statefulset:
           volumeClaimTemplates:
-            - name: adguardhome-data
+            - name: adguardhome
               storageClass: nfs-csi
               accessMode: ReadWriteOnce
-              size: 10Gi
+              size: 2Gi
               advancedMounts:
                 app:
                   - path: /opt/adguardhome/conf
