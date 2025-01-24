@@ -69,7 +69,7 @@ spec:
         size: 2Gi
       media:
         enabled: true
-        existingClaim: nfs-data   # Uses static PVC for /kubernetes/data
+        existingClaim: nfs-media   # Uses static PVC for /kubernetes/data
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
