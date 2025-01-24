@@ -18,8 +18,6 @@ spec:
   values:
     controllers:
       main:
-        type: deployment  # Required by the schema
-        strategy: Recreate
         containers:
           main:
             image:
@@ -37,13 +35,6 @@ spec:
                 value: "https://sonarr.${SECRET_DOMAIN}"
               - name: SONARR__LOG_LEVEL
                 value: "info"
-            volumeMounts:
-              - name: sonarr-config
-                mountPath: /config
-        volumes:
-          - name: sonarr-config
-            persistentVolumeClaim:
-              claimName: sonarr-config-pvc
     service:
       main:
         controller: main
