@@ -71,12 +71,15 @@ spec:
     persistence:
       config:
         enabled: true
-        existingClaim: sonarr-config-pvc
+        storageClass: nfs-csi
+        accessMode: ReadWriteOnce
+        size: 2Gi
+        mountPath: /config
       media:
         enabled: true
-        existingClaim: nfs-media-pvc
+        existingClaim: nfs-data
         globalMounts:
-          - path: /media
+          - path: /data
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
