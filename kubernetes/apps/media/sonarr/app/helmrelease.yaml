@@ -70,10 +70,10 @@ spec:
       media:
         enabled: true
         existingClaim: nfs-media   # Uses static PVC for /kubernetes/data
-    # defaultPodOptions:
-    #   securityContext:
-    #     runAsNonRoot: true
-    #     runAsUser: 1001
-    #     runAsGroup: 1001
-    #     fsGroup: 1001
-    #     fsGroupChangePolicy: "Always"
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: "Always"
