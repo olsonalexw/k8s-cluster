@@ -16,3 +16,17 @@ spec:
   claimRef:
     namespace: media  # <-- Explicitly bind to the `media` namespace
     name: nfs-media    # <-- Explicitly bind to the PVC named `nfs-media`
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-media
+  namespace: media          # Must match Sonarr's namespace, media
+spec:
+  storageClassName: nfs-csi
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 25Ti         # Match PV's capacity
+  volumeName: nfs-media     # Explicitly bind to the PV
