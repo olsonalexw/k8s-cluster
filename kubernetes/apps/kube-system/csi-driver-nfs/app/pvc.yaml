@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-data
+  namespace: media  # Must match Sonarr's namespace
+spec:
+  storageClassName: nfs-csi
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 25Ti  # Match PV's capacity
+  volumeName: nfs-data  # Explicitly bind to the PV

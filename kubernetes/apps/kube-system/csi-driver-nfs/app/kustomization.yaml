@@ -6,3 +6,4 @@ resources:
   - ./helmrelease.yaml
   - ./storageclass.yaml
   - ./pv.yaml
+  - ./pvc.yaml
