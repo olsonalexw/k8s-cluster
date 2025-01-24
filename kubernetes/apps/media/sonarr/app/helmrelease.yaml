@@ -70,8 +70,6 @@ spec:
       media:
         enabled: true
         existingClaim: nfs-data
-        globalMounts:
-          - path: /data
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
@@ -79,85 +77,3 @@ spec:
         runAsGroup: 1001
         fsGroup: 1001
         fsGroupChangePolicy: "Always"
-
-
-
-# apiVersion: helm.toolkit.fluxcd.io/v2beta1
-# kind: HelmRelease
-# metadata:
-#   name: sonarr
-#   namespace: media
-# spec:
-#   releaseName: sonarr
-#   interval: 15m
-#   chart:
-#     spec:
-#       chart: app-template
-#       version: 3.6.1
-#       sourceRef:
-#         kind: HelmRepository
-#         name: bjw-s
-#         namespace: flux-system
-#   values:
-#     controllers:
-#       main:
-#         containers:
-#           main:
-#             image:
-#               repository: ghcr.io/onedr0p/sonarr
-#               pullPolicy: IfNotPresent
-#               tag: 4.0.12.2823
-#             env:
-#               - name: TZ
-#                 value: "America/Detroit"
-#               - name: SONARR__INSTANCE_NAME
-#                 value: "Sonarr"
-#               - name: SONARR__PORT
-#                 value: "8989"
-#               - name: SONARR__APPLICATION_URL
-#                 value: "https://sonarr.${SECRET_DOMAIN}"
-#               - name: SONARR__LOG_LEVEL
-#                 value: "info"
-#     service:
-#       main:
-#         controller: main
-#         ports:
-#           http:
-#             port: 8989
-#     ingress:
-#       main:
-#         enabled: true
-#         className: traefik-internal
-#         annotations:
-#           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-#           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
-#         hosts:
-#           - host: "sonarr.${SECRET_DOMAIN}"
-#             paths:
-#               - path: /
-#                 service:
-#                   identifier: main
-#                   port: http
-#         tls:
-#           - hosts:
-#               - "sonarr.${SECRET_DOMAIN}"
-#             secretName: "${SECRET_DOMAIN/./-}-production-tls"
-#     persistence:
-#       config:
-#         enabled: true
-#         storageClass: nfs-csi
-#         accessMode: ReadWriteOnce
-#         size: 2Gi
-#         mountPath: /config
-#       media:
-#         enabled: true
-#         existingClaim: nfs-data
-#         globalMounts:
-#           - path: /data
-#     defaultPodOptions:
-#       securityContext:
-#         runAsNonRoot: true
-#         runAsUser: 1001
-#         runAsGroup: 1001
-#         fsGroup: 1001
-#         fsGroupChangePolicy: "Always"
