@@ -64,12 +64,12 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: nfs-csi     # Dynamic PVC in /kubernetes/pvcs
+        storageClass: nfs-csi     # Dynamic PVC in /kubernetes/appdata
         accessMode: ReadWriteOnce
         size: 2Gi
       media:
         enabled: true
-        existingClaim: nfs-media   # Uses static PVC for /kubernetes/data
+        existingClaim: nfs-media   # Uses static PVC for /kubernetes/media
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
