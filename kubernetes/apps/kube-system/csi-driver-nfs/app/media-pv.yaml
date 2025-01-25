@@ -35,5 +35,5 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 1Mi           # Match PV's capacity
-  volumeName: nfs-media      # Explicitly bind to the PV
+      storage: 1Mi          # Match PV's capacity
+  volumeName: nfs-media-pv     # Explicitly bind to the PV
