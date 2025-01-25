@@ -19,11 +19,11 @@ spec:
     name: nfs-media-pvc     # <-- Explicitly bind to the PVC named `nfs-media-pvc`
   mountOptions:
     - nfsvers=4.2
-    - TCP
+    - tcp
     - intr
     - hard
-    - noatime
-    - nodiratime
+    # - noatime
+    # - nodiratime
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
