@@ -77,7 +77,7 @@ spec:
         type: ClusterIP
         ports:
           http:
-            port: 3000       # Set to 3000 when setting up admin page
+            port: 80       # Set to 3000 when setting up admin page, 80 after
             protocol: TCP
     ingress:
       adguardhome:
