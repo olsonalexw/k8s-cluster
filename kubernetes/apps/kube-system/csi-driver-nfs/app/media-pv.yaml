@@ -22,8 +22,8 @@ spec:
     - tcp
     - intr
     - hard
-    # - noatime
-    # - nodiratime
+    - noatime
+    - nodiratime
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
