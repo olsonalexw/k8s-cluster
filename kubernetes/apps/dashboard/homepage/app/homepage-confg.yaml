@@ -1,0 +1,211 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage-config
+data:
+  bookmarks.yaml: |
+    - AI:
+        - DeepSeek:
+            - icon: https://custom.typingmind.com/assets/models/deepseek.png
+              href: https://chat.deepseek.com/
+        - Perplexity:
+            - icon: https://img.icons8.com/?size=512&id=kzJWN5jCDzpq&format=png
+              href: https://www.perplexity.ai/
+        - ChatGPT:
+            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/800px-ChatGPT_logo.svg.png
+              href: https://chat.openai.com/
+        - Grok:
+            - icon: https://registry.npmmirror.com/@lobehub/icons-static-png/1.13.0/files/dark/grok.png
+              href: https://x.com/i/grok
+        - v0:
+            - icon: https://registry.npmmirror.com/@lobehub/icons-static-png/1.13.0/files/dark/v0.png
+              href: https://v0.dev/
+    - Entertainment:
+        - YouTube:
+            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png
+              href: https://youtube.com/
+        - Daily Wire:
+            - icon: https://play-lh.googleusercontent.com/UyZ_AuTShQl58oz6F5rM2niyrSIc7J0DfSpDEELHKpCghq5LZc-Tx7_ZAJ44tvUQkNqr
+              href: https://dailywire.com/
+        - Twitch:
+            - icon: https://cdn-icons-png.flaticon.com/512/3991/3991943.png
+              href: https://twitch.tv/
+    - Social:
+        - Gmail:
+            - icon: https://mailmeteor.com/logos/assets/PNG/Gmail_Logo_512px.png
+              href: https://mail.google.com
+        - My FIU:
+            - icon: https://brand.fiu.edu/_assets/images/fiu-alone.png
+              href: https://myps.fiu.edu/psc/ihub/EMPLOYEE/EMPL/c/NUI_FRAMEWORK.PT_LANDINGPAGE.GBL
+        - Canvas:
+            - icon: https://www.wabash.edu/images2/technology/canvas.png
+              href: https://fiu.instructure.com/
+        - Reddit:
+            - icon: https://upload.wikimedia.org/wikipedia/en/thumb/b/bd/Reddit_Logo_Icon.svg/1200px-Reddit_Logo_Icon.svg.png
+              href: https://reddit.com/
+        - X:
+            - icon: https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-black-icon.png
+              href: https://x.com/
+    - Tools:
+        - Google Fi:
+            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Google_Fi_Logo.svg/1200px-Google_Fi_Logo.svg.png
+              href: https://fi.google.com/account
+        - Cloudflare:
+            - icon: https://img.icons8.com/?size=512&id=13682&format=png
+              href: https://dash.cloudflare.com/
+        - Speedtest:
+            - icon: https://speed.cloudflare.com/static/img/speedrabbit-animate.gif
+              href: https://speed.cloudflare.com/
+        - Winget:
+            - icon: https://raw.githubusercontent.com/Yves848/WingetPosh/master/Winget-posh/wingetposh2.ico
+              href: https://winget.run/
+        - Sensitivity:
+            - icon: https://www.mouse-sensitivity.com/uploads/monthly_2021_02/avatar.thumb.png.9ad29fb516eb3600bd05f656f4ed755c.png
+              href: https://mouse-sensitivity.com/
+        - Massgrave:
+            - icon: https://massgrave.dev/img/logo.png
+              href: https://massgrave.dev
+        - Piratebay:
+            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/The_Pirate_Bay_logo.svg/1200px-The_Pirate_Bay_logo.svg.png
+              href: https://thepiratebay.zone/
+        - Library Genesis:
+            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Libgen_logo.svg/1200px-Libgen_logo.svg.png
+              href: http://libgen.rs/
+        - MBDList:
+            - icon: https://styles.redditmedia.com/t5_2s2nx3/styles/communityIcon_m0k9rns7o3471.png
+              href: https://mdblist.com/
+        - Polymarket:
+            - icon: https://storage.googleapis.com/blocktribune-bucket/2020/10/polymarket.jpg
+              href: https://polymarket.com/elections
+        - IT-Tools:
+            - icon: https://cdn-icons-png.flaticon.com/512/868/868784.png
+              href: https://it-tools.tech/
+  docker.yaml: |
+    # Contents of docker.yaml
+    # - name: Docker Hub
+    #   url: https://hub.docker.com
+  kubernetes.yaml: |
+    mode: cluster
+  services.yaml: |
+    - Admin:
+        - Router:
+            href: "{{HOMEPAGE_VAR_ROUTER_URL}}"
+            description: Router Admin Page
+            icon: https://i.pinimg.com/736x/61/6c/1d/616c1dda06d4a37e62ad72d272aabd07.jpg
+        - TrueNAS:
+            href: "{{HOMEPAGE_VAR_TRUENAS_URL}}"
+            description: Network Attached Storage
+            icon: truenas.svg # https://avatars.githubusercontent.com/u/53482242?s=280&v=4
+            widget:
+              type: truenas
+              url: "{{HOMEPAGE_VAR_TRUENAS_URL}}"
+              key: "{{HOMEPAGE_VAR_TRUENAS_API_KEY}}"
+
+    - Services:
+        - Adguard:
+            href: "{{HOMEPAGE_VAR_ADGUARD_URL}}"
+            description: DNS Services
+            icon: https://static-00.iconduck.com/assets.00/adguard-home-icon-2023x2048-zxumr62h.png
+            widget:
+              type: adguard
+              url: "{{HOMEPAGE_VAR_ADGUARD_URL}}"
+              username: "{{HOMEPAGE_VAR_ADGUARD_USERNAME}}"
+              password: "{{HOMEPAGE_VAR_ADGUARD_PASSWORD}}"
+        - Nextcloud:
+            href: "{{HOMEPAGE_VAR_NEXTCLOUD_URL}}"
+            description: Personal File Hosting
+            icon: https://img.icons8.com/?size=512&id=2dCsJ8Pa920S&format=png
+        - VaultWarden:
+            href: "{{HOMEPAGE_VAR_VAULTWARDEN_URL}}"
+            description: Personal Password Manager
+            icon: https://img.icons8.com/?size=512&id=RR3DYslPXr2j&format=png
+        - Cloudflare-DDNS:
+            href: https://dash.cloudflare.com/
+            description: DNS Updater
+            icon: https://img.icons8.com/?size=512&id=13682&format=png
+        - Paperless:
+            href: "{{HOMEPAGE_VAR_PAPERLESS_URL}}"
+            description: Document Manager
+            icon: https://artifacthub.io/image/3ad49bcb-4897-4e64-8d0c-f6dda84377a4@3x
+
+    - Media:
+        - Jellyfin:
+            href: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
+            description: Streaming Media Service
+            icon: https://play-lh.googleusercontent.com/SxdWPR-oZQt9tqph0pyU62_CbyfdQX9g1R5_Nd_vwdkV0IIDceNsytVgdzyHHJGdAwM
+            widget:
+              type: jellyfin
+              url: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
+              key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
+              # enableBlocks: true # optional, defaults to false
+              # enableNowPlaying: true # optional, defaults to true
+              # enableUser: true # optional, defaults to false
+              # showEpisodeNumber: true # optional, defaults to false
+              # expandOneStreamToTwoRows: false # optional, defaults to true
+        - JellySeerr:
+            href: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
+            description: Request TV Shows and Movies via WebUI
+            icon: https://static-00.iconduck.com/assets.00/jellyseerr-icon-2048x1968-ox8q7e49.png
+            widget:
+              type: jellyseerr
+              url: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
+              key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
+        - Radarr:
+            href: "{{HOMEPAGE_VAR_RADARR_URL}}"
+            description: Movies Management
+            icon: https://static-00.iconduck.com/assets.00/radarr-icon-462x512-bydv4e4f.png
+        - Sonarr:
+            href: "{{HOMEPAGE_VAR_SONARR_URL}}"
+            description: TV Shows Management
+            icon: https://res.cloudinary.com/razordarkamg/image/upload/v1621212884/SonarrV3_pufacd.png
+
+    - Tools:
+        - Notifiarr:
+            href: "{{HOMEPAGE_VAR_NOTIFIARR_URL}}"
+            description: Discord Notifications for Services
+            icon: https://notifiarr.com/images/logo/notifiarr.png
+        - Prowlarr:
+            href: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
+            description: Indexer Manager
+            icon: https://static-00.iconduck.com/assets.00/prowlarr-icon-2048x2048-2pxvehfe.png
+        - SABnzbd:
+            href: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
+            description: Usenet Download Client
+            icon: https://static-00.iconduck.com/assets.00/sabnzbd-text-icon-256x256-k89vgimn.png
+        - qBittorrent:
+            href: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+            description: Torrent Download Client
+            icon: https://upload.wikimedia.org/wikipedia/commons/6/66/New_qBittorrent_Logo.svg
+        - Visual Studio:
+            href: "{{HOMEPAGE_VAR_VSCODE_URL}}"
+            description: Coding Server
+            icon: https://raw.githubusercontent.com/vscode-icons/vscode-icons/master/images/logo@3x.png
+
+  settings.yaml: |
+    background:
+      image: https://images4.alphacoders.com/106/1068731.jpg
+      opacity: 60
+      blur: sm
+    providers:
+      openweathermap: openweathermapapikey
+      weatherapi: weatherapiapikey
+    target: _self
+    theme: dark
+    color: slate
+  widgets.yaml: |
+    - resources:
+        cpu: true
+        memory: true
+        disk: /
+
+    - search:
+        provider: google
+        target: _blank
+
+    - weatherapi:
+        #label: Home # optional
+        latitude: {{HOMEPAGE_VAR_LATITUDE}}
+        longitude: {{HOMEPAGE_VAR_LONGITUDE}}
+        units: imperial # or metric
+        apiKey: {{HOMEPAGE_VAR_WEATHER_API_KEY}}
+        cache: 5 # Time in minutes to cache API responses, to stay within limits
