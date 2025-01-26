@@ -63,7 +63,6 @@ spec:
         controller: adguardhome
         type: LoadBalancer  # Use LoadBalancer to expose the service
         externalTrafficPolicy: Local  # Route traffic to local pods
-        clusterIP: "10.96.72.114"
         annotations:
           io.cilium/lb-ipam-ips: "${IPAM_IP_ADGUARDHOME}"  # Use the IP from cluster-settings.yaml
         ports:

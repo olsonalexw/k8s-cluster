@@ -30,7 +30,7 @@ servers:
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
       - name: forward
-        parameters: . 10.96.72.114:53 /etc/resolv.conf
+        parameters: . /etc/resolv.conf
       - name: cache
         parameters: 30
       - name: loop
