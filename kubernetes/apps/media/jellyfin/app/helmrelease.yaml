@@ -1,0 +1,78 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: jellyfin
+  namespace: media
+spec:
+  releaseName: jellyfin
+  interval: 15m
+  chart:
+    spec:
+      chart: app-template
+      version: 10.10.4
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  values:
+    controllers:
+      main:
+        type: deployment
+        strategy: Recreate
+        containers:
+          main:
+            image:
+              repository: docker.io/jellyfin/jellyfin
+              pullPolicy: IfNotPresent
+              tag: latest
+            env:
+              TZ: ${TIMEZONE}
+              JELLYFIN_TRANSCODE_DIR: /transcode
+              NVIDIA_VISIBLE_DEVICES: all
+              NVIDIA_DRIVER_CAPABILITIES: all
+    service:
+      main:
+        controller: main
+        ports:
+          http:
+            port: 8096
+    ingress:
+      main:
+        enabled: true
+        className: traefik-external
+        annotations:
+          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+        hosts:
+          - host: "jellyfin.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - hosts:
+              - "jellyfin.${SECRET_DOMAIN}"
+            secretName: "${SECRET_DOMAIN/./-}-production-tls"
+    persistence:
+      config:
+        enabled: true
+        storageClass: nfs-csi          # Dynamic PVC in /kubernetes/appdata
+        accessMode: ReadWriteOnce
+        size: 2Gi
+      media:
+        enabled: true
+        existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
+      tmpfs:
+        enabled: true
+        type: emptyDir
+
+    defaultPodOptions:
+      runtimeClassName: nvidia
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: "Always"
