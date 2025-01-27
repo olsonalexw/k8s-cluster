@@ -109,7 +109,7 @@ data:
             icon: https://static-00.iconduck.com/assets.00/adguard-home-icon-2023x2048-zxumr62h.png
             widget:
               type: adguard
-              url: "{{HOMEPAGE_VAR_ADGUARD_URL}}"
+              url: "{{HOMEPAGE_VAR_ADGUARD_URL2}}"
               username: "{{HOMEPAGE_VAR_ADGUARD_USERNAME}}"
               password: "{{HOMEPAGE_VAR_ADGUARD_PASSWORD}}"
         - Nextcloud:
