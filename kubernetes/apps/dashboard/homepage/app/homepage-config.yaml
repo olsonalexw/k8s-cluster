@@ -100,6 +100,7 @@ data:
               type: truenas
               url: "{{HOMEPAGE_VAR_TRUENAS_URL}}"
               key: "{{HOMEPAGE_VAR_TRUENAS_API_KEY}}"
+              enablePools: "true"
 
     - Services:
         - Adguard:
