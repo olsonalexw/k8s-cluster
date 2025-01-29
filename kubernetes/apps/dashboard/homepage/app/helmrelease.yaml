@@ -57,11 +57,11 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
-          gethomepage.dev/description: Dynamically Detected Homepage
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/group: Cluster Management
-          gethomepage.dev/icon: homepage.png
-          gethomepage.dev/name: Homepage
+          # gethomepage.dev/description: Dynamically Detected Homepage
+          # gethomepage.dev/enabled: "true"
+          # gethomepage.dev/group: Cluster Management
+          # gethomepage.dev/icon: homepage.png
+          # gethomepage.dev/name: Homepage
         hosts:
           - host: "homepage.${SECRET_DOMAIN}"
             paths:

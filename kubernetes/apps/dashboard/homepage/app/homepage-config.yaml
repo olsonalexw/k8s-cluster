@@ -51,7 +51,7 @@ data:
               href: https://x.com/
     - Tools:
         - Github:
-            - icon: github.svg
+            - icon: https://cdn-icons-png.flaticon.com/512/25/25231.png
             - href: https://github.com/
         - Google Fi:
             - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Google_Fi_Logo.svg/1200px-Google_Fi_Logo.svg.png
@@ -202,6 +202,10 @@ data:
     #     cpu: true
     #     memory: true
     #     disk: /
+    - datetime:
+        text_size: xl
+        format:
+          timeStyle: short
 
     - search:
         provider: google
