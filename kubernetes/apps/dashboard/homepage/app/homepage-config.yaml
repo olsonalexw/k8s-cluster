@@ -50,9 +50,9 @@ data:
             - icon: https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-black-icon.png
               href: https://x.com/
     - Tools:
-        - Github:
-            - icon: https://cdn-icons-png.flaticon.com/512/25/25231.png
-            - href: https://github.com/
+        # - Github:
+        #     - icon: https://cdn-icons-png.flaticon.com/512/25/25231.png
+        #     - href: https://github.com/
         - Google Fi:
             - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Google_Fi_Logo.svg/1200px-Google_Fi_Logo.svg.png
               href: https://fi.google.com/account
@@ -202,6 +202,7 @@ data:
     #     cpu: true
     #     memory: true
     #     disk: /
+
     - datetime:
         text_size: xl
         format:
