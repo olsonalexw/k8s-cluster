@@ -202,7 +202,7 @@ data:
             siteMonitor: "{{HOMEPAGE_VAR_VSCODE_URL}}"
   settings.yaml: |
     background:
-      image: https://images.hdqwalls.com/wallpapers/mountains-minimal-dark-simple-4k-t4.jpg # https://i.redd.it/54p07wx7k8q31.png # https://images4.alphacoders.com/106/1068731.jpg
+      image: https://images.unsplash.com/photo-1622737133809-d95047b9e673?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bWluaW1hbCUyMGJhY2tncm91bmR8ZW58MHx8MHx8fDA%3D # https://images4.alphacoders.com/106/1068731.jpg
       opacity: 60
       blur: sm
 
