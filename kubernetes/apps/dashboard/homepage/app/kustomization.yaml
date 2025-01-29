@@ -6,3 +6,4 @@ resources:
   - ./helmrelease.yaml
   - ./homepage-config.yaml
   - ./homepage-secret.sops.yaml
+  - ./rbac.yaml
