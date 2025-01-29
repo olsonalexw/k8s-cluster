@@ -95,7 +95,7 @@ data:
         - Router:
             href: "{{HOMEPAGE_VAR_ROUTER_URL}}"
             description: Router Admin Page
-            icon: https://i.pinimg.com/736x/61/6c/1d/616c1dda06d4a37e62ad72d272aabd07.jpg
+            icon: https://1000logos.net/wp-content/uploads/2016/10/Asus-Logo.png
         - TrueNAS:
             href: "{{HOMEPAGE_VAR_TRUENAS_URL}}"
             description: Network Attached Storage
@@ -113,7 +113,7 @@ data:
             icon: https://static-00.iconduck.com/assets.00/adguard-home-icon-2023x2048-zxumr62h.png
             widget:
               type: adguard
-              url: "{{HOMEPAGE_VAR_ADGUARD_URL2}}"
+              url: "{{HOMEPAGE_VAR_ADGUARD_URL}}"
               username: "{{HOMEPAGE_VAR_ADGUARD_USERNAME}}"
               password: "{{HOMEPAGE_VAR_ADGUARD_PASSWORD}}"
         - Nextcloud:
@@ -207,6 +207,11 @@ data:
         provider: google
         target: _blank
 
+    - datetime:
+        text_size: md
+        format:
+          timeStyle: short
+
     - weatherapi:
         #label: Home # optional
         latitude: {{HOMEPAGE_VAR_LATITUDE}}
@@ -227,11 +232,6 @@ data:
           cpu: true
           memory: true
           showLabel: true
-
-    - datetime:
-        text_size: md
-        format:
-          timeStyle: short
 
     # - resources:
     #     backend: resources
