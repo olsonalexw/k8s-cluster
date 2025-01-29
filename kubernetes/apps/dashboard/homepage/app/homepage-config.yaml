@@ -188,9 +188,10 @@ data:
 
   settings.yaml: |
     background:
-      image: https://images4.alphacoders.com/106/1068731.jpg
+      image: https://i.redd.it/54p07wx7k8q31.png # https://images4.alphacoders.com/106/1068731.jpg
       opacity: 60
       blur: sm
+
     providers:
       openweathermap: openweathermapapikey
       weatherapi: weatherapiapikey
