@@ -96,10 +96,12 @@ data:
             href: "{{HOMEPAGE_VAR_ROUTER_URL}}"
             description: Router Admin Page
             icon: https://1000logos.net/wp-content/uploads/2016/10/Asus-Logo.png
+            siteMonitor: "{{HOMEPAGE_VAR_ROUTER_URL}}"
         - TrueNAS:
             href: "{{HOMEPAGE_VAR_TRUENAS_URL}}"
             description: Network Attached Storage
             icon: truenas.svg # https://avatars.githubusercontent.com/u/53482242?s=280&v=4
+            siteMonitor: "{{HOMEPAGE_VAR_TRUENAS_URL}}"
             widget:
               type: truenas
               url: "{{HOMEPAGE_VAR_TRUENAS_URL}}"
@@ -111,6 +113,7 @@ data:
             href: "{{HOMEPAGE_VAR_ADGUARD_URL}}"
             description: DNS Services
             icon: https://static-00.iconduck.com/assets.00/adguard-home-icon-2023x2048-zxumr62h.png
+            siteMonitor: "{{HOMEPAGE_VAR_ADGUARD_URL}}"
             widget:
               type: adguard
               url: "{{HOMEPAGE_VAR_ADGUARD_URL}}"
@@ -120,24 +123,28 @@ data:
             href: "{{HOMEPAGE_VAR_NEXTCLOUD_URL}}"
             description: Personal File Hosting
             icon: https://img.icons8.com/?size=512&id=2dCsJ8Pa920S&format=png
+            siteMonitor: "{{HOMEPAGE_VAR_NEXTCLOUD_URL}}"
         - VaultWarden:
             href: "{{HOMEPAGE_VAR_VAULTWARDEN_URL}}"
             description: Personal Password Manager
             icon: https://img.icons8.com/?size=512&id=RR3DYslPXr2j&format=png
+            siteMonitor: "{{HOMEPAGE_VAR_VAULTWARDEN_URL}}"
         - Cloudflare-DDNS:
             href: https://dash.cloudflare.com/
             description: DNS Updater
             icon: https://img.icons8.com/?size=512&id=13682&format=png
+            siteMonitor: https://dash.cloudflare.com/
         - Paperless:
             href: "{{HOMEPAGE_VAR_PAPERLESS_URL}}"
             description: Document Manager
             icon: https://artifacthub.io/image/3ad49bcb-4897-4e64-8d0c-f6dda84377a4@3x
-
+            siteMonitor: "{{HOMEPAGE_VAR_PAPERLESS_URL}}"
     - Media:
         - Jellyfin:
             href: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
             description: Streaming Media Service
             icon: https://play-lh.googleusercontent.com/SxdWPR-oZQt9tqph0pyU62_CbyfdQX9g1R5_Nd_vwdkV0IIDceNsytVgdzyHHJGdAwM
+            siteMonitor: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
             widget:
               type: jellyfin
               url: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
@@ -151,6 +158,7 @@ data:
             href: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
             description: Request TV Shows and Movies via WebUI
             icon: https://static-00.iconduck.com/assets.00/jellyseerr-icon-2048x1968-ox8q7e49.png
+            siteMonitor: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
             widget:
               type: jellyseerr
               url: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
@@ -159,36 +167,42 @@ data:
             href: "{{HOMEPAGE_VAR_RADARR_URL}}"
             description: Movies Management
             icon: https://static-00.iconduck.com/assets.00/radarr-icon-462x512-bydv4e4f.png
+            siteMonitor: "{{HOMEPAGE_VAR_RADARR_URL}}"
         - Sonarr:
             href: "{{HOMEPAGE_VAR_SONARR_URL}}"
             description: TV Shows Management
             icon: https://res.cloudinary.com/razordarkamg/image/upload/v1621212884/SonarrV3_pufacd.png
+            siteMonitor: "{{HOMEPAGE_VAR_SONARR_URL}}"
 
     - Tools:
         - Notifiarr:
             href: "{{HOMEPAGE_VAR_NOTIFIARR_URL}}"
             description: Discord Notifications for Services
             icon: https://notifiarr.com/images/logo/notifiarr.png
+            siteMonitor: "{{HOMEPAGE_VAR_NOTIFIARR_URL}}"
         - Prowlarr:
             href: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
             description: Indexer Manager
             icon: https://static-00.iconduck.com/assets.00/prowlarr-icon-2048x2048-2pxvehfe.png
+            siteMonitor: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
         - SABnzbd:
             href: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
             description: Usenet Download Client
             icon: https://static-00.iconduck.com/assets.00/sabnzbd-text-icon-256x256-k89vgimn.png
+            siteMonitor: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
         - qBittorrent:
             href: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
             description: Torrent Download Client
             icon: https://upload.wikimedia.org/wikipedia/commons/6/66/New_qBittorrent_Logo.svg
+            siteMonitor: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
         - Visual Studio:
             href: "{{HOMEPAGE_VAR_VSCODE_URL}}"
             description: Coding Server
             icon: https://raw.githubusercontent.com/vscode-icons/vscode-icons/master/images/logo@3x.png
-
+            siteMonitor: "{{HOMEPAGE_VAR_VSCODE_URL}}"
   settings.yaml: |
     background:
-      image: https://i.redd.it/54p07wx7k8q31.png # https://images4.alphacoders.com/106/1068731.jpg
+      image: https://www.reddit.com/media?url=https%3A%2F%2Fi.redd.it%2F3n81yfouwu151.png # https://i.redd.it/54p07wx7k8q31.png # https://images4.alphacoders.com/106/1068731.jpg
       opacity: 60
       blur: sm
 
@@ -200,7 +214,7 @@ data:
     color: slate
     hideErrors: true
     hideVersion: true
-    headerStyle: boxedWidgets
+    headerStyle: boxed
   widgets.yaml: |
     # - resources:
     #     cpu: true
