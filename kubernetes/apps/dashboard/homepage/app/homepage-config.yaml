@@ -86,6 +86,7 @@ data:
     #   url: https://hub.docker.com
   kubernetes.yaml: |
     mode: cluster
+  settings:
   services.yaml: |
     - Admin:
         - Router:
@@ -223,4 +224,9 @@ data:
           cpu: true
           memory: true
           showLabel: true
-  enableRbac: true
+
+enableRbac: true
+
+serviceAccount:
+  create: true
+  name: homepage
