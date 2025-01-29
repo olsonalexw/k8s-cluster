@@ -202,7 +202,7 @@ data:
             siteMonitor: "{{HOMEPAGE_VAR_VSCODE_URL}}"
   settings.yaml: |
     background:
-      image: https://s3-figma-hubfile-images-production.figma.com/hub/file/carousel/img/ce4d20ece18e2a41e5e8db928d5b4fcc154b87ed # https://images4.alphacoders.com/106/1068731.jpg
+      image: https://www.reddit.com/media?url=https%3A%2F%2Fi.redd.it%2F7pgm8d9j1er71.png # https://images4.alphacoders.com/106/1068731.jpg
       opacity: 60
       blur: sm
 
