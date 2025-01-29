@@ -203,11 +203,6 @@ data:
     #     memory: true
     #     disk: /
 
-    - datetime:
-        text_size: xl
-        format:
-          timeStyle: short
-
     - search:
         provider: google
         target: _blank
@@ -233,9 +228,14 @@ data:
           memory: true
           showLabel: true
 
-    - resources:
-        backend: resources
-        expanded: true
-        cpu: true
-        memory: true
-        network: default
+    - datetime:
+        text_size: md
+        format:
+          timeStyle: short
+
+    # - resources:
+    #     backend: resources
+    #     expanded: true
+    #     cpu: true
+    #     memory: true
+    #     network: default
