@@ -194,10 +194,10 @@ data:
     theme: dark
     color: slate
   widgets.yaml: |
-    - resources:
-        cpu: true
-        memory: true
-        disk: /
+    # - resources:
+    #     cpu: true
+    #     memory: true
+    #     disk: /
 
     - search:
         provider: google
@@ -223,3 +223,4 @@ data:
           cpu: true
           memory: true
           showLabel: true
+  enableRbac: true
