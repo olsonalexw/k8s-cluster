@@ -40,8 +40,8 @@ spec:
                   name: homepage-secret
             resources:
               requests:
-                cpu: 15m
-                memory: 200M
+                cpu: 1000m
+                memory: 512Mi
               limits:
                 memory: 2G
     service:
