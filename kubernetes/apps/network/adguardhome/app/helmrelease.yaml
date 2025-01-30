@@ -70,6 +70,9 @@ spec:
             port: 53       # Add DNS UDP port
             protocol: UDP
           dns-tcp:
+            port: 53       # Add DNS TCP port
+            protocol: TCP
+          dns-tcp-tls:
             port: 853      # Add DNS-over-TLS TCP port
             protocol: TCP
       adguardhome-webui:
