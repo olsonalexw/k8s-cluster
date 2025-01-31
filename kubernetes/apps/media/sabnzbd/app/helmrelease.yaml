@@ -42,9 +42,9 @@ spec:
               #   {{ .Release.Name }}.ktwo.io,
               #   sab.ktwo.io
               TZ: ${TIMEZONE}
-            # envFrom:
-            #   - secretRef:
-            #       name: sabnzbd-secret
+            envFrom:
+              - secretRef:
+                  name: sabnzbd-secret
             # probes:
             #   liveness: &probes
             #     enabled: true
@@ -57,12 +57,12 @@ spec:
             #       periodSeconds: 10
             #       timeoutSeconds: 1
             #       failureThreshold: 3
-              readiness: *probes
-              startup:
-                enabled: true
-                spec:
-                  failureThreshold: 30
-                  periodSeconds: 10
+            #   readiness: *probes
+            #   startup:
+            #     enabled: true
+            #     spec:
+            #       failureThreshold: 30
+            #       periodSeconds: 10
             resources:
               requests:
                 cpu: 100m
