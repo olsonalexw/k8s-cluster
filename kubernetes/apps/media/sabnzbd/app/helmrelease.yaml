@@ -29,8 +29,8 @@ spec:
         containers:
           app:
             image:
-              repository: ghcr.io/buroa/sabnzbd
-              tag: 4.4.1@sha256:47390397a14b387dacdcf608a93e0ff4531791ffc44c4a7ad4a8daa91781148e
+              repository: lscr.io/linuxserver/sabnzbd
+              tag: 4.4.1-ls201
             env:
               SABNZBD__PORT: &port 8080
               # SABNZBD__HOST_WHITELIST_ENTRIES: >-
@@ -42,9 +42,9 @@ spec:
               #   {{ .Release.Name }}.ktwo.io,
               #   sab.ktwo.io
               TZ: ${TIMEZONE}
-            envFrom:
-              - secretRef:
-                  name: sabnzbd-secret
+            # envFrom:
+            #   - secretRef:
+            #       name: sabnzbd-secret
             # probes:
             #   liveness: &probes
             #     enabled: true
