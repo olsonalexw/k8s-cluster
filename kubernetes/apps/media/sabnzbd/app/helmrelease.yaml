@@ -1,0 +1,116 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: &app sabnzbd
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  values:
+    controllers:
+      sabnzbd:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        containers:
+          app:
+            image:
+              repository: ghcr.io/buroa/sabnzbd
+              tag: 4.4.1@sha256:47390397a14b387dacdcf608a93e0ff4531791ffc44c4a7ad4a8daa91781148e
+            env:
+              SABNZBD__PORT: &port 8080
+              # SABNZBD__HOST_WHITELIST_ENTRIES: >-
+              #   sabnzbd,
+              #   sabnzbd.media,
+              #   sabnzbd.media.svc,
+              #   sabnzbd.media.svc.cluster,
+              #   sabnzbd.media.svc.cluster.local,
+              #   {{ .Release.Name }}.ktwo.io,
+              #   sab.ktwo.io
+              TZ: ${TIMEZONE}
+            # envFrom:
+            #   - secretRef:
+            #       name: sabnzbd-secret
+            # probes:
+            #   liveness: &probes
+            #     enabled: true
+            #     custom: true
+            #     spec:
+            #       httpGet:
+            #         path: /api?mode=version
+            #         port: *port
+            #       initialDelaySeconds: 0
+            #       periodSeconds: 10
+            #       timeoutSeconds: 1
+            #       failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 6Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities: { drop: ["ALL"] }
+    service:
+      app:
+        controller: *app
+        ports:
+          http:
+            port: *port
+    ingress:
+      main:
+        enabled: true
+        className: traefik-internal
+        annotations:
+          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+        hosts:
+          - host: "sabnzbd.${SECRET_DOMAIN}"
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+        tls:
+          - hosts:
+              - "sabnzbd.${SECRET_DOMAIN}"
+            secretName: "${SECRET_DOMAIN/./-}-production-tls"
+    persistence:
+      config:
+        enabled: true
+        storageClass: nfs-csi          # Dynamic PVC in /kubernetes/appdata
+        accessMode: ReadWriteOnce
+        size: 2Gi
+      media:
+        enabled: true
+        existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
+      tmp:
+        type: emptyDir
+    defaultPodOptions:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: "Always"
