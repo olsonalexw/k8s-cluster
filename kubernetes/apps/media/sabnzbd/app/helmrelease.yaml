@@ -79,7 +79,7 @@ spec:
           http:
             port: *port
     ingress:
-      main:
+      sabnzbd:
         enabled: true
         className: traefik-internal
         annotations:
@@ -90,7 +90,7 @@ spec:
             paths:
               - path: /
                 service:
-                  identifier: main
+                  identifier: sabnzbd
                   port: http
         tls:
           - hosts:
