@@ -10,7 +10,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 10.10.4
+      version: 3.6.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -23,14 +23,21 @@ spec:
         containers:
           main:
             image:
-              repository: docker.io/jellyfin/jellyfin
-              pullPolicy: IfNotPresent
-              tag: latest
+              repository: ghcr.io/fallenbagel/jellyseerr
+              tag: 2.3.0@sha256:df53a7b06006e9da117a7072a55cf5d8b2071a6272f6bb329d8ca62b6f5c08a6
             env:
               TZ: ${TIMEZONE}
               JELLYFIN_TRANSCODE_DIR: /transcode
               NVIDIA_VISIBLE_DEVICES: all
               NVIDIA_DRIVER_CAPABILITIES: all
+            resources:
+              requests:
+                cpu: 20m
+                memory: 512M
+              limits:
+                cpu: 1000
+                memory: 4096M
+                nvidia.com/gpu: 1
     service:
       main:
         controller: main
@@ -69,10 +76,11 @@ spec:
         type: emptyDir
 
     defaultPodOptions:
-      runtimeClassName: nvidia
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
         runAsGroup: 1001
         fsGroup: 1001
         fsGroupChangePolicy: "Always"
+      nodeSelector:
+        nvidia.feature.node.kubernetes.io/gpu: "true"
