@@ -10,7 +10,7 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/media/nvidia/app
+  path: ./kubernetes/apps/kube-system/nvidia/app
   prune: true
   sourceRef:
     kind: GitRepository
