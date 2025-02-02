@@ -80,6 +80,7 @@ spec:
             scrapeTimeout: 10s
     ingress:
       app:
+        enabled: true
         className: traefik-external                                                                  # Decides if it's exposed to the internet (traefik-external vs traefik-internal)
         annotations:
           # cert-manager.io/cluster-issuer: letsencrypt-production                                   # Used in non-wildcard configuration
