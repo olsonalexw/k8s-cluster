@@ -27,9 +27,9 @@ spec:
               tag: 2.3.0@sha256:df53a7b06006e9da117a7072a55cf5d8b2071a6272f6bb329d8ca62b6f5c08a6
             env:
               TZ: ${TIMEZONE}
-              JELLYFIN_TRANSCODE_DIR: /transcode
-              NVIDIA_VISIBLE_DEVICES: all
-              NVIDIA_DRIVER_CAPABILITIES: all
+              # JELLYFIN_TRANSCODE_DIR: /transcode
+              # NVIDIA_VISIBLE_DEVICES: all
+              # NVIDIA_DRIVER_CAPABILITIES: all
             resources:
               requests:
                 cpu: 20m
@@ -71,24 +71,17 @@ spec:
       media:
         enabled: true
         existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
-      tmpfs:
-        enabled: true
-        type: emptyDir
+      # tmpfs:
+      #   enabled: true
+      #   type: emptyDir
 
     defaultPodOptions:
-      # securityContext:
-      #   runAsNonRoot: true
-      #   runAsUser: 1001
-      #   runAsGroup: 1001
-      #   fsGroup: 1001
-      #   fsGroupChangePolicy: "Always"
-      # nodeSelector:
-      #   nvidia.feature.node.kubernetes.io/gpu: "true"
-      # enableServiceLinks: false
       securityContext:
-        runAsUser: 568
-        runAsGroup: 568
-        fsGroup: 568
-        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+        fsGroupChangePolicy: "Always"
       nodeSelector:
         nvidia.feature.node.kubernetes.io/gpu: "true"
+      enableServiceLinks: false

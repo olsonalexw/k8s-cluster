@@ -71,6 +71,7 @@ spec:
       media:
         enabled: true
         existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
+
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
