@@ -76,11 +76,19 @@ spec:
         type: emptyDir
 
     defaultPodOptions:
+      # securityContext:
+      #   runAsNonRoot: true
+      #   runAsUser: 1001
+      #   runAsGroup: 1001
+      #   fsGroup: 1001
+      #   fsGroupChangePolicy: "Always"
+      # nodeSelector:
+      #   nvidia.feature.node.kubernetes.io/gpu: "true"
+      # enableServiceLinks: false
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
-        fsGroupChangePolicy: "Always"
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
       nodeSelector:
         nvidia.feature.node.kubernetes.io/gpu: "true"
