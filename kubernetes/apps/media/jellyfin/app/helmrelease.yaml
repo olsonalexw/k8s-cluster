@@ -23,8 +23,8 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/fallenbagel/jellyseerr
-              tag: 2.3.0@sha256:df53a7b06006e9da117a7072a55cf5d8b2071a6272f6bb329d8ca62b6f5c08a6
+              repository: jellyfin/jellyfin
+              tag: 10.10.5
             env:
               TZ: ${TIMEZONE}
               # JELLYFIN_TRANSCODE_DIR: /transcode
