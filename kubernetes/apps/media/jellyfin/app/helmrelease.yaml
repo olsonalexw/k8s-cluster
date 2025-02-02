@@ -34,6 +34,7 @@ spec:
               requests:
                 cpu: 20m
                 memory: 512M
+                nvidia.com/gpu: 1
               limits:
                 cpu: 1000
                 memory: 4096M
@@ -71,9 +72,9 @@ spec:
       media:
         enabled: true
         existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
-      # tmpfs:
-      #   enabled: true
-      #   type: emptyDir
+      tmpfs:
+        enabled: true
+        type: emptyDir
 
     defaultPodOptions:
       securityContext:
