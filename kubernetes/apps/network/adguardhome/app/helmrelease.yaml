@@ -75,7 +75,7 @@ spec:
           dns-tcp-tls:
             port: 853      # Add DNS-over-TLS TCP port
             protocol: TCP
-        clusterIP: "${IPAM_IP_ADUARDHOME_INTERNAL}"
+        clusterIP: "${IPAM_IP_ADGUARDHOME_INTERNAL}"
       adguardhome-webui:
         controller: adguardhome
         type: ClusterIP
