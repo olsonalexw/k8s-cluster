@@ -27,18 +27,10 @@ spec:
               tag: 10.10.5
             env:
               TZ: ${TIMEZONE}
-              JELLYFIN_TRANSCODE_DIR: /transcode
-              NVIDIA_VISIBLE_DEVICES: all
-              NVIDIA_DRIVER_CAPABILITIES: all
               DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
               JELLYFIN_FFmpeg__probesize: 50000000
               JELLYFIN_FFmpeg__analyzeduration: 50000000
               JELLYFIN_PublishedServerUrl: "jellyfin.${SECRET_DOMAIN}"
-              JELLYFIN_HardwareAccelerationOptions__EnableHardwareEncoding: "true"
-              JELLYFIN_HardwareAccelerationOptions__EnableNvdec: "true"
-              JELLYFIN_HardwareAccelerationOptions__EnableNvenc: "true"
-              JELLYFIN_HardwareAccelerationOptions__EnableVaapiEncoding: "false"
-              JELLYFIN_ffmpeg__hwaccel: "nvdec"
             resources:
               requests:
                 cpu: 20m
@@ -83,7 +75,7 @@ spec:
       media:
         enabled: true
         existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
-      tmpfs:
+      transcode:
         enabled: true
         type: emptyDir
 
