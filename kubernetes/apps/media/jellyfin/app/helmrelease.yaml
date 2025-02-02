@@ -33,7 +33,7 @@ spec:
               DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
               # JELLYFIN_FFmpeg__probesize: 50000000
               # JELLYFIN_FFmpeg__analyzeduration: 50000000
-              JELLYFIN_PublishedServerUrl: "jellyfin.${SECRET_DOMAIN}"
+              # JELLYFIN_PublishedServerUrl: "jellyfin.${SECRET_DOMAIN}"   # breaks external-dns
             resources:
               requests:
                 cpu: 20m
@@ -67,6 +67,7 @@ spec:
           - hosts:
               - "jellyfin.${SECRET_DOMAIN}"
             secretName: "${SECRET_DOMAIN/./-}-production-tls"
+
     persistence:
       config:
         enabled: true
