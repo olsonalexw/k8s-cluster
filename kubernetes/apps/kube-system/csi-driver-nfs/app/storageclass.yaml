@@ -5,7 +5,7 @@ metadata:
 provisioner: nfs.csi.k8s.io
 parameters:
   server: 192.168.1.2
-  share: /mnt/OlsonNAS/kubernetes/appdata
+  share: /mnt/OlsonNAS/nfs/appdata
   subDir: "$${pvc.metadata.namespace}/$${pvc.metadata.name}"  # Escaped variables
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
