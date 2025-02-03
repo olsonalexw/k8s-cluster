@@ -16,6 +16,3 @@ mountOptions:
   - hard
   - noatime
   - nodiratime
-  - rw
-  - async
-  - no_root_squash  # Ensure root has full access
