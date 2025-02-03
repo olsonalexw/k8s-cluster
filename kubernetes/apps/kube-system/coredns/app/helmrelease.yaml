@@ -25,7 +25,3 @@ spec:
   valuesFrom:
     - kind: ConfigMap
       name: coredns-helm-values
-    - kind: Secret
-      name: coredns-secret
-      valuesKey: SECRET_DOMAIN
-      targetPath: SECRETDOMAIN

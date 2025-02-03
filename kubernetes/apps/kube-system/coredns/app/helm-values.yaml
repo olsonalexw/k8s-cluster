@@ -9,6 +9,14 @@ service:
 replicaCount: 2
 servers:
   - zones:
+      - zone: ${SECRET_DOMAIN}  # Placeholder - Flux will replace this
+    port: 53
+    scheme: dns://
+    use_tcp: true
+    plugins:
+      - name: forward
+        parameters: . ${IPAM_IP_ADGUARDHOME_INTERNAL} # All queries for SECRETDOMAIN go here
+  - zones:
       - zone: .
         scheme: dns://
         use_tcp: true
@@ -30,10 +38,7 @@ servers:
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
       - name: forward
-        configBlock: |-
-          example.com 10.96.0.11
-          . 1.1.1.1 8.8.8.8
-      #   parameters: . ${IPAM_IP_ADGUARDHOME_INTERNAL}
+        parameters: . 1.1.1.1 8.8.8.8
       - name: cache
         parameters: 30
       - name: loop
