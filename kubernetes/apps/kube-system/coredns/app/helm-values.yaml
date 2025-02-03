@@ -30,7 +30,7 @@ servers:
           pods insecure
           fallthrough in-addr.arpa ip6.arpa
       - name: forward
-        parameters: . ${IPAM_IP_ADGUARDHOME_INTERNAL}
+        parameters: . 1.1.1.1 # ${IPAM_IP_ADGUARDHOME_INTERNAL}
       - name: cache
         parameters: 30
       - name: loop

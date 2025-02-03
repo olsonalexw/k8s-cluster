@@ -65,6 +65,7 @@ spec:
       adguardhome:
         controller: adguardhome
         type: LoadBalancer  # Use LoadBalancer to expose the service
+        clusterIP: 10.96.0.11 # ${IPAM_IP_ADGUARDHOME_INTERNAL}
         externalTrafficPolicy: Local  # Route traffic to local pods
         annotations:
           io.cilium/lb-ipam-ips: "${IPAM_IP_ADGUARDHOME}"  # Use the IP from cluster-settings.yaml
@@ -78,7 +79,6 @@ spec:
           dns-tcp-tls:
             port: 853      # Add DNS-over-TLS TCP port
             protocol: TCP
-        clusterIP: "${IPAM_IP_ADGUARDHOME_INTERNAL}"
       adguardhome-webui:
         controller: adguardhome
         type: ClusterIP
