@@ -9,3 +9,13 @@ parameters:
   subDir: "$${pvc.metadata.namespace}/$${pvc.metadata.name}"  # Escaped variables
 reclaimPolicy: Retain
 volumeBindingMode: Immediate
+mountOptions:
+  - nfsvers=4.2
+  - tcp
+  - intr
+  - hard
+  - noatime
+  - nodiratime
+  - rw
+  - async
+  - no_root_squash  # Ensure root has full access
