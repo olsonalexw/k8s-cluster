@@ -31,7 +31,7 @@ servers:
           fallthrough in-addr.arpa ip6.arpa
       - name: forward
         configBlock: |-
-          ${SECRET_DOMAIN} ${IPAM_IP_ADGUARDHOME_INTERNAL}
+          "${SECRET_DOMAIN}" "${IPAM_IP_ADGUARDHOME_INTERNAL}"
           . 1.1.1.1 8.8.8.8
       #   parameters: . ${IPAM_IP_ADGUARDHOME_INTERNAL}
       - name: cache
