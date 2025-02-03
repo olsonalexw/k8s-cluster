@@ -75,7 +75,7 @@ spec:
       config:
         enabled: true
         storageClass: nfs-csi          # Dynamic PVC in /kubernetes/appdata
-        accessMode: ReadWriteOnce
+        accessMode: ReadWriteMany
         size: 2Gi
       media:
         enabled: true
