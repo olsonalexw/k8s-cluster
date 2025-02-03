@@ -64,11 +64,10 @@ spec:
     service:
       adguardhome:
         controller: adguardhome
-        type: LoadBalancer  # Use LoadBalancer to expose the service
-        clusterIP: 10.96.0.11 # ${IPAM_IP_ADGUARDHOME_INTERNAL}
-        externalTrafficPolicy: Local  # Route traffic to local pods
+        type: LoadBalancer  # Use LoadBalancer to expose the service externally
+        externalTrafficPolicy: Local  # Route external traffic to local pods
         annotations:
-          io.cilium/lb-ipam-ips: "${IPAM_IP_ADGUARDHOME}"  # Use the IP from cluster-settings.yaml
+          io.cilium/lb-ipam-ips: "${IPAM_IP_ADGUARDHOME}"  # Use the IP from cluster-settings.yaml for external access
         ports:
           dns-udp:
             port: 53       # Add DNS UDP port
@@ -79,6 +78,17 @@ spec:
           dns-tcp-tls:
             port: 853      # Add DNS-over-TLS TCP port
             protocol: TCP
+      adguardhome-internal:
+        controller: adguardhome
+        type: ClusterIP  # Use ClusterIP for internal DNS queries
+        clusterIP: ${IPAM_IP_ADGUARDHOME_INTERNAL}
+        ports:
+          dns-udp-internal:
+            port: 53
+            protocol: UDP
+          dns-tcp-internal:
+            port: 53
+            protocol: TCP
       adguardhome-webui:
         controller: adguardhome
         type: ClusterIP
@@ -86,6 +96,31 @@ spec:
           http:
             port: 80       # Set to 3000 when setting up admin page, 80 after
             protocol: TCP
+    # service:
+    #   adguardhome:
+    #     controller: adguardhome
+    #     type: LoadBalancer  # Use LoadBalancer to expose the service
+    #     clusterIP: 10.96.0.11 # ${IPAM_IP_ADGUARDHOME_INTERNAL}
+    #     externalTrafficPolicy: Local  # Route traffic to local pods
+    #     annotations:
+    #       io.cilium/lb-ipam-ips: "${IPAM_IP_ADGUARDHOME}"  # Use the IP from cluster-settings.yaml
+    #     ports:
+    #       dns-udp:
+    #         port: 53       # Add DNS UDP port
+    #         protocol: UDP
+    #       dns-tcp:
+    #         port: 53       # Add DNS TCP port
+    #         protocol: TCP
+    #       dns-tcp-tls:
+    #         port: 853      # Add DNS-over-TLS TCP port
+    #         protocol: TCP
+    #   adguardhome-webui:
+    #     controller: adguardhome
+    #     type: ClusterIP
+    #     ports:
+    #       http:
+    #         port: 80       # Set to 3000 when setting up admin page, 80 after
+    #         protocol: TCP
     ingress:
       adguardhome:
         enabled: true
