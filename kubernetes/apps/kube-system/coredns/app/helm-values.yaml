@@ -9,13 +9,13 @@ service:
 replicaCount: 2
 servers:
   - zones:
-      - zone: ${SECRET_DOMAIN}  # Placeholder - Flux will replace this
+      - zone: ${SECRET_DOMAIN}
     port: 53
     scheme: dns://
     use_tcp: true
     plugins:
       - name: forward
-        parameters: . ${IPAM_IP_ADGUARDHOME_INTERNAL} # All queries for SECRETDOMAIN go here
+        parameters: . ${IPAM_IP_ADGUARDHOME_INTERNAL}
   - zones:
       - zone: .
         scheme: dns://
