@@ -17,6 +17,14 @@ spec:
         namespace: flux-system
   values:
     kubeletDir: /var/lib/kubelet
-    nfs:
-      server: 192.168.1.2
-      path: /mnt/OlsonNAS/nfs/appdata
+    # nfs:
+    #   server: 192.168.1.2
+    #   path: /mnt/OlsonNAS/nfs/appdata
+    # defaultPodOptions:
+    #   enableServiceLinks: false
+    #   securityContext:
+    #     runAsNonRoot: true
+    #     runAsUser: 1001
+    #     runAsGroup: 1001
+    #     fsGroup: 1001
+    #     fsGroupChangePolicy: "Always"
