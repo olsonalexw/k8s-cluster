@@ -11,6 +11,6 @@ reclaimPolicy: Retain
 volumeBindingMode: Immediate
 mountOptions:
   - nfsvers=4.2
-  - nconnect=16
+  - nconnect=8
   - hard
   - noatime
