@@ -4,7 +4,7 @@ kind: PersistentVolume
 metadata:
   name: nfs-media-pv
 spec:
-  storageClassName: "csi-media"
+  storageClassName: ""
   capacity:
     storage: 1Mi
   volumeMode: Filesystem
@@ -30,10 +30,10 @@ metadata:
   name: nfs-media-pvc
   namespace: media          # Must match Sonarr's namespace, media
 spec:
-  storageClassName: "csi-media"
+  storageClassName: ""
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 1Mi          # Match PV's capacity
+      storage: 1Mi             # Match PV's capacity
   volumeName: nfs-media-pv     # Explicitly bind to the PV
