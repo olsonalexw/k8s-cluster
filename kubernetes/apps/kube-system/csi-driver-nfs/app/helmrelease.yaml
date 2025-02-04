@@ -4,7 +4,6 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: csi-driver-nfs
-  namespace: kube-system
 spec:
   interval: 30m
   chart:
@@ -17,9 +16,9 @@ spec:
         namespace: flux-system
   values:
     kubeletDir: /var/lib/kubelet
-    # nfs:
-    #   server: 192.168.1.2
-    #   path: /mnt/OlsonNAS/nfs/appdata
+    nfs:
+      server: 192.168.1.2
+      path: /mnt/OlsonNAS/nfs
     # defaultPodOptions:
     #   enableServiceLinks: false
     #   securityContext:
