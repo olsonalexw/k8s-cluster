@@ -5,8 +5,8 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./media-pv.yaml
-  # - ./jellyfin/ks.yaml
-  # - ./prowlarr/ks.yaml
-  # - ./radarr/ks.yaml
-  # - ./sabnzbd/ks.yaml
-  # - ./sonarr/ks.yaml
+  - ./jellyfin/ks.yaml
+  - ./prowlarr/ks.yaml
+  - ./radarr/ks.yaml
+  - ./sabnzbd/ks.yaml
+  - ./sonarr/ks.yaml
