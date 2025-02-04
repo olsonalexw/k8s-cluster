@@ -14,9 +14,9 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  # dependsOn:
-  #   - name: csi-driver-nfs
-  #     namespace: storage
+  dependsOn:
+    - name: csi-driver-nfs
+      namespace: storage
   install:
     remediation:
       retries: 3
@@ -96,31 +96,6 @@ spec:
           http:
             port: 80       # Set to 3000 when setting up admin page, 80 after
             protocol: TCP
-    # service:
-    #   adguardhome:
-    #     controller: adguardhome
-    #     type: LoadBalancer  # Use LoadBalancer to expose the service
-    #     clusterIP: 10.96.0.11 # ${IPAM_IP_ADGUARDHOME_INTERNAL}
-    #     externalTrafficPolicy: Local  # Route traffic to local pods
-    #     annotations:
-    #       io.cilium/lb-ipam-ips: "${IPAM_IP_ADGUARDHOME}"  # Use the IP from cluster-settings.yaml
-    #     ports:
-    #       dns-udp:
-    #         port: 53       # Add DNS UDP port
-    #         protocol: UDP
-    #       dns-tcp:
-    #         port: 53       # Add DNS TCP port
-    #         protocol: TCP
-    #       dns-tcp-tls:
-    #         port: 853      # Add DNS-over-TLS TCP port
-    #         protocol: TCP
-    #   adguardhome-webui:
-    #     controller: adguardhome
-    #     type: ClusterIP
-    #     ports:
-    #       http:
-    #         port: 80       # Set to 3000 when setting up admin page, 80 after
-    #         protocol: TCP
     ingress:
       adguardhome:
         enabled: true

@@ -20,4 +20,3 @@ spec:
     # nfs:
     #   server: 192.168.1.2
     #   path: /mnt/OlsonNAS/nfs/appdata
-
