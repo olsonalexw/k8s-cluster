@@ -15,7 +15,7 @@ spec:
         namespace: flux-system
   dependsOn:
     - name: csi-driver-nfs
-      namespace: kube-system
+      namespace: storage
   install:
     remediation:
       retries: 3
