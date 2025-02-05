@@ -58,14 +58,15 @@ spec:
               #   drop: ["ALL"]
             resources:
               requests:
-                cpu: "100m"
+                cpu: "50m"
+                memory: "64Mi"
               limits:
-                memory: "256Mi"
+                memory: "128Mi"
     service:
       adguardhome:
         controller: adguardhome
         type: LoadBalancer  # Use LoadBalancer to expose the service externally
-        externalTrafficPolicy: Local  # Route external traffic to local pods
+        externalTrafficPolicy: Cluster # Allows Failover of Nodes # Local # Route external traffic to local pods
         annotations:
           io.cilium/lb-ipam-ips: "${IPAM_IP_ADGUARDHOME}"  # Use the IP from cluster-settings.yaml for external access
         ports:
@@ -88,6 +89,9 @@ spec:
             protocol: UDP
           dns-tcp-internal:
             port: 53
+            protocol: TCP
+          dns-tcp-tls:
+            port: 853      # Add DNS-over-TLS TCP port
             protocol: TCP
       adguardhome-webui:
         controller: adguardhome
