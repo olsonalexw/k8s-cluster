@@ -82,6 +82,10 @@ spec:
       config-logs:
         enabled: true
         type: emptyDir
+        globalMounts:
+          - path: /app/config/logs
+      tmp:
+        type: emptyDir
     defaultPodOptions:
       enableServiceLinks: false
       securityContext:
