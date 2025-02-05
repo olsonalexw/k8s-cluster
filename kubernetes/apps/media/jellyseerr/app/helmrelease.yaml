@@ -81,11 +81,9 @@ spec:
         size: 2Gi
       config-logs:
         enabled: true
-        type: emptyDir
-        globalMounts:
-          - path: /app/config/logs
-      tmp:
-        type: emptyDir
+        storageClass: nfs-csi     # Dynamic PVC in /kubernetes/appdata
+        accessMode: ReadWriteMany
+        size: 2Gi
     defaultPodOptions:
       enableServiceLinks: false
       securityContext:
