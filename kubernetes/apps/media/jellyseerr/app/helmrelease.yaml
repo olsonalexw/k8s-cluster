@@ -39,10 +39,10 @@ spec:
               TZ: ${TIMEZONE}
               LOG_LEVEL: "info"
               PORT: &port 80
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
-              capabilities: { drop: ["ALL"] }
+            # securityContext:
+            #   allowPrivilegeEscalation: false
+            #   readOnlyRootFilesystem: true
+            #   capabilities: { drop: ["ALL"] }
             resources:
               requests:
                 cpu: 10m
@@ -82,13 +82,11 @@ spec:
       config-logs:
         enabled: true
         type: emptyDir
-        globalMounts:
-          - path: /app/config/logs
     defaultPodOptions:
+      enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
         runAsGroup: 1001
         fsGroup: 1001
-        fsGroupChangePolicy: OnRootMismatch
-        seccompProfile: { type: RuntimeDefault }
+        fsGroupChangePolicy: "Always"
