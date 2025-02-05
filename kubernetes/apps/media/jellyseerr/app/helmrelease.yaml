@@ -82,6 +82,8 @@ spec:
       config-logs:
         enabled: true
         type: emptyDir
+        globalMounts:
+          - path: /app/config/logs
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
