@@ -64,10 +64,10 @@ spec:
                 cpu: 100m
               limits:
                 memory: 6Gi
-            securityContext:
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities: { drop: ["ALL"] }
+            # securityContext:
+            #   allowPrivilegeEscalation: false
+            #   readOnlyRootFilesystem: true
+            #   capabilities: { drop: ["ALL"] }
     service:
       sabnzbd:
         controller: *app
