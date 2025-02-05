@@ -31,7 +31,7 @@ spec:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
-          app:
+          jellyseerr:
             image:
               repository: ghcr.io/fallenbagel/jellyseerr
               tag: 2.3.0@sha256:df53a7b06006e9da117a7072a55cf5d8b2071a6272f6bb329d8ca62b6f5c08a6
@@ -49,7 +49,7 @@ spec:
               limits:
                 memory: 2Gi
     service:
-      app:
+      jellyseerr:
         controller: jellyseerr
         ports:
           http:
@@ -63,7 +63,7 @@ spec:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
         hosts:
-          - host: "jellyseerr.${SECRET_DOMAIN}"
+          - host: &host "jellyseerr.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
@@ -71,7 +71,7 @@ spec:
                   port: http
         tls:
           - hosts:
-              - "jellyseerr.${SECRET_DOMAIN}"
+              - *host
             secretName: "${SECRET_DOMAIN/./-}-production-tls"
     persistence:
       config:
