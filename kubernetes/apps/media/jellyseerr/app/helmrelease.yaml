@@ -76,14 +76,27 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: nfs-csi     # Dynamic PVC in /kubernetes/appdata
+        storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 2Gi
+        globalMounts:
+          - path: /app/config
+      config-cache:
+        enabled: true
+        storageClass: nfs-csi
+        accessMode: ReadWriteMany
+        size: 2Gi
+        globalMounts:
+          - path: /app/config/cache
       config-logs:
         enabled: true
-        storageClass: nfs-csi     # Dynamic PVC in /kubernetes/appdata
+        storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 2Gi
+        globalMounts:
+          - path: /app/config/logs
+      tmp:
+        type: emptyDir
     defaultPodOptions:
       enableServiceLinks: false
       securityContext:
