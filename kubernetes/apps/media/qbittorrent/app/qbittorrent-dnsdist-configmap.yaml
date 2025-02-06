@@ -10,7 +10,7 @@ data:
 
     -- K8S DNS
     newServer({
-      address = "172.24.0.10",
+      address = "10.96.0.10",
       pool = "k8s",
       healthCheckMode = "lazy",
       lazyHealthCheckMode = 'TimeoutOnly',
