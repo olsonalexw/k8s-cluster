@@ -4,9 +4,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./helmrelease.yaml
-configMapGenerator:
-  - name: generic-device-plugin-configmap
-    files:
-      - ./generic-device-plugin-configmap.yaml
-generatorOptions:
-  disableNameSuffixHash: true
+  - ./generic-device-plugin-configmap.yaml
+# configMapGenerator:
+#   - name: generic-device-plugin-configmap
+#     files:
+#       - ./generic-device-plugin-configmap.yaml
+# generatorOptions:
+#   disableNameSuffixHash: true
