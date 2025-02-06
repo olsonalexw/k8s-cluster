@@ -84,9 +84,9 @@ spec:
                 cpu: 10m
                 memory: 442M
               limits:
-                cpu: 1000m
-                memory: 2000M
-                squat.ai/tun: 1
+                cpu: 500m
+                memory: 700M
+                # squat.ai/tun: 1
 
           qbittorrent:
             dependsOn: gluetun
@@ -134,10 +134,10 @@ spec:
             resources:
               requests:
                 cpu: 34m
-                memory: 2048M
+                memory: 1024M
               limits:
-                cpu: 1000m
-                memory: 4096M
+                cpu: 500m
+                memory: 2048M
 
             securityContext:
               runAsUser: 1001
