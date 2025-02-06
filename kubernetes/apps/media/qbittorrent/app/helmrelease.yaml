@@ -63,7 +63,7 @@ spec:
               DNS_ADDRESS: "127.0.0.2"
               VPN_SERVICE_PROVIDER: protonvpn
               VPN_TYPE: wireguard
-              VPN_INTERFACE: wg0
+              # VPN_INTERFACE: wg0
               VPN_PORT_FORWARDING: on
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
               FIREWALL_INPUT_PORTS: &port 80
@@ -71,9 +71,9 @@ spec:
               WIREGUARD_MTU: 8900
               SHADOWSOCKS: on
               SHADOWSOCKS_LOG: on
-            envFrom:
-              - secretRef:
-                  name: qbittorrent
+            # envFrom:
+            #   - secretRef:
+            #       name: qbittorrent
             securityContext:
               capabilities:
                 add:
@@ -92,7 +92,7 @@ spec:
             dependsOn: gluetun
             image:
               repository: ghcr.io/onedr0p/qbittorrent
-              tag: 5.0.3@sha256:ef7b54df65ed34aec0809024061fc55b322cc8b3882dfebde499fb3f50f5bb62
+              tag: 5.0.3
             env:
               TZ: ${TIMEZONE}
               UMASK: "022"
@@ -200,7 +200,7 @@ spec:
         className: traefik-internal
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
         hosts:
           - host: &host qbittorrent.${SECRET_DOMAIN}
             paths:
@@ -247,7 +247,7 @@ spec:
             dnsdist:
               - path: /etc/dnsdist/dnsdist.conf
                 subPath: dnsdist.conf
-                readOnly: true
+                readOnly: false
       #scripts:
       #  type: configMap
       #  name: qbittorrent-scripts
