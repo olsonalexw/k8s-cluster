@@ -17,11 +17,9 @@ spec:
         namespace: flux-system
   driftDetection:
     mode: enabled
-
   values:
     defaultPodOptions:
       priorityClassName: system-node-critical
-
     controllers:
       generic-device-plugin:
         type: daemonset
@@ -39,13 +37,13 @@ spec:
                 cpu: 10m
               limits:
                 memory: 64Mi
-            securityContext:
-              # privileged: true
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: true
-              capabilities:
-                drop:
-                  - ALL
+            # securityContext:
+            #   # privileged: true
+            #   allowPrivilegeEscalation: false
+            #   readOnlyRootFilesystem: true
+            #   capabilities:
+            #     drop:
+            #       - ALL
 
     persistence:
       config:
@@ -58,13 +56,13 @@ spec:
       dev:
         type: hostPath
         hostPath: /dev
-        globalMounts:
-          - readOnly: true
+        # globalMounts:
+          # - readOnly: true
       sys:
         type: hostPath
         hostPath: /sys
-        globalMounts:
-          - readOnly: true
+        # globalMounts:
+        #   - readOnly: true
       var-lib-kubelet-device-plugins:
         type: hostPath
         hostPath: /var/lib/kubelet/device-plugins
