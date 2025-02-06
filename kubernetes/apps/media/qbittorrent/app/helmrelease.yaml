@@ -61,19 +61,20 @@ spec:
               TZ: ${TIMEZONE}
               DOT: "off"
               DNS_ADDRESS: "127.0.0.2"
+              PORT_FORWARD_ONLY: on
               VPN_SERVICE_PROVIDER: protonvpn
               VPN_TYPE: wireguard
-              # VPN_INTERFACE: wg0
+              VPN_INTERFACE: wg0
               VPN_PORT_FORWARDING: on
               VPN_PORT_FORWARDING_PROVIDER: protonvpn
               FIREWALL_INPUT_PORTS: &port 80
-              FIREWALL_OUTBOUND_SUBNETS: 172.22.0.0/16,172.24.0.0/16 # Allow access to k8s subnets
+              FIREWALL_OUTBOUND_SUBNETS: 10.69.0.0/16,10.96.0.0/16 # Allow access to k8s subnets
               WIREGUARD_MTU: 8900
               SHADOWSOCKS: on
               SHADOWSOCKS_LOG: on
-            # envFrom:
-            #   - secretRef:
-            #       name: qbittorrent
+            envFrom:
+              - secretRef:
+                  name: qbittorrent-secret
             securityContext:
               capabilities:
                 add:
@@ -98,13 +99,13 @@ spec:
               UMASK: "022"
               QBITTORRENT__PORT: *port
               QBITTORRENT__BT_PORT: &bittorrentPort 50413
-              # QBT_BitTorrent__Session__AsyncIOThreadsCount: "4"
+              QBT_BitTorrent__Session__AsyncIOThreadsCount: "4"
               QBT_BitTorrent__Session__DefaultSavePath: /media/downloads/qbittorrent/complete
               QBT_BitTorrent__Session__DisableAutoTMMByDefault: "false"
-              # QBT_BitTorrent__Session__Interface: wg0
-              # QBT_BitTorrent__Session__InterfaceAddress: 0.0.0.0
-              # QBT_BitTorrent__Session__InterfaceName: wg0
-              # QBT_BitTorrent__Session__LSDEnabled: "false"
+              QBT_BitTorrent__Session__Interface: wg0
+              QBT_BitTorrent__Session__InterfaceAddress: 0.0.0.0
+              QBT_BitTorrent__Session__InterfaceName: wg0
+              QBT_BitTorrent__Session__LSDEnabled: "false"
               QBT_BitTorrent__Session__TempPath: /media/downloads/qbittorrent/incomplete
               QBT_BitTorrent__Session__TempPathEnabled: "true"
               QBT_BitTorrent__Session__TorrentExportDirectory: /media/downloads/qbittorrent/torrents
