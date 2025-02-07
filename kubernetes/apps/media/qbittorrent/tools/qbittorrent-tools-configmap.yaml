@@ -178,6 +178,16 @@ data:
         required_seed_ratio: 0
         required_seed_days: 0
 
+      - name: piratebay
+        urls:
+          - tracker.openbittorrent.com
+          - tracker.opentrackr.org
+          - opentracker.i2p.rocks
+          - tracker.auctor.tv
+          - open.demonii.com
+        required_seed_ratio: 0
+        required_seed_days: 0
+
       - name: privatehd
         urls:
           - privatehd.to
@@ -226,20 +236,6 @@ data:
           - superbits.org
         required_seed_ratio: 1.15
         required_seed_days: 2.5
-
-      - name: thepiratebay
-        urls:
-          - open.tracker.thepiratebay.org
-          - tracker.leechers-paradise.org
-          - tracker.openbittorrent.com
-          - tracker.opentrackr.org
-          - opentracker.i2p.rocks
-          - tracker.publicbt.com
-          - tracker.auctor.tv
-          - open.demonii.com
-          - tracker.ccc.de
-        required_seed_ratio: 1.05
-        required_seed_days: 14.5
 
       - name: torrentday
         urls:
