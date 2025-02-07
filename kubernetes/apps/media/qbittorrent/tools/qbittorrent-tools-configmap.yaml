@@ -122,7 +122,7 @@ data:
           - bgp.technology
           - empirehost.me
           - stackoverflow.tech
-        required_seed_ratio: 1.5 # 1.05
+        required_seed_ratio: 1.05
         required_seed_days: 14.5
 
       - name: karagarga
@@ -229,9 +229,13 @@ data:
 
       - name: thepiratebay
         urls:
-          - thepiratebay.org
-        required_seed_ratio: 0
-        required_seed_days: 0
+          - http://open.tracker.thepiratebay.org/announce
+          - udp://tracker.openbittorrent.com:80/announce
+          - udp://tracker.publicbt.com:80/announce
+          - udp://tracker.ccc.de:80/announce
+          - udp://tracker.leechers-paradise.org:6969/announce
+        required_seed_ratio: 1.05
+        required_seed_days: 14.5
 
       - name: torrentday
         urls:
