@@ -99,23 +99,23 @@ spec:
               UMASK: "022"
               QBITTORRENT__PORT: *port
               QBITTORRENT__BT_PORT: &bittorrentPort 50413
-              QBT_BitTorrent__Session__AsyncIOThreadsCount: "4"
-              QBT_BitTorrent__Session__DefaultSavePath: /media/downloads/qbittorrent/complete
+              # QBT_BitTorrent__Session__AsyncIOThreadsCount: "4"
+              # QBT_BitTorrent__Session__DefaultSavePath: /media/downloads/qbittorrent/complete
               QBT_BitTorrent__Session__DisableAutoTMMByDefault: "false"
               QBT_BitTorrent__Session__Interface: wg0
               QBT_BitTorrent__Session__InterfaceAddress: 0.0.0.0
               QBT_BitTorrent__Session__InterfaceName: wg0
               QBT_BitTorrent__Session__LSDEnabled: "false"
-              QBT_BitTorrent__Session__TempPath: /media/downloads/qbittorrent/incomplete
-              QBT_BitTorrent__Session__TempPathEnabled: "true"
+              # QBT_BitTorrent__Session__TempPath: /media/downloads/qbittorrent/incomplete
+              # QBT_BitTorrent__Session__TempPathEnabled: "true"
               # QBT_BitTorrent__Session__TorrentExportDirectory: /media/downloads/qbittorrent/complete
-              QBT_Preferences__WebUI__AlternativeUIEnabled: true
-              QBT_Preferences__WebUI__AuthSubnetWhitelistEnabled: true
-              QBT_Preferences__WebUI__AuthSubnetWhitelist: |-
-                10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
-              QBT_Preferences__WebUI__LocalHostAuth: false
-              QBT_Preferences__WebUI__RootFolder: /addons/VueTorrent # have to set manually, doesn't work
-              QBT_Preferences__WebUI__UseUPNP: false
+              # QBT_Preferences__WebUI__AlternativeUIEnabled: true
+              # QBT_Preferences__WebUI__AuthSubnetWhitelistEnabled: true
+              # QBT_Preferences__WebUI__AuthSubnetWhitelist: |-
+              #   10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+              # QBT_Preferences__WebUI__LocalHostAuth: false
+              # QBT_Preferences__WebUI__RootFolder: /addons/VueTorrent # have to set manually, doesn't work
+              # QBT_Preferences__WebUI__UseUPNP: false
               #CROSS_SEED_HOST: cross-seed.media.svc.cluster.local
               #CROSS_SEED_PORT: 80
               #CROSS_SEED_SLEEP_INTERVAL: 0

@@ -196,6 +196,10 @@ data:
             description: Torrent Download Client
             icon: https://upload.wikimedia.org/wikipedia/commons/6/66/New_qBittorrent_Logo.svg
             siteMonitor: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+            widget:
+              type: qbittorrent
+              url: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+              enableLeechProgress: true # optional, defaults to false
         - Visual Studio:
             href: "{{HOMEPAGE_VAR_VSCODE_URL}}"
             description: Coding Server
