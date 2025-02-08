@@ -117,7 +117,7 @@ spec:
           cpu: 197m
           memory: 92M
         limits:
-          cpu: 3729m
+          cpu: 800m
           memory: 1378M
     vpa:
       enabled: false
@@ -139,13 +139,11 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-authentik-restrict-networks@kubernetescrd"
-
         hosts:
           - host: &host "goldilocks.${SECRET_DOMAIN}"
             paths:
               - path: /
                 type: Prefix
-
         tls:
           - hosts:
               - *host
