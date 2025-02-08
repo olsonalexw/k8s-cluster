@@ -10,6 +10,7 @@ resources:
   - ./csi-driver-nfs.yaml
   - ./emberstack-charts.yaml
   - ./external-dns.yaml
+  - ./fairwinds.yaml
   - ./ingress-nginx.yaml
   - ./jetstack.yaml
   - ./k8s-gateway.yaml
