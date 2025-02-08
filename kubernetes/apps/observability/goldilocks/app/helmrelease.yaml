@@ -65,7 +65,7 @@ spec:
                 - path: /
                   service:
                     identifier: main
-                    port: http
+                    port: 8080
           tls:
             - hosts:
                 - "goldilocks.${SECRET_DOMAIN}"
