@@ -123,22 +123,21 @@ spec:
       enabled: false
       updater:
         enabled: false
-
     dashboard:
       resources:
         requests:
           cpu: 15m
           memory: 107M
         limits:
-          cpu: 162m
-          memory: 1619M
+          cpu: 600m
+          memory: 2048M
       replicaCount: 1
       ingress:
         enabled: true
         ingressClassName: "traefik-internal"
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-authentik-restrict-networks@kubernetescrd"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
         hosts:
           - host: &host "goldilocks.${SECRET_DOMAIN}"
             paths:
