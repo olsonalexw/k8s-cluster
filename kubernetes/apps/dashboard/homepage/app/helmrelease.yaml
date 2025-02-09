@@ -40,11 +40,11 @@ spec:
                   name: homepage-secret
             resources:
               requests:
-                cpu: 15m
+                cpu: 500m
                 memory: 184M
               limits:
-                cpu: 21m
-                memory: 362M
+                cpu: 1000m
+                memory: 512M
     service:
       main:
         controller: main
