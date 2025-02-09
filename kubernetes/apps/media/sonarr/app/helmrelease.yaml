@@ -45,8 +45,8 @@ spec:
                 cpu: 15m
                 memory: 298M
               limits:
-                cpu: 45m
-                memory: 587M
+                cpu: 500m
+                memory: 1028M
     service:
       main:
         controller: main

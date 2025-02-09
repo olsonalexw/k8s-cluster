@@ -48,8 +48,8 @@ spec:
                 cpu: 49m
                 memory: 352M
               limits:
-                cpu: 154m
-                memory: 649M
+                cpu: 500m
+                memory: 1028M
     service:
       jellyseerr:
         controller: jellyseerr
