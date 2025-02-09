@@ -61,9 +61,11 @@ spec:
               tag: v0.19.14@sha256:905617dfc1a8aa1510381d8e177cc5581a49bfa9d56f3f05e0574f6c83987d3c
             resources: &resources
               requests:
-                cpu: 10m
+                cpu: 15m
+                memory: 105M
               limits:
-                memory: 256Mi
+                cpu: 21m
+                memory: 105M
             securityContext: &securityContext
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }

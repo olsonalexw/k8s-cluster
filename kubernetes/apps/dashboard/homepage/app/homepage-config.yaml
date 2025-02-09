@@ -107,7 +107,11 @@ data:
               url: "{{HOMEPAGE_VAR_TRUENAS_URL}}"
               key: "{{HOMEPAGE_VAR_TRUENAS_API_KEY}}"
               enablePools: "true"
-
+        - Goldilocks:
+            href: "{{HOMEPAGE_VAR_GOLDILOCKS_URL}}"
+            description: Goldilocks QoS
+            icon: https://www.fairwinds.com/hubfs/Icons/Fairwinds_Website_Icon_OPA_v1.svg
+            siteMonitor: "{{HOMEPAGE_VAR_GOLDILOCKS_URL}}"
     - Services:
         - Adguard:
             href: "{{HOMEPAGE_VAR_ADGUARD_URL}}"

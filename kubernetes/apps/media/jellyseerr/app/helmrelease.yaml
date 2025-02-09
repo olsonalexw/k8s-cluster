@@ -45,9 +45,11 @@ spec:
             #   capabilities: { drop: ["ALL"] }
             resources:
               requests:
-                cpu: 10m
+                cpu: 49m
+                memory: 352M
               limits:
-                memory: 2Gi
+                cpu: 154m
+                memory: 649M
     service:
       jellyseerr:
         controller: jellyseerr

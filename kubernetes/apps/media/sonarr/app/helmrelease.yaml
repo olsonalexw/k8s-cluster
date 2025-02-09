@@ -40,6 +40,13 @@ spec:
                 value: "https://sonarr.${SECRET_DOMAIN}"
               - name: SONARR__LOG_LEVEL
                 value: "info"
+            resources:
+              requests:
+                cpu: 15m
+                memory: 298M
+              limits:
+                cpu: 45m
+                memory: 587M
     service:
       main:
         controller: main

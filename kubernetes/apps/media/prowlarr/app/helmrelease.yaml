@@ -40,6 +40,13 @@ spec:
                 value: "https://prowlarr.${SECRET_DOMAIN}"
               - name: PROWLARR__LOG_LEVEL
                 value: "info"
+            resources:
+              requests:
+                cpu: 15m
+                memory: 249M
+              limits:
+                cpu: 21m
+                memory: 491M
     service:
       main:
         controller: main

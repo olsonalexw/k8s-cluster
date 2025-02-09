@@ -52,6 +52,13 @@ spec:
             image:
               repository: docker.io/powerdns/dnsdist-19
               tag: 1.9.8
+            resources:
+              requests:
+                cpu: 11m
+                memory: 50M
+              limits:
+                cpu: 21m
+                memory: 98M
           gluetun:
             dependsOn: dnsdist
             image:
@@ -82,11 +89,11 @@ spec:
               allowPrivilegeEscalation: false
             resources:
               requests:
-                cpu: 10m
-                memory: 442M
+                cpu: 11m
+                memory: 50M
               limits:
-                cpu: 500m
-                memory: 700M
+                cpu: 21m
+                memory: 98M
                 squat.ai/tun: 1
 
           qbittorrent:
@@ -134,11 +141,11 @@ spec:
             #       periodSeconds: 5
             resources:
               requests:
-                cpu: 34m
-                memory: 1024M
+                cpu: 11m
+                memory: 2408M
               limits:
-                cpu: 500m
-                memory: 2048M
+                cpu: 45m
+                memory: 4755M
 
             securityContext:
               runAsUser: 1001
@@ -172,6 +179,13 @@ spec:
               capabilities:
                 drop:
                   - ALL
+            resources:
+              requests:
+                cpu: 11m
+                memory: 24M
+              limits:
+                cpu: 45m
+                memory: 47M
 
           vuetorrent:
             dependsOn: qbittorrent
@@ -185,10 +199,11 @@ spec:
               - --root=/addons
             resources:
               requests:
-                cpu: 10m
-                memory: 25Mi
+                cpu: 11m
+                memory: 37M
               limits:
-                memory: 50Mi
+                cpu: 21m
+                memory: 72M
 
     service:
       app:

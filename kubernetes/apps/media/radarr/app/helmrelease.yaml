@@ -41,6 +41,13 @@ spec:
                 value: "https://radarr.${SECRET_DOMAIN}"
               - name: RADARR__LOG_LEVEL
                 value: "info"
+            resources:
+              requests:
+                cpu: 15m
+                memory: 629M
+              limits:
+                cpu: 45m
+                memory: 1242M
     service:
       main:
         controller: main

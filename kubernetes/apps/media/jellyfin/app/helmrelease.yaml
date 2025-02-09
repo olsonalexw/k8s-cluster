@@ -38,12 +38,12 @@ spec:
               JELLYFIN_PublishedServerUrl: "jellyfin.${SECRET_DOMAIN}"
             resources:
               requests:
-                cpu: 20m
-                memory: 512M
+                cpu: 49m
+                memory: 2049M
                 nvidia.com/gpu: 1
               limits:
-                cpu: 1000
-                memory: 4096M
+                cpu: 183m
+                memory: 4046M
                 nvidia.com/gpu: 1
     service:
       main:
