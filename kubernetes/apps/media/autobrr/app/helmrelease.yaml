@@ -27,7 +27,7 @@ spec:
       namespace: storage
   values:
     controllers:
-      autobrr:
+      main:
         annotations:
           reloader.stakater.com/auto: "true"
         containers:
@@ -78,7 +78,7 @@ spec:
         seccompProfile: { type: RuntimeDefault }
     service:
       main:
-        controller: main
+        controller: autobrr
         ports:
           http:
             port: *port
