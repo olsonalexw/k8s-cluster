@@ -56,9 +56,9 @@ spec:
               requests:
                 cpu: 11m
                 memory: 50M
-              limits:
-                cpu: 100m
-                memory: 200M
+              # limits:
+              #   cpu: 100m
+              #   memory: 200M
           gluetun:
             dependsOn: dnsdist
             image:
@@ -92,8 +92,8 @@ spec:
                 cpu: 11m
                 memory: 50M
               limits:
-                cpu: 400m
-                memory: 300M
+                # cpu: 400m
+                # memory: 300M
                 squat.ai/tun: 1
 
           qbittorrent:
@@ -143,9 +143,9 @@ spec:
               requests:
                 cpu: 11m
                 memory: 2408M
-              limits:
-                cpu: 45m
-                memory: 4755M
+              # limits:
+              #   cpu: 45m
+              #   memory: 4755M
 
             securityContext:
               runAsUser: 1001
@@ -183,9 +183,9 @@ spec:
               requests:
                 cpu: 11m
                 memory: 24M
-              limits:
-                cpu: 200m
-                memory: 500M
+              # limits:
+              #   cpu: 200m
+              #   memory: 500M
 
           vuetorrent:
             dependsOn: qbittorrent
@@ -201,9 +201,9 @@ spec:
               requests:
                 cpu: 11m
                 memory: 37M
-              limits:
-                cpu: 600m
-                memory: 2048M
+              # limits:
+              #   cpu: 600m
+              #   memory: 2048M
 
     service:
       app:
