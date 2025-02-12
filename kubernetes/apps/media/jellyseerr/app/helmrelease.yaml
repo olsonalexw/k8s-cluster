@@ -48,7 +48,6 @@ spec:
                 cpu: 49m
                 memory: 352M
               limits:
-                cpu: 500m
                 memory: 1028M
     service:
       jellyseerr:
