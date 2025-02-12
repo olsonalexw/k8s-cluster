@@ -86,6 +86,9 @@ data:
         - IT-Tools:
             - icon: https://cdn-icons-png.flaticon.com/512/868/868784.png
               href: https://it-tools.tech/
+        - Privacy-Card:
+            - icon: https://play-lh.googleusercontent.com/xcIH2rg95sUMnhLZiQmMMuuj-GL2VuKtDjfmbvGbf5ODUCTob2DyxOoc_ZRCp9s96w=w240-h480-rw
+              href: https://app.privacy.com/home
   docker.yaml: ""
     # Contents of docker.yaml
     # - name: Docker Hub
@@ -204,6 +207,11 @@ data:
               type: qbittorrent
               url: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
               enableLeechProgress: true # optional, defaults to false
+        - Autobrr:
+            href: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
+            description: IRC Watcher
+            icon: https://static-00.iconduck.com/assets.00/autobrr-icon-2048x1872-2oskmtt1.png
+            siteMonitor: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
         - Visual Studio:
             href: "{{HOMEPAGE_VAR_VSCODE_URL}}"
             description: Coding Server

@@ -122,8 +122,8 @@ data:
           - bgp.technology
           - empirehost.me
           - stackoverflow.tech
-        required_seed_ratio: 1.05
-        required_seed_days: 99999 # 14.5
+        required_seed_ratio: 9999
+        required_seed_days: 9999 # 14.5
 
       - name: karagarga
         urls:
