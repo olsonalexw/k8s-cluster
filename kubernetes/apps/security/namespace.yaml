@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: data
+  name: security
   labels:
     kustomize.toolkit.fluxcd.io/prune: disabled
     goldilocks.fairwinds.com/enabled: "true"

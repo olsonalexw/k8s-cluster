@@ -6,11 +6,11 @@ metadata:
   name: &app vaultwarden
   namespace: flux-system
 spec:
-  targetNamespace: data
+  targetNamespace: security
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  path: ./kubernetes/apps/data/vaultwarden/app
+  path: ./kubernetes/apps/security/vaultwarden/app
   prune: true
   sourceRef:
     kind: GitRepository

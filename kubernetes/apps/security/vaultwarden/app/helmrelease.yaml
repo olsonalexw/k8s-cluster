@@ -38,23 +38,23 @@ spec:
               repository: vaultwarden/server
               tag: 1.33.1@sha256:24aa90c2424f2f6b10862ba84dc9141d09c1df2b7025f111c9b2bbc4c078894b
             env:
-              DATA_FOLDER: data
-              ICON_CACHE_FOLDER: data/icon_cache
-              ATTACHMENTS_FOLDER: data/attachments
-              DOMAIN: "https://vaultwarden.${SECRET_EXTERNAL_DOMAIN}"
+              # DATA_FOLDER: data
+              # ICON_CACHE_FOLDER: data/icon_cache
+              # ATTACHMENTS_FOLDER: data/attachments
+              DOMAIN: "https://vaultwarden.${SECRET_DOMAIN}"
               TZ: "${TIMEZONE}"
               SIGNUPS_ALLOWED: "false"
               WEBSOCKET_ENABLED: "true"
               WEBSOCKET_ADDRESS: 0.0.0.0
               WEBSOCKET_PORT: 3012
-              SMTP_HOST: smtp-relay.default.svc.cluster.local.
-              SMTP_FROM: vaultwarden@${SECRET_DOMAIN}
-              SMTP_FROM_NAME: vaultwarden
-              SMTP_PORT: 2525
-              SMTP_SECURITY: "off"
-            # envFrom:
-            #   - secretRef:
-            #       name: vaultwarden-secret
+              # SMTP_HOST: smtp-relay.default.svc.cluster.local.
+              # SMTP_FROM: vaultwarden@${SECRET_DOMAIN}
+              # SMTP_FROM_NAME: vaultwarden
+              # SMTP_PORT: 2525
+              # SMTP_SECURITY: "off"
+            envFrom:
+              - secretRef:
+                  name: vaultwarden-secret
             #   - secretRef:
             #       name: vaultwarden-db-secret
             resources:
@@ -75,7 +75,7 @@ spec:
         className: traefik-internal
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
         hosts:
           - host: &host "vaultwarden.${SECRET_DOMAIN}"
             paths:
