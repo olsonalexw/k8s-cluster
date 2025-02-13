@@ -46,7 +46,6 @@ spec:
               ATTACHMENTS_FOLDER: data/attachments
               DOMAIN: "https://vaultwarden.${SECRET_DOMAIN}"
               TZ: "${TIMEZONE}"
-              # WEB_VAULT_ENABLED: "true"
               SIGNUPS_ALLOWED: "false"
               WEBSOCKET_ENABLED: "true"
               WEBSOCKET_ADDRESS: 0.0.0.0
@@ -63,10 +62,10 @@ spec:
             #       name: vaultwarden-db-secret
             resources:
               requests:
-                cpu: 100m
-                memory: 100M
+                cpu: 15m
+                memory: 105M
               limits:
-                memory: 512M
+                memory: 655M
     service:
       main:
         controller: main
