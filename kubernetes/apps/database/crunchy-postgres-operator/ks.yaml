@@ -17,7 +17,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   wait: true
   # dependsOn:
   #   - name: onepassword-store
@@ -41,7 +40,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   wait: true
   # postBuild:
   #   substituteFrom:
@@ -50,7 +48,7 @@ spec:
   #       optional: false
   dependsOn:
     - name: crunchy-postgres-operator
-      namespace: database
+      namespace: flux-system # database
     # - name: onepassword-store
     #   namespace: external-secrets
 ---
@@ -72,13 +70,12 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   wait: true
   dependsOn:
     - name: crunchy-postgres-operator-cluster
-      namespace: database
+      namespace: flux-system # database
     - name: external-secrets
-      namespace: external-secrets
+      namespace: flux-system # external-secrets
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -98,5 +95,4 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-    namespace: flux-system
   wait: false
