@@ -117,7 +117,7 @@ spec:
           volume: &nfs
             volumeClaimSpec:
               storageClassName: nfs-csi
-              volumeName: nfs-postgres-pv
+              volumeName: nfs-pgbackrest-pv
               accessModes:
                 - ReadWriteMany
               resources:
