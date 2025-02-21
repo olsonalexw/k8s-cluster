@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: nfs-pgbackrest-pv
+  name: nfs-backups-pv
 spec:
   storageClassName: nfs-csi
   capacity:
@@ -13,7 +13,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: 192.168.1.2
-    path: /mnt/OlsonNAS/nfs/backups/postgres-cluster
+    path: /mnt/OlsonNAS/nfs/backups
   mountOptions:
     - nfsvers=4.2
     - nconnect=16
