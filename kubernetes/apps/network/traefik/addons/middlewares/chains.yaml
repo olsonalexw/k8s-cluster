@@ -16,6 +16,21 @@ spec:
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
+  name: chain-basic-auth
+spec:
+  chain:
+    middlewares:
+      - name: network-traefik-middleware-basic-auth@kubernetescrd
+      - name: network-traefik-middleware-rate-limit@kubernetescrd
+      - name: network-traefik-middleware-secure-headers@kubernetescrd
+      - name: network-traefik-middleware-compress@kubernetescrd
+      # - name: network-traefik-middleware-blockuseragent@kubernetescrd
+      # - name: network-traefik-middleware-crowdsec-bouncer@kubernetescrd
+      # - name: network-traefik-middleware-error-pages@kubernetescrd
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
   name: chain-no-auth-restrict-networks
 spec:
   chain:
