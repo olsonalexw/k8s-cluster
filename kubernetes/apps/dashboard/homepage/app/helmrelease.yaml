@@ -63,12 +63,16 @@ spec:
           # gethomepage.dev/icon: homepage.png
           # gethomepage.dev/name: Homepage
         hosts:
-          - host: "homepage.${SECRET_DOMAIN}"
+          - host: &host "homepage.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
                   identifier: main
                   port: http
+        tls:
+          - hosts:
+              - *host
+            secretName: "${SECRET_DOMAIN/./-}-production-tls"
     persistence:
       config:
         type: configMap
