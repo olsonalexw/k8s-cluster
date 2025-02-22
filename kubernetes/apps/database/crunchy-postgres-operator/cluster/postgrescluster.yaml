@@ -98,8 +98,8 @@ spec:
         repo1-bundle: "y"
         repo1-retention-full: "30" # days
         repo1-retention-full-type: "time"
-        repo1-path: /pgbackrest/repo1/postgres-cluster
-        log-path: /pgbackrest/repo1/postgres-cluster/log
+        # repo1-path: /pgbackrest/repo1/postgres-cluster
+        # log-path: /pgbackrest/repo1/postgres-cluster/log
         # R2
         # repo2-block: "y"
         # repo2-bundle: "y"
@@ -119,7 +119,7 @@ spec:
           volume: &nfs
             volumeClaimSpec:
               storageClassName: nfs-csi
-              volumeName: nfs-backups-pv
+              volumeName: nfs-pgbackrest-pv
               accessModes:
                 - ReadWriteMany
               resources:
