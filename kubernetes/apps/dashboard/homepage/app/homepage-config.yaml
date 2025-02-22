@@ -198,6 +198,10 @@ data:
             description: Usenet Download Client
             icon: https://static-00.iconduck.com/assets.00/sabnzbd-text-icon-256x256-k89vgimn.png
             siteMonitor: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
+            widget:
+              type: sabnzbd
+              url: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
+              key: "{{HOMEPAGE_VAR_SABNZBD_API_KEY}}"
         - qBittorrent:
             href: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
             description: Torrent Download Client
