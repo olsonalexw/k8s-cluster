@@ -3,6 +3,9 @@ kind: ConfigMap
 metadata:
   name: homepage-config
 data:
+  kubernetes.yaml: |
+    mode: cluster
+  settings: ""
   bookmarks.yaml: |
     - AI:
         - DeepSeek:
@@ -47,6 +50,9 @@ data:
             - icon: https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-black-icon.png
               href: https://x.com/
     - Tools:
+        - Github:
+            - icon: github.svg
+              href: https://github.com/
         - Google Fi:
             - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Google_Fi_Logo.svg/1200px-Google_Fi_Logo.svg.png
               href: https://fi.google.com/account
@@ -80,60 +86,73 @@ data:
         - IT-Tools:
             - icon: https://cdn-icons-png.flaticon.com/512/868/868784.png
               href: https://it-tools.tech/
-  docker.yaml: |
+        - Privacy-Card:
+            - icon: https://play-lh.googleusercontent.com/xcIH2rg95sUMnhLZiQmMMuuj-GL2VuKtDjfmbvGbf5ODUCTob2DyxOoc_ZRCp9s96w=w240-h480-rw
+              href: https://app.privacy.com/home
+  docker.yaml: ""
     # Contents of docker.yaml
     # - name: Docker Hub
     #   url: https://hub.docker.com
-  kubernetes.yaml: |
-    mode: cluster
   services.yaml: |
     - Admin:
         - Router:
             href: "{{HOMEPAGE_VAR_ROUTER_URL}}"
             description: Router Admin Page
-            icon: https://i.pinimg.com/736x/61/6c/1d/616c1dda06d4a37e62ad72d272aabd07.jpg
+            icon: https://1000logos.net/wp-content/uploads/2016/10/Asus-Logo.png
+            siteMonitor: "{{HOMEPAGE_VAR_ROUTER_URL}}"
         - TrueNAS:
             href: "{{HOMEPAGE_VAR_TRUENAS_URL}}"
             description: Network Attached Storage
             icon: truenas.svg # https://avatars.githubusercontent.com/u/53482242?s=280&v=4
+            siteMonitor: "{{HOMEPAGE_VAR_TRUENAS_URL}}"
             widget:
               type: truenas
               url: "{{HOMEPAGE_VAR_TRUENAS_URL}}"
               key: "{{HOMEPAGE_VAR_TRUENAS_API_KEY}}"
               enablePools: "true"
-
+        - Goldilocks:
+            href: "{{HOMEPAGE_VAR_GOLDILOCKS_URL}}"
+            description: Goldilocks QoS
+            icon: https://www.fairwinds.com/hubfs/Icons/Fairwinds_Website_Icon_OPA_v1.svg
+            siteMonitor: "{{HOMEPAGE_VAR_GOLDILOCKS_URL}}"
     - Services:
         - Adguard:
             href: "{{HOMEPAGE_VAR_ADGUARD_URL}}"
             description: DNS Services
             icon: https://static-00.iconduck.com/assets.00/adguard-home-icon-2023x2048-zxumr62h.png
+            siteMonitor: "{{HOMEPAGE_VAR_ADGUARD_URL}}"
             widget:
               type: adguard
-              url: "{{HOMEPAGE_VAR_ADGUARD_URL2}}"
+              url: "{{HOMEPAGE_VAR_ADGUARD_URL}}"
               username: "{{HOMEPAGE_VAR_ADGUARD_USERNAME}}"
               password: "{{HOMEPAGE_VAR_ADGUARD_PASSWORD}}"
+              fields: ["queries", "blocked"]
         - Nextcloud:
             href: "{{HOMEPAGE_VAR_NEXTCLOUD_URL}}"
             description: Personal File Hosting
             icon: https://img.icons8.com/?size=512&id=2dCsJ8Pa920S&format=png
+            siteMonitor: "{{HOMEPAGE_VAR_NEXTCLOUD_URL}}"
         - VaultWarden:
             href: "{{HOMEPAGE_VAR_VAULTWARDEN_URL}}"
             description: Personal Password Manager
             icon: https://img.icons8.com/?size=512&id=RR3DYslPXr2j&format=png
+            siteMonitor: "{{HOMEPAGE_VAR_VAULTWARDEN_URL}}"
         - Cloudflare-DDNS:
             href: https://dash.cloudflare.com/
             description: DNS Updater
             icon: https://img.icons8.com/?size=512&id=13682&format=png
+            siteMonitor: https://dash.cloudflare.com/
         - Paperless:
             href: "{{HOMEPAGE_VAR_PAPERLESS_URL}}"
             description: Document Manager
             icon: https://artifacthub.io/image/3ad49bcb-4897-4e64-8d0c-f6dda84377a4@3x
-
+            siteMonitor: "{{HOMEPAGE_VAR_PAPERLESS_URL}}"
     - Media:
         - Jellyfin:
             href: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
             description: Streaming Media Service
             icon: https://play-lh.googleusercontent.com/SxdWPR-oZQt9tqph0pyU62_CbyfdQX9g1R5_Nd_vwdkV0IIDceNsytVgdzyHHJGdAwM
+            siteMonitor: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
             widget:
               type: jellyfin
               url: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
@@ -147,6 +166,7 @@ data:
             href: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
             description: Request TV Shows and Movies via WebUI
             icon: https://static-00.iconduck.com/assets.00/jellyseerr-icon-2048x1968-ox8q7e49.png
+            siteMonitor: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
             widget:
               type: jellyseerr
               url: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
@@ -155,53 +175,81 @@ data:
             href: "{{HOMEPAGE_VAR_RADARR_URL}}"
             description: Movies Management
             icon: https://static-00.iconduck.com/assets.00/radarr-icon-462x512-bydv4e4f.png
+            siteMonitor: "{{HOMEPAGE_VAR_RADARR_URL}}"
         - Sonarr:
             href: "{{HOMEPAGE_VAR_SONARR_URL}}"
             description: TV Shows Management
             icon: https://res.cloudinary.com/razordarkamg/image/upload/v1621212884/SonarrV3_pufacd.png
+            siteMonitor: "{{HOMEPAGE_VAR_SONARR_URL}}"
 
     - Tools:
         - Notifiarr:
             href: "{{HOMEPAGE_VAR_NOTIFIARR_URL}}"
             description: Discord Notifications for Services
             icon: https://notifiarr.com/images/logo/notifiarr.png
+            siteMonitor: "{{HOMEPAGE_VAR_NOTIFIARR_URL}}"
         - Prowlarr:
             href: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
             description: Indexer Manager
             icon: https://static-00.iconduck.com/assets.00/prowlarr-icon-2048x2048-2pxvehfe.png
+            siteMonitor: "{{HOMEPAGE_VAR_PROWLARR_URL}}"
         - SABnzbd:
             href: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
             description: Usenet Download Client
             icon: https://static-00.iconduck.com/assets.00/sabnzbd-text-icon-256x256-k89vgimn.png
+            siteMonitor: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
+            widget:
+              type: sabnzbd
+              url: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
+              key: "{{HOMEPAGE_VAR_SABNZBD_API_KEY}}"
         - qBittorrent:
             href: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
             description: Torrent Download Client
             icon: https://upload.wikimedia.org/wikipedia/commons/6/66/New_qBittorrent_Logo.svg
+            siteMonitor: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+            widget:
+              type: qbittorrent
+              url: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+              enableLeechProgress: true # optional, defaults to false
+        - Autobrr:
+            href: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
+            description: IRC Watcher
+            icon: https://static-00.iconduck.com/assets.00/autobrr-icon-2048x1872-2oskmtt1.png
+            siteMonitor: "{{HOMEPAGE_VAR_AUTOBRR_URL}}"
         - Visual Studio:
             href: "{{HOMEPAGE_VAR_VSCODE_URL}}"
             description: Coding Server
             icon: https://raw.githubusercontent.com/vscode-icons/vscode-icons/master/images/logo@3x.png
-
+            siteMonitor: "{{HOMEPAGE_VAR_VSCODE_URL}}"
   settings.yaml: |
     background:
-      image: https://images4.alphacoders.com/106/1068731.jpg
-      opacity: 60
-      blur: sm
+      image: https://i.ibb.co/Q7FSHG3v/photo-1622737133809-d95047b9e675.jpg # https://i.redd.it/7pgm8d9j1er71.png # https://images4.alphacoders.com/106/1068731.jpg
+      blur: md
+      opacity: 95
+
     providers:
       openweathermap: openweathermapapikey
       weatherapi: weatherapiapikey
     target: _self
     theme: dark
     color: slate
+    hideErrors: true
+    hideVersion: true
+    # headerStyle: boxed
   widgets.yaml: |
-    - resources:
-        cpu: true
-        memory: true
-        disk: /
+    # - resources:
+    #     cpu: true
+    #     memory: true
+    #     disk: /
 
     - search:
         provider: google
         target: _blank
+
+    - datetime:
+        text_size: md
+        format:
+          timeStyle: short
 
     - weatherapi:
         #label: Home # optional
@@ -210,3 +258,23 @@ data:
         units: imperial # or metric
         apiKey: {{HOMEPAGE_VAR_WEATHER_API_KEY}}
         cache: 5 # Time in minutes to cache API responses, to stay within limits
+
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: "cluster"
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+
+    # - resources:
+    #     backend: resources
+    #     expanded: true
+    #     cpu: true
+    #     memory: true
+    #     network: default

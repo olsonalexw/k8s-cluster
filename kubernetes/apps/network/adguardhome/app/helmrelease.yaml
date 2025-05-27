@@ -14,6 +14,9 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  dependsOn:
+    - name: csi-driver-nfs
+      namespace: storage
   install:
     remediation:
       retries: 3
@@ -31,7 +34,7 @@ spec:
           volumeClaimTemplates:
             - name: adguardhome
               storageClass: nfs-csi
-              accessMode: ReadWriteOnce
+              accessMode: ReadWriteMany
               size: 2Gi
               advancedMounts:
                 app:
@@ -55,21 +58,39 @@ spec:
               #   drop: ["ALL"]
             resources:
               requests:
-                cpu: "100m"
+                cpu: "50m"
+                memory: "64Mi"
               limits:
-                memory: "256Mi"
+                memory: "512Mi"
     service:
       adguardhome:
         controller: adguardhome
-        type: LoadBalancer  # Use LoadBalancer to expose the service
-        externalTrafficPolicy: Local  # Route traffic to local pods
+        type: LoadBalancer  # Use LoadBalancer to expose the service externally
+        externalTrafficPolicy: Cluster # Allows Failover of Nodes # Local # Route external traffic to local pods
         annotations:
-          io.cilium/lb-ipam-ips: "${IPAM_IP_ADGUARDHOME}"  # Use the IP from cluster-settings.yaml
+          io.cilium/lb-ipam-ips: "${IPAM_IP_ADGUARDHOME}"  # Use the IP from cluster-settings.yaml for external access
         ports:
           dns-udp:
             port: 53       # Add DNS UDP port
             protocol: UDP
           dns-tcp:
+            port: 53       # Add DNS TCP port
+            protocol: TCP
+          dns-tcp-tls:
+            port: 853      # Add DNS-over-TLS TCP port
+            protocol: TCP
+      adguardhome-internal:
+        controller: adguardhome
+        type: ClusterIP  # Use ClusterIP for internal DNS queries
+        clusterIP: ${IPAM_IP_ADGUARDHOME_INTERNAL}
+        ports:
+          dns-udp-internal:
+            port: 53
+            protocol: UDP
+          dns-tcp-internal:
+            port: 53
+            protocol: TCP
+          dns-tcp-tls:
             port: 853      # Add DNS-over-TLS TCP port
             protocol: TCP
       adguardhome-webui:
@@ -85,7 +106,7 @@ spec:
         className: traefik-internal
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
         hosts:
           - host: "adguardhome.${SECRET_DOMAIN}"
             paths:

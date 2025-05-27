@@ -1,0 +1,157 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage-external-config
+data:
+  kubernetes.yaml: |
+    mode: cluster
+  settings: ""
+  bookmarks.yaml: |
+    - AI:
+        - DeepSeek:
+            - icon: https://custom.typingmind.com/assets/models/deepseek.png
+              href: https://chat.deepseek.com/
+        - Perplexity:
+            - icon: https://img.icons8.com/?size=512&id=kzJWN5jCDzpq&format=png
+              href: https://www.perplexity.ai/
+        - ChatGPT:
+            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/800px-ChatGPT_logo.svg.png
+              href: https://chat.openai.com/
+        - Grok:
+            - icon: https://registry.npmmirror.com/@lobehub/icons-static-png/1.13.0/files/dark/grok.png
+              href: https://x.com/i/grok
+        - v0:
+            - icon: https://registry.npmmirror.com/@lobehub/icons-static-png/1.13.0/files/dark/v0.png
+              href: https://v0.dev/
+
+    - Entertainment:
+        - YouTube:
+            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png
+              href: https://youtube.com/
+        - Daily Wire:
+            - icon: https://play-lh.googleusercontent.com/UyZ_AuTShQl58oz6F5rM2niyrSIc7J0DfSpDEELHKpCghq5LZc-Tx7_ZAJ44tvUQkNqr
+              href: https://dailywire.com/
+        - Twitch:
+            - icon: https://cdn-icons-png.flaticon.com/512/3991/3991943.png
+              href: https://twitch.tv/
+
+    - Social:
+        - Gmail:
+            - icon: https://mailmeteor.com/logos/assets/PNG/Gmail_Logo_512px.png
+              href: https://mail.google.com
+        - Reddit:
+            - icon: https://upload.wikimedia.org/wikipedia/en/thumb/b/bd/Reddit_Logo_Icon.svg/1200px-Reddit_Logo_Icon.svg.png
+              href: https://reddit.com/
+        - X:
+            - icon: https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/x-social-media-black-icon.png
+              href: https://x.com/
+
+    - Tools:
+        - Github:
+            - icon: github.svg
+              href: https://github.com/
+        - Google Fi:
+            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Google_Fi_Logo.svg/1200px-Google_Fi_Logo.svg.png
+              href: https://fi.google.com/account
+        - Cloudflare:
+            - icon: https://img.icons8.com/?size=512&id=13682&format=png
+              href: https://dash.cloudflare.com/
+        - Speedtest:
+            - icon: https://speed.cloudflare.com/static/img/speedrabbit-animate.gif
+              href: https://speed.cloudflare.com/
+        - Winget:
+            - icon: https://raw.githubusercontent.com/Yves848/WingetPosh/master/Winget-posh/wingetposh2.ico
+              href: https://winget.run/
+        - Sensitivity:
+            - icon: https://www.mouse-sensitivity.com/uploads/monthly_2021_02/avatar.thumb.png.9ad29fb516eb3600bd05f656f4ed755c.png
+              href: https://mouse-sensitivity.com/
+        - Massgrave:
+            - icon: https://massgrave.dev/img/logo.png
+              href: https://massgrave.dev
+        - Piratebay:
+            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/The_Pirate_Bay_logo.svg/1200px-The_Pirate_Bay_logo.svg.png
+              href: https://thepiratebay.zone/
+        - Library Genesis:
+            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Libgen_logo.svg/1200px-Libgen_logo.svg.png
+              href: http://libgen.rs/
+        - MBDList:
+            - icon: https://styles.redditmedia.com/t5_2s2nx3/styles/communityIcon_m0k9rns7o3471.png
+              href: https://mdblist.com/
+        - Polymarket:
+            - icon: https://storage.googleapis.com/blocktribune-bucket/2020/10/polymarket.jpg
+              href: https://polymarket.com/elections
+        - IT-Tools:
+            - icon: https://cdn-icons-png.flaticon.com/512/868/868784.png
+              href: https://it-tools.tech/
+        - Privacy-Card:
+            - icon: https://play-lh.googleusercontent.com/xcIH2rg95sUMnhLZiQmMMuuj-GL2VuKtDjfmbvGbf5ODUCTob2DyxOoc_ZRCp9s96w=w240-h480-rw
+              href: https://app.privacy.com/home
+
+  docker.yaml: ""
+
+  services.yaml: |
+    - Media:
+        - Jellyfin:
+            href: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
+            description: Streaming Media Service
+            icon: https://play-lh.googleusercontent.com/SxdWPR-oZQt9tqph0pyU62_CbyfdQX9g1R5_Nd_vwdkV0IIDceNsytVgdzyHHJGdAwM
+            siteMonitor: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
+            widget:
+              type: jellyfin
+              url: "{{HOMEPAGE_VAR_JELLYFIN_URL}}"
+              key: "{{HOMEPAGE_VAR_JELLYFIN_API_KEY}}"
+              # enableBlocks: true # optional, defaults to false
+              # enableNowPlaying: true # optional, defaults to true
+              # enableUser: true # optional, defaults to false
+              # showEpisodeNumber: true # optional, defaults to false
+              # expandOneStreamToTwoRows: false # optional, defaults to true
+        - JellySeerr:
+            href: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
+            description: Request TV Shows and Movies via WebUI
+            icon: https://static-00.iconduck.com/assets.00/jellyseerr-icon-2048x1968-ox8q7e49.png
+            siteMonitor: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
+            widget:
+              type: jellyseerr
+              url: "{{HOMEPAGE_VAR_JELLYSEERR_URL}}"
+              key: "{{HOMEPAGE_VAR_JELLYSEERR_API_KEY}}"
+
+    - Downloads:
+        - SABnzbd:
+            href: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
+            description: Usenet Download Client
+            icon: https://static-00.iconduck.com/assets.00/sabnzbd-text-icon-256x256-k89vgimn.png
+            siteMonitor: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
+            widget:
+              type: sabnzbd
+              url: "{{HOMEPAGE_VAR_SABNZBD_URL}}"
+              key: "{{HOMEPAGE_VAR_SABNZBD_API_KEY}}"
+        - qBittorrent:
+            href: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+            description: Torrent Download Client
+            icon: https://upload.wikimedia.org/wikipedia/commons/6/66/New_qBittorrent_Logo.svg
+            siteMonitor: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+            widget:
+              type: qbittorrent
+              url: "{{HOMEPAGE_VAR_QBITTORRENT_URL}}"
+              enableLeechProgress: true # optional, defaults to false
+
+  settings.yaml: |
+    background:
+      image: https://i.ibb.co/Q7FSHG3v/photo-1622737133809-d95047b9e675.jpg
+      blur: md
+      opacity: 95
+    target: _self
+    theme: dark
+    color: slate
+    hideErrors: true
+    hideVersion: true
+    # headerStyle: boxed
+  widgets.yaml: |
+    # - resources:
+    #     cpu: true
+    #     memory: true
+    #     disk: /
+
+    - search:
+        provider: google
+        target: _blank

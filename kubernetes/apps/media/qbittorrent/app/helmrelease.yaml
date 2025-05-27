@@ -1,0 +1,282 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: qbittorrent
+spec:
+  interval: 30m
+  timeout: 10m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: csi-driver-nfs
+      namespace: storage
+    # - name: volsync
+    #   namespace: system
+    - name: generic-device-plugin
+      namespace: kube-system
+  values:
+    controllers:
+      qbittorrent:
+        annotations:
+          configmap.reloader.stakater.com/reload: qbittorrent-dnsdist #qbittorrent-scripts
+          secret.reloader.stakater.com/reload: qbittorrent
+
+        pod:
+          securityContext:
+            fsGroup: 1001
+            fsGroupChangePolicy: "OnRootMismatch"
+            supplementalGroups:
+              - 65534
+
+        containers:
+          dnsdist:
+            image:
+              repository: docker.io/powerdns/dnsdist-19
+              tag: 1.9.8
+            resources:
+              requests:
+                cpu: 11m
+                memory: 50M
+              # limits:
+              #   cpu: 100m
+              #   memory: 200M
+          gluetun:
+            dependsOn: dnsdist
+            image:
+              repository: ghcr.io/qdm12/gluetun
+              tag: v3.40.0
+            env:
+              TZ: ${TIMEZONE}
+              DOT: "off"
+              DNS_ADDRESS: "127.0.0.2"
+              PORT_FORWARD_ONLY: on
+              VPN_TYPE: wireguard
+              VPN_INTERFACE: wg0
+              VPN_SERVICE_PROVIDER: protonvpn
+              VPN_PORT_FORWARDING: on
+              VPN_PORT_FORWARDING_PROVIDER: protonvpn
+              FIREWALL_INPUT_PORTS: &port 80
+              FIREWALL_OUTBOUND_SUBNETS: 10.69.0.0/16,10.96.0.0/16 # Allow access to k8s subnets
+              WIREGUARD_MTU: 8900
+              SHADOWSOCKS: on
+              SHADOWSOCKS_LOG: on
+            envFrom:
+              - secretRef:
+                  name: qbittorrent-secret
+            securityContext:
+              capabilities:
+                add:
+                  - NET_ADMIN
+              allowPrivilegeEscalation: false
+            resources:
+              requests:
+                cpu: 11m
+                memory: 50M
+              limits:
+                # cpu: 400m
+                # memory: 300M
+                squat.ai/tun: 1
+
+          qbittorrent:
+            dependsOn: gluetun
+            image:
+              repository: ghcr.io/onedr0p/qbittorrent
+              tag: 5.0.3
+            env:
+              TZ: ${TIMEZONE}
+              UMASK: "022"
+              QBITTORRENT__PORT: *port
+              QBITTORRENT__BT_PORT: &bittorrentPort 50413
+              # QBT_BitTorrent__Session__AsyncIOThreadsCount: "4"
+              # QBT_BitTorrent__Session__DefaultSavePath: /media/downloads/qbittorrent/complete
+              # QBT_BitTorrent__Session__DisableAutoTMMByDefault: "false"                                      # "Default Torrent Management Mode" under Downloads section of settings
+              QBT_BitTorrent__Session__Interface: wg0
+              QBT_BitTorrent__Session__InterfaceAddress: 0.0.0.0
+              QBT_BitTorrent__Session__InterfaceName: wg0
+              # QBT_BitTorrent__Session__LSDEnabled: "false"                                                 # I believe this is "Enable Local Peer Discovery to find more peers" in the webui
+              # QBT_BitTorrent__Session__TempPath: /media/downloads/qbittorrent/incomplete
+              # QBT_BitTorrent__Session__TempPathEnabled: "true"
+              # QBT_BitTorrent__Session__TorrentExportDirectory: /media/downloads/qbittorrent/complete
+              # QBT_Preferences__WebUI__AlternativeUIEnabled: true
+              # QBT_Preferences__WebUI__AuthSubnetWhitelistEnabled: true
+              # QBT_Preferences__WebUI__AuthSubnetWhitelist: |-
+              #   10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+              # QBT_Preferences__WebUI__LocalHostAuth: false
+              # QBT_Preferences__WebUI__RootFolder: /addons/VueTorrent                                       # have to set all of these manually, none of the "QBT" env variables appear to work for me
+              # QBT_Preferences__WebUI__UseUPNP: false
+              #CROSS_SEED_HOST: cross-seed.media.svc.cluster.local
+              #CROSS_SEED_PORT: 80
+              #CROSS_SEED_SLEEP_INTERVAL: 0
+            # envFrom:
+            #   - secretRef:
+            #       name: qbittorrent
+            # probes:
+            #   liveness:
+            #     enabled: true
+            #   readiness:
+            #     enabled: true
+            #   startup:
+            #     enabled: true
+            #     spec:
+            #       failureThreshold: 30
+            #       periodSeconds: 5
+            resources:
+              requests:
+                cpu: 11m
+                memory: 2408M
+              # limits:
+              #   cpu: 45m
+              #   memory: 4755M
+
+            securityContext:
+              runAsUser: 1001
+              runAsGroup: 1001
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+
+          port-forward:
+            image:
+              repository: ghcr.io/bjw-s-labs/gluetun-qb-port-sync
+              tag: 0.0.4@sha256:1689650236d3f0b9fc79551ce47770e9a743ed3b1d8196f6cc3737cd8cbe92e2
+            env:
+              TZ: ${TIMEZONE}
+              GLUETUN_CONTROL_SERVER_HOST: localhost
+              GLUETUN_CONTROL_SERVER_PORT: 8000
+              QBITTORRENT_HOST: localhost
+              QBITTORRENT_WEBUI_PORT: *port
+              CRON_ENABLED: true
+              CRON_SCHEDULE: "*/5 * * * *"
+              LOG_TIMESTAMP: false
+            securityContext:
+              runAsUser: 1001
+              runAsGroup: 1001
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: false
+              capabilities:
+                drop:
+                  - ALL
+            resources:
+              requests:
+                cpu: 11m
+                memory: 24M
+              # limits:
+              #   cpu: 200m
+              #   memory: 500M
+
+          vuetorrent:
+            dependsOn: qbittorrent
+            image:
+              repository: registry.k8s.io/git-sync/git-sync
+              tag: v4.4.0
+            args:
+              - --repo=https://github.com/WDaan/VueTorrent
+              - --ref=latest-release
+              - --period=86400s
+              - --root=/addons
+            resources:
+              requests:
+                cpu: 11m
+                memory: 37M
+              # limits:
+              #   cpu: 600m
+              #   memory: 2048M
+
+    service:
+      app:
+        controller: qbittorrent
+        ports:
+          http:
+            port: *port
+    ingress:
+      qbittorrent:
+        className: traefik-internal
+        annotations:
+          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
+        hosts:
+          - host: &host qbittorrent.${SECRET_DOMAIN}
+            paths:
+              - path: /
+                service:
+                  identifier: app
+                  port: http
+        tls:
+          - hosts:
+              - *host
+            secretName: "${SECRET_DOMAIN/./-}-production-tls"
+
+    persistence:
+      config:
+        enabled: true
+        storageClass: nfs-csi          # Dynamic PVC in /kubernetes/appdata
+        accessMode: ReadWriteMany
+        size: 2Gi
+        advancedMounts:
+          qbittorrent:
+            qbittorrent:
+              - path: /config
+      media:
+        enabled: true
+        existingClaim: nfs-media-pvc
+        globalMounts:
+          - path: /media
+      empty-config:
+        type: emptyDir
+        advancedMounts:
+          qbittorrent:
+            port-forward:
+              - path: /config
+      addons:
+        type: emptyDir
+        globalMounts:
+          - path: /addons
+      dnsdist:
+        type: configMap
+        name: qbittorrent-dnsdist
+        defaultMode: 0755
+        advancedMounts:
+          qbittorrent:
+            dnsdist:
+              - path: /etc/dnsdist/dnsdist.conf
+                subPath: dnsdist.conf
+                readOnly: false
+      #scripts:
+      #  type: configMap
+      #  name: qbittorrent-scripts
+      #  defaultMode: 0775
+      #  advancedMounts:
+      #    qbittorrent:
+      #      qbittorrent:
+      #        - path: /scripts/post-process.sh
+      #          subPath: post-process.sh
+      #          readOnly: true
+
+
+
+
+
+

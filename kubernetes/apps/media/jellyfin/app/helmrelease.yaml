@@ -10,11 +10,16 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 10.10.4
+      version: 3.6.1
       sourceRef:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  dependsOn:
+    - name: nvidia-device-plugin
+      namespace: kube-system
+    - name: csi-driver-nfs
+      namespace: storage
   values:
     controllers:
       main:
@@ -23,14 +28,22 @@ spec:
         containers:
           main:
             image:
-              repository: docker.io/jellyfin/jellyfin
-              pullPolicy: IfNotPresent
-              tag: latest
+              repository: jellyfin/jellyfin
+              tag: 10.10.5
             env:
               TZ: ${TIMEZONE}
-              JELLYFIN_TRANSCODE_DIR: /transcode
-              NVIDIA_VISIBLE_DEVICES: all
-              NVIDIA_DRIVER_CAPABILITIES: all
+              DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
+              JELLYFIN_FFmpeg__probesize: 50000000
+              JELLYFIN_FFmpeg__analyzeduration: 50000000
+              JELLYFIN_PublishedServerUrl: "jellyfin.${SECRET_DOMAIN}"
+            resources:
+              requests:
+                cpu: 49m
+                memory: 2049M
+                nvidia.com/gpu: 1
+              limits:
+                memory: 4046M
+                nvidia.com/gpu: 1
     service:
       main:
         controller: main
@@ -42,10 +55,11 @@ spec:
         enabled: true
         className: traefik-external
         annotations:
+          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
         hosts:
-          - host: "jellyfin.${SECRET_DOMAIN}"
+          - host: &host "jellyfin.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
@@ -53,23 +67,27 @@ spec:
                   port: http
         tls:
           - hosts:
-              - "jellyfin.${SECRET_DOMAIN}"
+              - *host
             secretName: "${SECRET_DOMAIN/./-}-production-tls"
+
     persistence:
       config:
         enabled: true
         storageClass: nfs-csi          # Dynamic PVC in /kubernetes/appdata
-        accessMode: ReadWriteOnce
+        accessMode: ReadWriteMany
         size: 2Gi
       media:
         enabled: true
         existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
-      tmpfs:
+      transcode:
         enabled: true
         type: emptyDir
 
     defaultPodOptions:
       runtimeClassName: nvidia
+      nodeSelector:
+        nvidia.feature.node.kubernetes.io/gpu: "true"
+      enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001

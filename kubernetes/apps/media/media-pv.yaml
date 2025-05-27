@@ -13,28 +13,27 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   nfs:
     server: 192.168.1.2
-    path: "/mnt/OlsonNAS/kubernetes/media"
+    path: /mnt/OlsonNAS/nfs/media
   claimRef:
-    namespace: media        # <-- Explicitly bind to the `media` namespace
-    name: nfs-media-pvc     # <-- Explicitly bind to the PVC named `nfs-media-pvc`
+    namespace: media           # <-- Explicitly bind to the `media` namespace
+    name: nfs-media-pvc        # <-- Explicitly bind to the PVC named `nfs-media-pvc`
   mountOptions:
     - nfsvers=4.2
-    - tcp
-    - intr
+    - nconnect=16
     - hard
     - noatime
-    - nodiratime
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: nfs-media-pvc
-  namespace: media          # Must match Sonarr's namespace, media
+  namespace: media             # Must match Sonarr's namespace, media
 spec:
   storageClassName: nfs-csi
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 1Mi          # Match PV's capacity
+      storage: 1Mi             # Match PV's capacity
   volumeName: nfs-media-pv     # Explicitly bind to the PV

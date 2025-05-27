@@ -7,12 +7,18 @@ resources:
   - ./cilium.yaml
   - ./controlplaneio.yaml
   - ./coredns.yaml
+  - ./crunchy-userinit.yaml
+  - ./crunchydata.yaml
   - ./csi-driver-nfs.yaml
   - ./emberstack-charts.yaml
   - ./external-dns.yaml
+  - ./external-secrets.yaml
+  - ./fairwinds.yaml
   - ./ingress-nginx.yaml
   - ./jetstack.yaml
   - ./k8s-gateway.yaml
+  - ./nvidia-charts.yaml
+  - ./node-feature-discovery-charts.yaml
   - ./metrics-server.yaml
   - ./openebs.yaml
   - ./prometheus-community.yaml

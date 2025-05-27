@@ -181,11 +181,10 @@ spec:
             app.kubernetes.io/component: controller
     resources:
       requests:
-        cpu: 300m
-        memory: 100M
+        cpu: 23m
+        memory: 549M
       limits:
-        cpu: 750m
-        memory: 500M
+        memory: 1G
     # experimental:
     #   plugins:
 #        ldapAuth:

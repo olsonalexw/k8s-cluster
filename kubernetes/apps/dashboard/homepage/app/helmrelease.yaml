@@ -40,8 +40,8 @@ spec:
                   name: homepage-secret
             resources:
               requests:
-                cpu: 15m
-                memory: 200M
+                cpu: 11m
+                memory: 184M
               limits:
                 memory: 2G
     service:
@@ -57,13 +57,22 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+          # gethomepage.dev/description: Dynamically Detected Homepage
+          # gethomepage.dev/enabled: "true"
+          # gethomepage.dev/group: Cluster Management
+          # gethomepage.dev/icon: homepage.png
+          # gethomepage.dev/name: Homepage
         hosts:
-          - host: "homepage.${SECRET_DOMAIN}"
+          - host: &host "homepage.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
                   identifier: main
                   port: http
+        tls:
+          - hosts:
+              - *host
+            secretName: "${SECRET_DOMAIN/./-}-production-tls"
     persistence:
       config:
         type: configMap

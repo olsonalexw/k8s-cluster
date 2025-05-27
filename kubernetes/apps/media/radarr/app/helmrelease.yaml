@@ -16,6 +16,9 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
+  dependsOn:
+    - name: csi-driver-nfs
+      namespace: storage
   values:
     controllers:
       main:
@@ -38,6 +41,12 @@ spec:
                 value: "https://radarr.${SECRET_DOMAIN}"
               - name: RADARR__LOG_LEVEL
                 value: "info"
+            resources:
+              requests:
+                cpu: 15m
+                memory: 629M
+              limits:
+                memory: 1242M
     service:
       main:
         controller: main
@@ -66,11 +75,12 @@ spec:
       config:
         enabled: true
         storageClass: nfs-csi     # Dynamic PVC in /kubernetes/appdata
-        accessMode: ReadWriteOnce
+        accessMode: ReadWriteMany
         size: 2Gi
       media:
         enabled: true
         existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
+
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true

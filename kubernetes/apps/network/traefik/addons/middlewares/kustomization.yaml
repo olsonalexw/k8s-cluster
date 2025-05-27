@@ -4,6 +4,8 @@ kind: Kustomization
 resources:
   # - ./agents.yaml
   - ./auth.yaml
+  - ./basic-auth.yaml
+  - ./basic-auth-secret.sops.yaml
   - ./chains.yaml
   - ./compress.yaml
   # - ./crowdsec.yaml
