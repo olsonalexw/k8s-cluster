@@ -16,9 +16,6 @@ spec:
             apiTokenSecretRef:
               name: cert-manager-secret
               key: api-token
-            zoneIDSecretRef:
-              name: cert-manager-secret
-              key: zone-id
         selector:
           dnsZones:
             - "${SECRET_DOMAIN}"
@@ -40,9 +37,6 @@ spec:
             apiTokenSecretRef:
               name: cert-manager-secret
               key: api-token
-            zoneIDSecretRef:
-              name: cert-manager-secret
-              key: zone-id
         selector:
           dnsZones:
             - "${SECRET_DOMAIN}"
