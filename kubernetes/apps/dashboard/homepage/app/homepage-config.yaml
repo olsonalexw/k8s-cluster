@@ -27,12 +27,18 @@ data:
         - YouTube:
             - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png
               href: https://youtube.com/
+        - Rumble:
+            - icon: https://img.icons8.com/?size=512&id=PK4azLeOpaNW&format=png
+              href: https://rumble.com
         - Daily Wire:
             - icon: https://play-lh.googleusercontent.com/UyZ_AuTShQl58oz6F5rM2niyrSIc7J0DfSpDEELHKpCghq5LZc-Tx7_ZAJ44tvUQkNqr
               href: https://dailywire.com/
         - Twitch:
             - icon: https://cdn-icons-png.flaticon.com/512/3991/3991943.png
               href: https://twitch.tv/
+        - Kick:
+            - icon: https://miro.medium.com/v2/resize:fit:940/1*ZkTmhg4rCIfRJOZsWrgkQA.png
+              href: https://kick.com
     - Social:
         - Gmail:
             - icon: https://mailmeteor.com/logos/assets/PNG/Gmail_Logo_512px.png
