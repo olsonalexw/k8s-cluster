@@ -23,6 +23,9 @@ data:
         - v0:
             - icon: https://registry.npmmirror.com/@lobehub/icons-static-png/1.13.0/files/dark/v0.png
               href: https://v0.dev/
+        - Venice:
+            - icon: https://venice.ai/images/icon-512-maskable.png
+              href: https://venice.ai
     - Entertainment:
         - YouTube:
             - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png
