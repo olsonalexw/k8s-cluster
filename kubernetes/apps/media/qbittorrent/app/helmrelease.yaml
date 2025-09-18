@@ -54,11 +54,11 @@ spec:
               tag: 1.9.8
             resources:
               requests:
-                cpu: 11m
+                cpu: 50m
                 memory: 50M
-              # limits:
-              #   cpu: 100m
-              #   memory: 200M
+              limits:
+                cpu: 100m
+                memory: 200M
           gluetun:
             dependsOn: dnsdist
             image:
@@ -89,7 +89,7 @@ spec:
               allowPrivilegeEscalation: false
             resources:
               requests:
-                cpu: 11m
+                cpu: 50m
                 memory: 50M
               limits:
                 # cpu: 400m
@@ -141,7 +141,7 @@ spec:
             #       periodSeconds: 5
             resources:
               requests:
-                cpu: 11m
+                cpu: 50m
                 memory: 2408M
               # limits:
               #   cpu: 45m
@@ -181,7 +181,7 @@ spec:
                   - ALL
             resources:
               requests:
-                cpu: 11m
+                cpu: 50m
                 memory: 24M
               # limits:
               #   cpu: 200m
@@ -199,7 +199,7 @@ spec:
               - --root=/addons
             resources:
               requests:
-                cpu: 11m
+                cpu: 50m
                 memory: 37M
               # limits:
               #   cpu: 600m
