@@ -70,7 +70,7 @@ spec:
               DNS_ADDRESS: "127.0.0.2"
               PORT_FORWARD_ONLY: on
               # VPN_TYPE: wireguard
-              VPN_INTERFACE: wg0
+              VPN_INTERFACE: tun0 # wg0=wireguard
               # VPN_SERVICE_PROVIDER: protonvpn
               VPN_PORT_FORWARDING: on
               # VPN_PORT_FORWARDING_PROVIDER: protonvpn
@@ -109,9 +109,9 @@ spec:
               # QBT_BitTorrent__Session__AsyncIOThreadsCount: "4"
               # QBT_BitTorrent__Session__DefaultSavePath: /media/downloads/qbittorrent/complete
               # QBT_BitTorrent__Session__DisableAutoTMMByDefault: "false"                                      # "Default Torrent Management Mode" under Downloads section of settings
-              QBT_BitTorrent__Session__Interface: wg0
+              QBT_BitTorrent__Session__Interface: tun0 # wg0=wireguard
               QBT_BitTorrent__Session__InterfaceAddress: 0.0.0.0
-              QBT_BitTorrent__Session__InterfaceName: wg0
+              QBT_BitTorrent__Session__InterfaceName: tun0 # wg0=wireguard
               # QBT_BitTorrent__Session__LSDEnabled: "false"                                                 # I believe this is "Enable Local Peer Discovery to find more peers" in the webui
               # QBT_BitTorrent__Session__TempPath: /media/downloads/qbittorrent/incomplete
               # QBT_BitTorrent__Session__TempPathEnabled: "true"
