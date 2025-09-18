@@ -48,6 +48,7 @@ spec:
               capabilities:
                 drop:
                   - ALL
+            terminationMessagePath: /tmp/termination-log  # Redirect to writable path
 
     persistence:
       config:
@@ -70,3 +71,10 @@ spec:
       var-lib-kubelet-device-plugins:
         type: hostPath
         hostPath: /var/lib/kubelet/device-plugins
+      tmp:  # Add writable emptyDir volume
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          generic-device-plugin:  # Controller name
+            app:  # Container name
+              - path: /tmp
