@@ -57,7 +57,7 @@ spec:
               # VPN_SERVICE_PROVIDER: protonvpn
               VPN_PORT_FORWARDING: off
               # VPN_PORT_FORWARDING_PROVIDER: protonvpn
-              FIREWALL_INPUT_PORTS: &port 8080
+              FIREWALL_INPUT_PORTS: 8080,1080
               FIREWALL_OUTBOUND_SUBNETS: 10.69.0.0/16,10.96.0.0/16 # Allow access to k8s subnets
               # WIREGUARD_MTU: 8900
               SHADOWSOCKS: on
@@ -87,7 +87,7 @@ spec:
               repository: ghcr.io/buroa/sabnzbd
               tag: 4.4.1@sha256:47390397a14b387dacdcf608a93e0ff4531791ffc44c4a7ad4a8daa91781148e
             env:
-              SABNZBD__PORT: *port
+              SABNZBD__PORT: 8080
               SABNZBD__HOST_WHITELIST_ENTRIES: sabnzbd.media.svc.cluster.local, sabnzbd.${SECRET_DOMAIN}
               TZ: ${TIMEZONE}
             # envFrom:
@@ -126,7 +126,7 @@ spec:
         controller: *app
         ports:
           http:
-            port: *port
+            port: 8080
     ingress:
       sabnzbd:
         enabled: true
