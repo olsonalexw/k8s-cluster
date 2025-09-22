@@ -57,12 +57,13 @@ spec:
               # VPN_SERVICE_PROVIDER: protonvpn
               VPN_PORT_FORWARDING: off
               # VPN_PORT_FORWARDING_PROVIDER: protonvpn
-              FIREWALL_INPUT_PORTS: 8080,1080
+              FIREWALL_INPUT_PORTS: 8080,8888
               FIREWALL_OUTBOUND_SUBNETS: 10.69.0.0/16,10.96.0.0/16 # Allow access to k8s subnets
               # WIREGUARD_MTU: 8900
-              SHADOWSOCKS: on
+              SHADOWSOCKS: off
               SHADOWSOCKS_LOG: on
-              SHADOWSOCKS_PORT: 1080
+              SHADOWSOCKS_LISTENING_PORT: 1080
+              HTTP_PROXY: on
             envFrom:
               - secretRef:
                   name: sabnzbd-secret
