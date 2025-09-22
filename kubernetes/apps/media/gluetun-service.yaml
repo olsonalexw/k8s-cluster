@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gluetun-socks5
+spec:
+  selector:
+    app.kubernetes.io/name: sabnzbd  # Or qbittorrent if preferred
+  ports:
+  - protocol: TCP
+    port: 1080
+    targetPort: 1080
+  type: ClusterIP
+
+# Used for SOCKS5 connection in -arr apps. Connects to sabnzbd's gluetun sidecar.
