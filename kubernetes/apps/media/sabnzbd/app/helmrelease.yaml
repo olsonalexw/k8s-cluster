@@ -62,6 +62,7 @@ spec:
               # WIREGUARD_MTU: 8900
               SHADOWSOCKS: on
               SHADOWSOCKS_LOG: on
+              SHADOWSOCKS_PORT: 1080
             envFrom:
               - secretRef:
                   name: sabnzbd-secret
