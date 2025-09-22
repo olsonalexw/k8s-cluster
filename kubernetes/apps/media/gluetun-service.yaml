@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: gluetun-socks5
+  namespace: media
 spec:
   selector:
     app.kubernetes.io/name: sabnzbd  # Or qbittorrent if preferred
