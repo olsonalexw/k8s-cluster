@@ -69,7 +69,7 @@ spec:
               capabilities:
                 add:
                   - NET_ADMIN
-              allowPrivilegeEscalation: false
+              allowPrivilegeEscalation: true
             resources:
               requests:
                 cpu: 50m
