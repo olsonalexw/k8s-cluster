@@ -62,8 +62,8 @@ spec:
               # WIREGUARD_MTU: 8900
               SHADOWSOCKS: off
               SHADOWSOCKS_LOG: on
-              SHADOWSOCKS_LISTENING_PORT: 1080
-              HTTP_PROXY: on
+              # SHADOWSOCKS_LISTENING_PORT: 1080
+              HTTPPROXY: on
             envFrom:
               - secretRef:
                   name: sabnzbd-secret
