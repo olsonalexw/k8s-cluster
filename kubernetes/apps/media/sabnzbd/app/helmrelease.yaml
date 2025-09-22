@@ -28,14 +28,63 @@ spec:
     controllers:
       sabnzbd:
         annotations:
+          configmap.reloader.stakater.com/reload: sabnzbd-dnsdist
           reloader.stakater.com/auto: "true"
         containers:
+          dnsdist:
+            image:
+              repository: docker.io/powerdns/dnsdist-19
+              tag: 1.9.8
+            resources:
+              requests:
+                cpu: 50m
+                memory: 50M
+              limits:
+                cpu: 100m
+                memory: 200M
+          gluetun:
+            dependsOn: dnsdist
+            image:
+              repository: ghcr.io/qdm12/gluetun
+              tag: v3.40.0
+            env:
+              TZ: ${TIMEZONE}
+              DOT: "off"
+              DNS_ADDRESS: "127.0.0.2"
+              PORT_FORWARD_ONLY: off
+              # VPN_TYPE: wireguard
+              VPN_INTERFACE: tun0 # wg0=wireguard
+              # VPN_SERVICE_PROVIDER: protonvpn
+              VPN_PORT_FORWARDING: off
+              # VPN_PORT_FORWARDING_PROVIDER: protonvpn
+              FIREWALL_INPUT_PORTS: &port 8080
+              FIREWALL_OUTBOUND_SUBNETS: 10.69.0.0/16,10.96.0.0/16 # Allow access to k8s subnets
+              # WIREGUARD_MTU: 8900
+              SHADOWSOCKS: on
+              SHADOWSOCKS_LOG: on
+            envFrom:
+              - secretRef:
+                  name: sabnzbd-secret
+            securityContext:
+              capabilities:
+                add:
+                  - NET_ADMIN
+              allowPrivilegeEscalation: false
+            resources:
+              requests:
+                cpu: 50m
+                memory: 50M
+              limits:
+                # cpu: 400m
+                # memory: 300M
+                squat.ai/tun: 1
           app:
+            dependsOn: gluetun
             image:
               repository: ghcr.io/buroa/sabnzbd
               tag: 4.4.1@sha256:47390397a14b387dacdcf608a93e0ff4531791ffc44c4a7ad4a8daa91781148e
             env:
-              SABNZBD__PORT: &port 8080
+              SABNZBD__PORT: *port
               SABNZBD__HOST_WHITELIST_ENTRIES: sabnzbd.media.svc.cluster.local, sabnzbd.${SECRET_DOMAIN}
               TZ: ${TIMEZONE}
             # envFrom:
@@ -104,6 +153,16 @@ spec:
         existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
       tmp:
         type: emptyDir
+      dnsdist:
+        type: configMap
+        name: sabnzbd-dnsdist
+        defaultMode: 0755
+        advancedMounts:
+          sabnzbd:
+            dnsdist:
+              - path: /etc/dnsdist/dnsdist.conf
+                subPath: dnsdist.conf
+                readOnly: false
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
