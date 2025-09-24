@@ -111,15 +111,18 @@ spec:
               - /bin/sh
               - -c
               - |
-                # Wait for qBittorrent to start
+                apk add --no-cache curl nc-openbsd
                 while ! nc -z localhost 8080; do sleep 5; done
-                # Loop: Check port.dat every 5 mins, update qBittorrent if changed
-                PREV_PORT=50413  # Initial fallback
+                sleep 10
+                PREV_PORT=50413
                 while true; do
                   if [ -f /pia-shared/port.dat ]; then
                     NEW_PORT=$(cat /pia-shared/port.dat)
                     if [ "$NEW_PORT" != "$PREV_PORT" ]; then
-                      curl -u $QBIT_USER:$QBIT_PASS -X POST \
+                      curl -s --cookie-jar /tmp/qb-cookies.txt \
+                        -u "$QBIT_USER:$QBIT_PASS" \
+                        http://localhost:8080/api/v2/auth/login
+                      curl -s --cookie /tmp/qb-cookies.txt -X POST \
                         "http://localhost:8080/api/v2/app/setPreferences" \
                         -H "Content-Type: application/x-www-form-urlencoded" \
                         -d "json={\"listen_port\": $NEW_PORT}"
@@ -127,7 +130,7 @@ spec:
                       PREV_PORT=$NEW_PORT
                     fi
                   fi
-                  sleep 300  # 5 mins
+                  sleep 300
                 done
             env:
               TZ: ${TIMEZONE}
