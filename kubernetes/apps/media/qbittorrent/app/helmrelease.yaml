@@ -35,7 +35,6 @@ spec:
     controllers:
       qbittorrent:
         annotations:
-          configmap.reloader.stakater.com/reload: qbittorrent-dnsdist #qbittorrent-scripts
           secret.reloader.stakater.com/reload: qbittorrent
 
         pod:
@@ -46,20 +45,6 @@ spec:
               - 65534
 
         containers:
-          dnsdist:
-            image:
-              repository: docker.io/powerdns/dnsdist-19
-              tag: 1.9.8
-            resources:
-              requests:
-                cpu: 50m
-                memory: 50M
-              limits:
-                cpu: 100m
-                memory: 200M
-            dependsOn:
-              - wireguard-pia
-
           wireguard-pia:
             image:
               repository: ghcr.io/thrnz/docker-wireguard-pia
@@ -246,16 +231,6 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /addons
-      dnsdist:
-        type: configMap
-        name: qbittorrent-dnsdist
-        defaultMode: 0755
-        advancedMounts:
-          qbittorrent:
-            dnsdist:
-              - path: /etc/dnsdist/dnsdist.conf
-                subPath: dnsdist.conf
-                readOnly: false
       pia-shared:
         enabled: true
         type: emptyDir
