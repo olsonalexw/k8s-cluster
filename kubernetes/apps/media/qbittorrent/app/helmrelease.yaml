@@ -83,15 +83,14 @@ spec:
             env:
               TZ: ${TIMEZONE}
               UMASK: "022"
-              QBITTORRENT__PORT: &port 80
-              # QBITTORRENT__BT_PORT: &bittorrentPort 50413  # Initial; will be updated dynamically
-              QBT_BitTorrent__Session__Interface: wg0
-              # QBT_BitTorrent__Session__InterfaceAddress: 0.0.0.0
-              # QBT_BitTorrent__Session__InterfaceName: wg0
+              QBT_WEBUI_PORT: &port 80
             resources:
               requests:
                 cpu: 50m
-                memory: 2408M
+                memory: 1024M
+              limits:
+                cpu: 500m
+                memory: 2048M
             securityContext:
               runAsUser: 1001
               runAsGroup: 1001
@@ -167,20 +166,6 @@ spec:
               requests:
                 cpu: 50m
                 memory: 37M
-
-    # NEW: ConfigMap for port-sync script (if you want to externalize the command above; optional for now)
-    # Create separately: kubectl apply -f - <<EOF
-    # apiVersion: v1
-    # kind: ConfigMap
-    # metadata:
-    #   name: qbittorrent-port-sync-script
-    #   namespace: flux-system  # Adjust
-    # data:
-    #   sync-port.sh: |
-    #     #!/bin/sh
-    #     # (paste the script from command above)
-    # EOF
-    # Then in port-sync: volumeMounts for the CM, and command: ["/bin/sh", "/scripts/sync-port.sh"]
 
     service:
       app:
