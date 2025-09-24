@@ -83,11 +83,11 @@ spec:
             env:
               TZ: ${TIMEZONE}
               UMASK: "022"
-              QBITTORRENT__PORT: 8080
-              QBITTORRENT__BT_PORT: &bittorrentPort 50413  # Initial; will be updated dynamically
+              QBITTORRENT__PORT: &port 80
+              # QBITTORRENT__BT_PORT: &bittorrentPort 50413  # Initial; will be updated dynamically
               QBT_BitTorrent__Session__Interface: wg0
-              QBT_BitTorrent__Session__InterfaceAddress: 0.0.0.0
-              QBT_BitTorrent__Session__InterfaceName: wg0
+              # QBT_BitTorrent__Session__InterfaceAddress: 0.0.0.0
+              # QBT_BitTorrent__Session__InterfaceName: wg0
             resources:
               requests:
                 cpu: 50m
@@ -102,7 +102,6 @@ spec:
                 drop:
                   - ALL
 
-          # CHANGED: Renamed/updated from port-forward to port-sync; custom for file-based update via qBittorrent API
           port-sync:
             image:
               repository: curlimages/curl
@@ -111,18 +110,18 @@ spec:
               - /bin/sh
               - -c
               - |
-                while ! nc -z localhost 8080; do sleep 5; done
+                while ! curl --output /dev/null --silent --head --fail --connect-timeout 1 http://localhost:80; do sleep 5; done
                 sleep 10
-                PREV_PORT=50413
+                PREV_PORT=0
                 while true; do
                   if [ -f /pia-shared/port.dat ]; then
                     NEW_PORT=$(cat /pia-shared/port.dat)
                     if [ "$NEW_PORT" != "$PREV_PORT" ]; then
                       curl -s --cookie-jar /tmp/qb-cookies.txt \
                         -u "$QBIT_USER:$QBIT_PASS" \
-                        http://localhost:8080/api/v2/auth/login
+                        http://localhost:80/api/v2/auth/login
                       curl -s --cookie /tmp/qb-cookies.txt -X POST \
-                        "http://localhost:8080/api/v2/app/setPreferences" \
+                        "http://localhost:80/api/v2/app/setPreferences" \
                         -H "Content-Type: application/x-www-form-urlencoded" \
                         -d "json={\"listen_port\": $NEW_PORT}"
                       echo "Updated qBittorrent port to $NEW_PORT"
@@ -136,7 +135,7 @@ spec:
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
-            dependsOn: qbittorrent  # NEW: Sync after qBittorrent starts
+            dependsOn: qbittorrent
             securityContext:
               runAsUser: 1001
               runAsGroup: 1001
@@ -188,7 +187,7 @@ spec:
         controller: qbittorrent
         ports:
           http:
-            port: 8080
+            port: *port
 
     ingress:
       qbittorrent:
