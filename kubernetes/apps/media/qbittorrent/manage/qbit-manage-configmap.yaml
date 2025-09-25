@@ -50,20 +50,37 @@ data:
       min_file_age_minutes: 0
 
     settings:
-      force_auto_tmm: false
-      force_auto_tmm_ignore_tags: []
-      tracker_error_tag: issue
-      nohardlinks_tag: noHL
-      share_limits_tag: ~share_limit
-      share_limits_min_seeding_time_tag: MinSeedTimeNotReached
-      share_limits_min_num_seeds_tag: MinSeedsNotMet
-      share_limits_last_active_tag: LastActiveLimitNotReached
-      cat_filter_completed: true
-      share_limits_filter_completed: true
-      tag_nohardlinks_filter_completed: true
-      cat_update_all: true
-      disable_qbt_default_share_limits: true
-      tag_stalled_torrents: true
-      stalled_tag: stalledDL
-      rem_unregistered_grace_minutes: 10
-      rem_unregistered_ignore_list: []
+      # Category update settings
+      cat_update_all: true  # bool: Update all categories, not just configured ones
+      cat_filter_completed: true  # bool: Filter completed torrents for category updates
+
+      # Force AutoTMM settings
+      force_auto_tmm: false  # bool: Force torrents to use AutoTMM regardless of qBittorrent setting
+      force_auto_tmm_ignore_tags: []  # list[str]: Tags to ignore when forcing AutoTMM
+
+      # Stalled torrent tagging
+      tag_stalled_torrents: true  # bool: Tag stalled downloading torrents (your custom override)
+      stalled_tag: stalledDL  # str: Tag name for stalled torrents
+
+      # Tracker error tagging
+      tracker_error_tag: issue  # str: Tag name for torrents with tracker errors (your custom)
+      tag_tracker_error_filter_completed: true  # bool: Filter completed torrents for tracker error tagging
+
+      # Remove unregistered torrents
+      rem_unregistered_grace_minutes: 10  # int: Grace period in minutes before removing unregistered torrents
+      rem_unregistered_ignore_list: []  # list[str]: List of torrent names/hashes to ignore for removal
+      rem_unregistered_filter_completed: false  # bool: Filter completed torrents for unregistered removal
+
+      # No hardlinks tagging
+      nohardlinks_tag: noHL  # str: Tag name for torrents without hardlinks (your custom)
+      tag_nohardlinks_filter_completed: true  # bool: Filter completed torrents for no-hardlinks tagging
+
+      # Share limits
+      share_limits_tag: ~share_limit  # str: Tag name for torrents hitting share limits (your custom)
+      share_limits_filter_completed: true  # bool: Filter completed torrents for share limits
+      share_limits_min_seeding_time_tag: MinSeedTimeNotReached  # str: Tag for min seeding time not met
+      share_limits_min_num_seeds_tag: MinSeedsNotMet  # str: Tag for min seeds not met
+      share_limits_last_active_tag: LastActiveLimitNotReached  # str: Tag for last active limit not reached
+
+      # qBittorrent defaults override
+      disable_qbt_default_share_limits: true  # bool: Disable qBittorrent's built-in share ratio limits (your custom)
