@@ -47,6 +47,7 @@ spec:
               QBT_LOG_LEVEL: DEBUG
               QBT_DEBUG: true
               QBT_DRY_RUN: true  # Optional: Simulates actions without applying (e.g., tags/cleanup); remove later for real runs
+              QBT_PORT: 80
             envFrom:
               - secretRef:
                   name: qbittorrent-login
@@ -85,6 +86,7 @@ spec:
               QBT_LOG_LEVEL: DEBUG
               QBT_DEBUG: true
               QBT_DRY_RUN: true  # Optional: Simulates actions without applying (e.g., tags/cleanup); remove later for real runs
+              QBT_PORT: 80
             envFrom:
               - secretRef:
                   name: qbittorrent-login
