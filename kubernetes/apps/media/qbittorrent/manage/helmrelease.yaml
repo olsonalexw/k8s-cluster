@@ -1,0 +1,144 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: qbit-manage
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 3.6.1
+      interval: 30m
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+  maxHistory: 2
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      strategy: rollback
+      retries: 3
+  uninstall:
+    keepHistory: false
+  dependsOn:
+    - name: qbittorrent
+      namespace: media
+  values:
+    controllers:
+      main:
+        type: cronjob
+        cronjob: &cronJobSpec
+          schedule: "@hourly"
+          timeZone: ${TIMEZONE}
+          concurrencyPolicy: Forbid
+          successfulJobsHistory: 1
+          failedJobsHistory: 1
+        containers:
+          app:
+            args:
+              - --config
+              - "/config/config.yml"
+              - --run
+            env: &env
+              TZ: ${TIMEZONE}
+            envFrom:
+              - secretRef:
+                  name: qbittorrent-login
+            image: &image
+              repository: ghcr.io/stuffanthings/qbit_manage
+              tag: latest
+            resources: &resources
+              requests:
+                cpu: 50m
+                memory: 105M
+              limits:
+                cpu: 50m
+                memory: 105M
+            securityContext: &securityContext
+              allowPrivilegeEscalation: false
+              capabilities: { drop: ["ALL"] }
+              readOnlyRootFilesystem: true
+        pod: &podSecurityContext
+          automountServiceAccountToken: false
+          securityContext:
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seccompProfile: { type: RuntimeDefault }
+      recheck:
+        type: cronjob
+        cronjob:
+          <<: *cronJobSpec
+          schedule: "@daily"
+        containers:
+          app:
+            args:
+              - --config
+              - "/config/config.yml"
+              - --recheck
+            env: *env
+            envFrom:
+              - secretRef:
+                  name: qbittorrent-login
+            image: *image
+            resources: *resources
+            securityContext: *securityContext
+        pod: *podSecurityContext
+      trim:
+        type: cronjob
+        cronjob:
+          <<: *cronJobSpec
+          schedule: "@daily"
+        initContainers:
+          pip-install:
+            image:
+              repository: python
+              tag: 3.12-slim
+            args:
+              - -m
+              - pip
+              - install
+              - qbittorrent-api
+            resources: *resources
+            securityContext: *securityContext
+        containers:
+          app:
+            command:
+              - python
+              - /config/trim_seeders.py
+            env: *env
+            envFrom:
+              - secretRef:
+                  name: qbittorrent-login
+            image:
+              repository: python
+              tag: 3.12-slim
+            resources: *resources
+            securityContext: *securityContext
+        pod: *podSecurityContext
+
+    persistence:
+      config-file:
+        enabled: true
+        type: configMap
+        name: qbit-manage-configmap
+        globalMounts:
+          - path: /config/config.yml
+            subPath: config.yml
+      trim-script:
+        enabled: true
+        type: configMap
+        name: qbittorrent-trim-script
+        globalMounts:
+          - path: /config/trim_seeders.py
+            subPath: trim_seeders.py
+      media:
+        enabled: true
+        existingClaim: nfs-media-pvc
+        globalMounts:
+          - path: /media

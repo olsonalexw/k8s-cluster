@@ -1,0 +1,47 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qbittorrent-trim-script
+data:
+  trim_seeders.py: |
+    from qbittorrentapi import Client
+    import os
+    import time
+
+    # Connect to qBittorrent
+    username = os.getenv('QBT_USER')
+    password = os.getenv('QBT_PASS')
+    if username and password:
+        client = Client(host='qbittorrent.media.svc.cluster.local', port=80, username=username, password=password)
+    else:
+        raise ValueError("QBT_USER and QBT_PASS env vars must be set")
+
+    # Constants
+    MIN_RATIO = 1.0
+    MIN_SEEDING_HOURS = 336
+    MAX_SEEDERS = 10
+    IPT_TAG = 'iptorrents'
+    DRY_RUN = True  # Set to False to actually delete
+
+    # Get all seeding torrents for IPT tag
+    torrents = client.torrents_info(status_filter='seeding', tag=IPT_TAG)
+    eligible = []
+    for t in torrents:
+        seeding_hours = t.seeding_time / 3600
+        if t.ratio >= MIN_RATIO or seeding_hours >= MIN_SEEDING_HOURS:
+            productivity = (t.uploaded / 1e9) / max(seeding_hours, 1)  # GB/hour; avoid div0
+            eligible.append((t.hash, productivity, t.name))
+
+    # If more than MAX_SEEDERS, sort by productivity desc, "delete" lowest
+    if len(eligible) > MAX_SEEDERS:
+        eligible.sort(key=lambda x: x[1], reverse=True)  # Highest first
+        to_delete = eligible[MAX_SEEDERS:]
+        for hash_val, prod, name in to_delete:
+            if DRY_RUN:
+                print(f"Would delete torrent: {name} (hash: {hash_val}, productivity: {prod:.4f} GB/h)")
+            else:
+                client.torrents_delete(delete_local_files=True, torrent_hashes=hash_val)
+                time.sleep(1)  # Avoid API flood
+
+    print(f"Processed {len(eligible)} eligible seeders. Trimmed to {MAX_SEEDERS} if needed.")

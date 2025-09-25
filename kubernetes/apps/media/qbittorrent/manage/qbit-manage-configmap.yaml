@@ -1,0 +1,52 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qbit-manage-configmap
+data:
+  config.yml: |
+    qbt:
+      host: qbittorrent.media.svc.cluster.local:80
+      user: !ENV QBT_USER
+      pass: !ENV QBT_PASS
+
+    directory:
+      remote_dir: /media
+      recycle_bin: /media/.RecycleBin
+      orphaned_dir: /media/orphaned_data
+
+    tracker:
+      iptorrents.com:  # Adjust if the tracker URL keyword is different
+        tag: iptorrents
+
+    share_limits:
+      ipt:
+        priority: 1
+        include_any_tags: ["iptorrents"]
+        max_ratio: 1.0
+        max_seeding_time: 336h
+        cleanup: true
+        min_seeding_time: 0h
+        min_num_seeds: 0
+        resume_torrent_after_change: true
+        add_group_to_tag: false
+
+    recyclebin:
+      enable: true
+      empty_after_x_days: 7
+      save_torrents: false
+      split_by_category: false
+
+    orphaned:
+      empty_after_x_days: 7
+      exclude_patterns: ["*/incomplete/*", "*/manual/*"]
+      max_orphaned_files_to_delete: 50
+      min_file_age_minutes: 0
+
+    settings:
+      tracker_error_tag: issue
+      nohardlinks_tag: noHL
+      share_limits_tag: ~share_limit
+      rem_unregistered_grace_minutes: 10
+      tag_stalled_torrents: true
+      disable_qbt_default_share_limits: true
