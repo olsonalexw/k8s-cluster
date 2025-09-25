@@ -64,5 +64,6 @@ data:
       cat_update_all: true
       disable_qbt_default_share_limits: true
       tag_stalled_torrents: true
+      stalled_tag: stalledDL
       rem_unregistered_grace_minutes: 10
       rem_unregistered_ignore_list: []
