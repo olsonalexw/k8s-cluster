@@ -118,29 +118,29 @@ spec:
             runAsUser: 0  # Run as root for pip
             seccompProfile: { type: RuntimeDefault }
 
-  persistence:
-    config-dir:
-      enabled: true
-      type: emptyDir
-      globalMounts:
-        - path: /config
-    config-file:
-      enabled: true
-      type: configMap
-      name: qbit-manage-configmap
-      globalMounts:
-        - path: /config/config.yml
-          subPath: config.yml
-          readOnly: true
-    trim-script:
-      enabled: true
-      type: configMap
-      name: qbittorrent-trim-script
-      globalMounts:
-        - path: /config/trim_seeders.py
-          subPath: trim_seeders.py
-    media:
-      enabled: true
-      existingClaim: nfs-media-pvc
-      globalMounts:
-        - path: /media
+    persistence:
+      config-dir:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /config
+      config-file:
+        enabled: true
+        type: configMap
+        name: qbit-manage-configmap
+        globalMounts:
+          - path: /config/config.yml
+            subPath: config.yml
+            readOnly: true
+      trim-script:
+        enabled: true
+        type: configMap
+        name: qbittorrent-trim-script
+        globalMounts:
+          - path: /config/trim_seeders.py
+            subPath: trim_seeders.py
+      media:
+        enabled: true
+        existingClaim: nfs-media-pvc
+        globalMounts:
+          - path: /media
