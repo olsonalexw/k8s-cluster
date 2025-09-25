@@ -46,7 +46,7 @@ spec:
             command:
               - sh
               - -c
-              - cp /tmp/config.yml /config/config.yml || true
+              - cp /tmp/config.yml /config/config.yml || true && chmod 664 /config/config.yml || true
         containers:
           app:
             env:
@@ -73,6 +73,7 @@ spec:
         pod: &podSecurityContext
           automountServiceAccountToken: false
           securityContext:
+            fsGroup: 1001  # Ensure volume files are group-writable by 1001
             runAsGroup: 1001
             runAsNonRoot: true
             runAsUser: 1001
@@ -90,7 +91,7 @@ spec:
             command:
               - sh
               - -c
-              - cp /tmp/config.yml /config/config.yml || true
+              - cp /tmp/config.yml /config/config.yml || true && chmod 664 /config/config.yml || true
         containers:
           app:
             env:
@@ -149,7 +150,12 @@ spec:
         globalMounts:
           - path: /tmp/config.yml
             subPath: config.yml
-            readOnly: true  # Explicit for clarity (default anyway)
+            readOnly: true
+      tmp:  # New: Writable temp for multiprocessing sockets
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
       trim-script:
         enabled: true
         type: configMap

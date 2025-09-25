@@ -11,9 +11,17 @@ data:
       pass: !ENV QBT_PASS
 
     directory:
-      remote_dir: /media
-      recycle_bin: /media/.RecycleBin
-      orphaned_dir: /media/orphaned_data
+      root_dir: /media/downloads/qbittorrent/complete  # Base for orphaned/noHL/unregistered checks
+      remote_dir: /media  # Optional: Host path if qbit_manage is outside qBittorrent Docker
+      recycle_bin: /media/downloads/qbittorrent/complete/.RecycleBin  # For deleted file staging
+      torrents_dir: /config/qBittorrent/BT_backup  # Optional: qBittorrent's .torrent dir for backups
+      orphaned_dir: /media/downloads/qbittorrent/complete/orphaned_data  # Disposable orphaned files
+
+    cat:  # Mandatory: Map ALL qBittorrent categories to their complete save paths
+      Uncategorized: /media/downloads/qbittorrent/complete/*  # Catch-all for uncategorized
+      manual: /media/downloads/qbittorrent/complete/manual/*
+      series: /media/downloads/qbittorrent/complete/series/*  # Use * for subdirs (e.g., seasons)
+      movies: /media/downloads/qbittorrent/complete/movies/*
 
     tracker:
       iptorrents.com:  # Adjust if the tracker URL keyword is different
