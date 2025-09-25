@@ -40,12 +40,14 @@ spec:
           failedJobsHistory: 1
         initContainers:
           copy-config:
-            image: busybox:1.36
+            image:
+              repository: busybox
+              tag: 1.36
             command:
               - sh
               - -c
               - cp /tmp-config/config.yml /config/config.yml
-            volumeMounts:
+            mounts:
               - name: config-dir
                 mountPath: /config
               - name: config-file
@@ -92,12 +94,14 @@ spec:
           schedule: "@daily"
         initContainers:
           copy-config:
-            image: busybox:1.36
+            image:
+              repository: busybox
+              tag: 1.36
             command:
               - sh
               - -c
               - cp /tmp-config/config.yml /config/config.yml
-            volumeMounts:
+            mounts:
               - name: config-dir
                 mountPath: /config
               - name: config-file
