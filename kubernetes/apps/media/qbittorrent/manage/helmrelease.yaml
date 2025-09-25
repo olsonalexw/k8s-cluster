@@ -38,6 +38,19 @@ spec:
           concurrencyPolicy: Forbid
           successfulJobsHistory: 1
           failedJobsHistory: 1
+        initContainers:
+          copy-config:
+            image: busybox:1.36
+            command:
+              - sh
+              - -c
+              - cp /tmp-config/config.yml /config/config.yml
+            volumeMounts:
+              - name: config-dir
+                mountPath: /config
+              - name: config-file
+                mountPath: /tmp-config/config.yml
+                subPath: config.yml
         containers:
           app:
             env:
@@ -77,6 +90,19 @@ spec:
         cronjob:
           <<: *cronJobSpec
           schedule: "@daily"
+        initContainers:
+          copy-config:
+            image: busybox:1.36
+            command:
+              - sh
+              - -c
+              - cp /tmp-config/config.yml /config/config.yml
+            volumeMounts:
+              - name: config-dir
+                mountPath: /config
+              - name: config-file
+                mountPath: /tmp-config/config.yml
+                subPath: config.yml
         containers:
           app:
             env:
@@ -136,10 +162,7 @@ spec:
         enabled: true
         type: configMap
         name: qbit-manage-configmap
-        globalMounts:
-          - path: /config/config.yml
-            subPath: config.yml
-            readOnly: true
+        # Remove globalMounts here to avoid direct read-only overlay; init container will handle copy instead
       trim-script:
         enabled: true
         type: configMap
