@@ -40,34 +40,22 @@ spec:
           failedJobsHistory: 1
         containers:
           app:
+            command:  # New: Bypass entrypoint
+              - qbit_manage
+            # No 'args' needed; env vars control behavior
             env:
               TZ: ${TIMEZONE}
               QBT_CONFIG_DIR: /config
-              QBT_RUN: "true"
+              QBT_CONFIG_FILE: /config/config.yml  # Explicit for safety
+              QBT_RUN: "true"  # Triggers run mode
             envFrom:
               - secretRef:
                   name: qbittorrent-login
-            image: &image
-              repository: ghcr.io/stuffanthings/qbit_manage
-              tag: latest
-            resources: &resources
-              requests:
-                cpu: 50m
-                memory: 105M
-              limits:
-                cpu: 50m
-                memory: 105M
-            securityContext: &securityContext
-              allowPrivilegeEscalation: false
-              capabilities: { drop: ["ALL"] }
-              readOnlyRootFilesystem: true
-        pod: &podSecurityContext
-          automountServiceAccountToken: false
-          securityContext:
-            runAsGroup: 1001
-            runAsNonRoot: true
-            runAsUser: 1001
-            seccompProfile: { type: RuntimeDefault }
+            image: *image
+            resources: *resources
+            securityContext:
+              <<: *securityContext
+              readOnlyRootFilesystem: false  # Allow any writes (e.g., temp logs)
       recheck:
         type: cronjob
         cronjob:
@@ -75,29 +63,35 @@ spec:
           schedule: "@daily"
         containers:
           app:
+            command:
+              - qbit_manage
             env:
               TZ: ${TIMEZONE}
               QBT_CONFIG_DIR: /config
-              QBT_RECHECK: "true"
+              QBT_CONFIG_FILE: /config/config.yml
+              QBT_RECHECK: "true"  # Triggers recheck mode
             envFrom:
               - secretRef:
                   name: qbittorrent-login
             image: *image
             resources: *resources
-            securityContext: *securityContext
-        pod: *podSecurityContext
+            securityContext:
+              <<: *securityContext
+              readOnlyRootFilesystem: false
       trim:
         type: cronjob
         cronjob:
           <<: *cronJobSpec
           schedule: "@daily"
+        # Explicitly ensure no initContainers (app-template default is none)
+        initContainers: []  # Add this empty array to override any template default
         containers:
           app:
             command:
               - sh
               - -c
               - |
-                pip install qbittorrent-api && python /config/trim_seeders.py
+                pip install --no-cache-dir qbittorrent-api && python /config/trim_seeders.py  # --no-cache to minimize writes
             env:
               TZ: ${TIMEZONE}
             envFrom:
@@ -109,13 +103,13 @@ spec:
             resources: *resources
             securityContext:
               <<: *securityContext
-              readOnlyRootFilesystem: false  # Allow pip writes
+              readOnlyRootFilesystem: false
         pod:
           automountServiceAccountToken: false
           securityContext:
-            runAsGroup: 0  # Root group
-            runAsNonRoot: false  # Allow root
-            runAsUser: 0  # Run as root for pip
+            runAsGroup: 0
+            runAsNonRoot: false
+            runAsUser: 0
             seccompProfile: { type: RuntimeDefault }
 
     persistence:
