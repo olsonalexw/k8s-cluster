@@ -53,6 +53,10 @@ spec:
               TZ: ${TIMEZONE}
               QBT_CONFIG_DIR: /config
               QBT_RUN: "true"
+              QBT_TAG_NOHARDLINKS: "true"
+              QBT_SHARE_LIMITS: "true"
+              QBT_TAG_UPDATE: "true"
+              QBT_CAT_UPDATE: "true"
             envFrom:
               - secretRef:
                   name: qbittorrent-login
