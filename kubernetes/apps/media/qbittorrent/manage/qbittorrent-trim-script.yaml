@@ -9,6 +9,8 @@ data:
     import os
     import time
 
+    print("Starting trim script")
+
     # Connect to qBittorrent
     username = os.getenv('QBT_USER')
     password = os.getenv('QBT_PASS')
@@ -20,7 +22,7 @@ data:
     # Constants
     MIN_RATIO = 1.0
     MIN_SEEDING_HOURS = 336
-    MAX_SEEDERS = 10
+    MAX_SEEDERS = 3
     IPT_TAG = 'iptorrents'
     DRY_RUN = True  # Set to False to actually delete
 

@@ -18,13 +18,19 @@ data:
     tracker:
       iptorrents.com:  # Adjust if the tracker URL keyword is different
         tag: iptorrents
+      stackoverflow.tech:
+        tag: iptorrents
+      empirehost.me:
+        tag: iptorrents
+      bgp.technology:
+        tag: iptorrents
 
     share_limits:
       ipt:
         priority: 1
         include_any_tags: ["iptorrents"]
-        max_ratio: 1.0
-        max_seeding_time: 336h
+        max_ratio: 1.1
+        max_seeding_time: 337h
         cleanup: true
         min_seeding_time: 0h
         min_num_seeds: 0

@@ -44,6 +44,9 @@ spec:
               TZ: ${TIMEZONE}
               QBT_CONFIG_DIR: /config
               QBT_RUN: "true"
+              QBT_LOG_LEVEL: DEBUG
+              QBT_DEBUG: true
+              QBT_DRY_RUN: true  # Optional: Simulates actions without applying (e.g., tags/cleanup); remove later for real runs
             envFrom:
               - secretRef:
                   name: qbittorrent-login
@@ -79,6 +82,9 @@ spec:
               TZ: ${TIMEZONE}
               QBT_CONFIG_DIR: /config
               QBT_RECHECK: "true"
+              QBT_LOG_LEVEL: DEBUG
+              QBT_DEBUG: true
+              QBT_DRY_RUN: true  # Optional: Simulates actions without applying (e.g., tags/cleanup); remove later for real runs
             envFrom:
               - secretRef:
                   name: qbittorrent-login
@@ -144,3 +150,8 @@ spec:
         existingClaim: nfs-media-pvc
         globalMounts:
           - path: /media
+      tmp:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
