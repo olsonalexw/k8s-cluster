@@ -40,12 +40,10 @@ spec:
           failedJobsHistory: 1
         containers:
           app:
-            args:
-              - --config
-              - "/config/config.yml"
-              - --run
-            env: &env
+            env:
               TZ: ${TIMEZONE}
+              QBT_CONFIG_DIR: /config
+              QBT_RUN: "true"
             envFrom:
               - secretRef:
                   name: qbittorrent-login
@@ -77,11 +75,10 @@ spec:
           schedule: "@daily"
         containers:
           app:
-            args:
-              - --config
-              - "/config/config.yml"
-              - --recheck
-            env: *env
+            env:
+              TZ: ${TIMEZONE}
+              QBT_CONFIG_DIR: /config
+              QBT_RECHECK: "true"
             envFrom:
               - secretRef:
                   name: qbittorrent-login
@@ -94,24 +91,15 @@ spec:
         cronjob:
           <<: *cronJobSpec
           schedule: "@daily"
-        initContainers:
-          pip-install:
-            image:
-              repository: python
-              tag: 3.12-slim
-            args:
-              - -m
-              - pip
-              - install
-              - qbittorrent-api
-            resources: *resources
-            securityContext: *securityContext
         containers:
           app:
             command:
-              - python
-              - /config/trim_seeders.py
-            env: *env
+              - sh
+              - -c
+              - |
+                pip install qbittorrent-api && python /config/trim_seeders.py
+            env:
+              TZ: ${TIMEZONE}
             envFrom:
               - secretRef:
                   name: qbittorrent-login
@@ -119,17 +107,30 @@ spec:
               repository: python
               tag: 3.12-slim
             resources: *resources
-            securityContext: *securityContext
-        pod: *podSecurityContext
+            securityContext:
+              <<: *securityContext
+              readOnlyRootFilesystem: false  # Allow pip writes
+        pod:
+          automountServiceAccountToken: false
+          securityContext:
+            runAsGroup: 0  # Root group
+            runAsNonRoot: false  # Allow root
+            runAsUser: 0  # Run as root for pip
+            seccompProfile: { type: RuntimeDefault }
 
     persistence:
+      config-dir:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /config
       config-file:
         enabled: true
         type: configMap
         name: qbit-manage-configmap
-        globalMounts:
-          - path: /config/config.yml
-            subPath: config.yml
+        mountPath: /config/config.yml
+        subPath: config.yml
+        readOnly: true
       trim-script:
         enabled: true
         type: configMap
