@@ -15,3 +15,4 @@ resources:
   - ./sabnzbd/ks.yaml
   - ./sonarr/ks.yaml
   - ./gluetun-service.yaml
+  - ./plik/ks.yaml
