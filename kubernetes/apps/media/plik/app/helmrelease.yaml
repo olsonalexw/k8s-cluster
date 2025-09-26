@@ -1,11 +1,11 @@
-yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: plik
+  name: pilk
   namespace: media
 spec:
-  releaseName: plik
+  releaseName: pilk
   interval: 15m
   chart:
     spec:
@@ -27,7 +27,7 @@ spec:
               tag: 1.3.8
             env:
               TZ: ${TIMEZONE}
-              PLIKD_DOWNLOAD_DOMAIN: "plik.${SECRET_DOMAIN}"
+              PLIKD_DOWNLOAD_DOMAIN: "pilk.${SECRET_DOMAIN}"
               PLIKD_DATA_BACKEND_CONFIG: '{"Directory":"/files"}'
               PLIKD_METADATA_BACKEND_CONFIG: '{"File":"/config/plik.db"}'
             resources:
@@ -51,7 +51,7 @@ spec:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
         hosts:
-          - host: &host "plik.${SECRET_DOMAIN}"
+          - host: &host "pilk.${SECRET_DOMAIN}"
             paths:
               - path: /
                 service:
@@ -61,19 +61,18 @@ spec:
           - hosts:
               - *host
             secretName: "${SECRET_DOMAIN/./-}-production-tls"
+
     persistence:
       config:
         enabled: true
         storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 100Mi
-        mountPath: /config
       files:
         enabled: true
         storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 10Gi
-        mountPath: /files
 
     defaultPodOptions:
       enableServiceLinks: false
@@ -83,4 +82,3 @@ spec:
         runAsGroup: 1001
         fsGroup: 1001
         fsGroupChangePolicy: "Always"
-
