@@ -53,11 +53,11 @@ data:
         include_any_tags: ["iptorrents"]
         max_ratio: 1.1
         max_seeding_time: 337h
-        cleanup: true
+        cleanup: false
         min_seeding_time: 0h
         min_num_seeds: 0
         resume_torrent_after_change: true
-        add_group_to_tag: false
+        add_group_to_tag: true
 
     recyclebin:
       enable: true
