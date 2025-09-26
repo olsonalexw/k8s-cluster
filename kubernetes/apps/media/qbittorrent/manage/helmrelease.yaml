@@ -53,7 +53,7 @@ spec:
               TZ: ${TIMEZONE}
               QBT_CONFIG_DIR: /config
               QBT_RUN: "true"
-              QBT_TAG_NOHARDLINKS: "true"
+              QBT_TAG_NOHARDLINKS: "false"
               QBT_SHARE_LIMITS: "false"
               QBT_TAG_UPDATE: "true"
               QBT_CAT_UPDATE: "true"
