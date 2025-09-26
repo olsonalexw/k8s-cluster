@@ -20,9 +20,9 @@ data:
         raise ValueError("QBT_USER and QBT_PASS env vars must be set")
 
     # Constants
-    MIN_RATIO = 1.0
-    MIN_SEEDING_HOURS = 336
-    MAX_SEEDERS = 3
+    MIN_RATIO = 1.1
+    MIN_SEEDING_HOURS = 337
+    MAX_SEEDERS = 1
     IPT_TAG = 'iptorrents'
     DRY_RUN = True  # Set to False to actually delete
 

@@ -54,7 +54,7 @@ spec:
               QBT_CONFIG_DIR: /config
               QBT_RUN: "true"
               QBT_TAG_NOHARDLINKS: "true"
-              QBT_SHARE_LIMITS: "true"
+              QBT_SHARE_LIMITS: "false"
               QBT_TAG_UPDATE: "true"
               QBT_CAT_UPDATE: "true"
             envFrom:
