@@ -18,10 +18,24 @@ data:
       orphaned_dir: /media/downloads/qbittorrent/complete/orphaned_data  # Disposable orphaned files
 
     cat:  # Mandatory: Map ALL qBittorrent categories to their complete save paths
-      Uncategorized: /media/downloads/qbittorrent/complete/*  # Catch-all for uncategorized
+      uncategorized: /media/downloads/qbittorrent/complete/*  # Catch-all for uncategorized
       manual: /media/downloads/qbittorrent/complete/manual/*
       series: /media/downloads/qbittorrent/complete/series/*  # Use * for subdirs (e.g., seasons)
       movies: /media/downloads/qbittorrent/complete/movies/*
+
+    nohardlinks:  # NEW: List of categories to check for external hardlinks
+      - uncategorized:  # Catch-all
+          ignore_root_dir: true  # Ignore internal links in complete/
+          # exclude_tags: [noHL, ~share_limit]  # Optional: Skip these tags (uncomment/add if needed)
+      - manual:
+          ignore_root_dir: true
+          # exclude_tags: []
+      - series:
+          ignore_root_dir: true
+          # exclude_tags: []
+      - movies:
+          ignore_root_dir: true
+          # exclude_tags: []
 
     tracker:
       iptorrents.com:  # Adjust if the tracker URL keyword is different
