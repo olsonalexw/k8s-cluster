@@ -22,28 +22,47 @@ data:
     # Constants
     MIN_RATIO = 1.1
     MIN_SEEDING_HOURS = 337
-    MAX_SEEDERS = 10
+    MAX_SEEDERS = 15
     IPT_TAG = 'iptorrents'
     DRY_RUN = False  # Set to False to actually delete
 
     # Get all seeding torrents for IPT tag
     torrents = client.torrents_info(status_filter='seeding', tag=IPT_TAG)
-    eligible = []
+
+    # Classify torrents
+    protected = []  # Must keep: ratio < MIN_RATIO AND seeding_hours < MIN_SEEDING_HOURS
+    eligible = []   # Can delete: ratio >= MIN_RATIO OR seeding_hours >= MIN_SEEDING_HOURS
     for t in torrents:
         seeding_hours = t.seeding_time / 3600
-        if t.ratio >= MIN_RATIO or seeding_hours >= MIN_SEEDING_HOURS:
+        if t.ratio < MIN_RATIO and seeding_hours < MIN_SEEDING_HOURS:
+            protected.append(t)
+        else:
             productivity = (t.uploaded / 1e9) / max(seeding_hours, 1)  # GB/hour; avoid div0
             eligible.append((t.hash, productivity, t.name))
 
-    # If more than MAX_SEEDERS, sort by productivity desc, "delete" lowest
-    if len(eligible) > MAX_SEEDERS:
-        eligible.sort(key=lambda x: x[1], reverse=True)  # Highest first
-        to_delete = eligible[MAX_SEEDERS:]
-        for hash_val, prod, name in to_delete:
-            if DRY_RUN:
-                print(f"Would delete torrent: {name} (hash: {hash_val}, productivity: {prod:.4f} GB/h)")
-            else:
-                client.torrents_delete(delete_local_files=True, torrent_hashes=hash_val)
-                time.sleep(1)  # Avoid API flood
+    total = len(protected) + len(eligible)
+    print(f"Total seeding: {total} (protected: {len(protected)}, eligible: {len(eligible)})")
 
-    print(f"Processed {len(eligible)} eligible seeders. Trimmed to {MAX_SEEDERS} if needed.")
+    # If total <= MAX_SEEDERS, do nothing
+    if total <= MAX_SEEDERS:
+        print("Total at or below limit; no deletions needed.")
+    else:
+        # Calculate how many eligible to keep (fill to MAX_SEEDERS after keeping all protected)
+        num_to_keep_eligible = max(0, MAX_SEEDERS - len(protected))
+
+        if num_to_keep_eligible < len(eligible):
+            # Sort eligible by productivity desc (highest first)
+            eligible.sort(key=lambda x: x[1], reverse=True)
+
+            # Delete the bottom (least productive) ones
+            to_delete = eligible[num_to_keep_eligible:]
+            for hash_val, prod, name in to_delete:
+                if DRY_RUN:
+                    print(f"Would delete torrent: {name} (hash: {hash_val}, productivity: {prod:.4f} GB/h)")
+                else:
+                    client.torrents_delete(delete_local_files=True, torrent_hashes=hash_val)
+                    time.sleep(1)  # Avoid API flood
+        else:
+            print("Cannot reduce below protected count; no deletions possible.")
+
+    print(f"Processed {len(eligible)} eligible. Trimmed to maintain ~{MAX_SEEDERS} total if possible.")
