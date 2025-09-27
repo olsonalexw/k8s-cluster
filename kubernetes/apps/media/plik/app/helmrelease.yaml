@@ -60,11 +60,10 @@ spec:
     ingress:
       main:
         enabled: true
-        className: traefik-internal  # Changed to internal Traefik class (assuming this exists in your setup)
+        className: traefik-internal
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
-          # Removed external-dns annotation since this is now internal
         hosts:
           - host: &host "plik.${SECRET_DOMAIN}"
             paths:
@@ -106,10 +105,10 @@ spec:
         storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 10Gi
-      config-file:  # Mount the config file from ConfigMap
+      config-file:
         enabled: true
         type: configMap
-        name: config-file
+        name: plik-config-file
         defaultMode: 0644
         advancedMounts:
           main:
