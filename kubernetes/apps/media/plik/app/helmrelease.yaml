@@ -26,7 +26,7 @@ spec:
               repository: rootgg/plik
               tag: 1.3.8
             args:
-              - -config
+              - --config
               - /plikd.cfg
             env:
               TZ: ${TIMEZONE}
@@ -57,6 +57,7 @@ spec:
             port: 8080
         annotations:
           traefik.ingress.kubernetes.io/service.passhostheader: "true"  # Explicitly pass original Host header to backend
+          traefik.ingress.kubernetes.io/service.pass-host-header: "true"  # Alternative format, in case the no-dash version doesn't work
     ingress:
       main:
         enabled: true
@@ -105,7 +106,7 @@ spec:
         storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 10Gi
-      config-file:
+      config-file:  # Mount the config file from ConfigMap
         enabled: true
         type: configMap
         name: plik-config-file
