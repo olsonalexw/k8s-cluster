@@ -27,7 +27,7 @@ spec:
               tag: 1.3.8
             env:
               TZ: ${TIMEZONE}
-              PLIKD_DOWNLOAD_DOMAIN: ""
+              PLIKD_DOWNLOAD_DOMAIN: "https://dl.${SECRET_DOMAIN}"
               PLIKD_DATA_BACKEND_CONFIG: '{"Directory":"/files"}'
               PLIKD_METADATA_BACKEND_CONFIG: '{"File":"/config/plik.db"}'
               PLIKD_FEATURE_AUTHENTICATION: "forced"  # Forces login for uploads; downloads remain public
@@ -71,7 +71,8 @@ spec:
         hosts:
           - host: &host2 "dl.${SECRET_DOMAIN}"
             paths:
-              - path: /
+              - path: /file
+                pathType: Prefix
                 service:
                   identifier: main
                   port: http
@@ -99,4 +100,3 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: "Always"
-
