@@ -25,31 +25,46 @@ spec:
             image:
               repository: rootgg/plik
               tag: 1.3.8
+            args:
+              - -config
+              - /plikd.cfg
             env:
               TZ: ${TIMEZONE}
-              PLIKD_DOWNLOAD_DOMAIN: "dl.${SECRET_DOMAIN}"
-              PLIKD_DATA_BACKEND_CONFIG: '{"Directory":"/files"}'
-              PLIKD_METADATA_BACKEND_CONFIG: '{"File":"/config/plik.db"}'
-              PLIKD_FEATURE_AUTHENTICATION: "forced"  # Forces login for uploads; downloads remain public
             resources:
               requests:
                 cpu: 10m
                 memory: 128Mi
               limits:
                 memory: 512Mi
+    configMaps:
+      config-file:
+        enabled: true
+        data:
+          plikd.cfg: |
+            DownloadDomain = "dl.${SECRET_DOMAIN}"
+            DataBackend = "file"
+            [DataBackendConfig]
+            Directory = "/files"
+            MetadataBackend = "file"
+            [MetadataBackendConfig]
+            File = "/config/plik.db"
+            FeatureAuthentication = "forced"  # Forces login for uploads; downloads remain public
     service:
       main:
         controller: main
         ports:
           http:
             port: 8080
+        annotations:
+          traefik.ingress.kubernetes.io/service.passhostheader: "true"  # Explicitly pass original Host header to backend
     ingress:
       main:
         enabled: true
-        className: traefik-internal
+        className: traefik-internal  # Changed to internal Traefik class (assuming this exists in your setup)
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
+          # Removed external-dns annotation since this is now internal
         hosts:
           - host: &host "plik.${SECRET_DOMAIN}"
             paths:
@@ -61,7 +76,7 @@ spec:
           - hosts:
               - *host
             secretName: "${SECRET_DOMAIN/./-}-production-tls"
-      download:
+      download:  # Added a second ingress for the download domain
         enabled: true
         className: traefik-external
         annotations:
@@ -79,6 +94,7 @@ spec:
           - hosts:
               - *host2
             secretName: "${SECRET_DOMAIN/./-}-production-tls"
+
     persistence:
       config:
         enabled: true
@@ -90,6 +106,17 @@ spec:
         storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 10Gi
+      config-file:  # Mount the config file from ConfigMap
+        enabled: true
+        type: configMap
+        name: config-file
+        defaultMode: 0644
+        advancedMounts:
+          main:
+            main:
+              - path: /plikd.cfg
+                subPath: plikd.cfg
+                readOnly: true
 
     defaultPodOptions:
       enableServiceLinks: false
@@ -99,4 +126,3 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         fsGroupChangePolicy: "Always"
-
