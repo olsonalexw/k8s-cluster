@@ -19,6 +19,13 @@ spec:
     controllers:
       main:
         type: deployment
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+            runAsGroup: 1001
+            fsGroup: 1001
+            fsGroupChangePolicy: "Always"
         strategy: Recreate
         containers:
           main:
@@ -28,8 +35,8 @@ spec:
             env:
               TZ: ${TIMEZONE}
               PLIKD_DOWNLOAD_DOMAIN: "https://dl.${SECRET_DOMAIN}"
-              PLIKD_METADATABACKENDCONFIG_FILE: "/config/plik.db"  # Sets the File key in MetadataBackendConfig
-              PLIKD_DATABACKENDCONFIG_DIRECTORY: "/files"  # Sets the Directory key in DataBackendConfig
+              PLIKD_METADATA_BACKEND_CONFIG_FILE: "/config/plik.db"
+              PLIKD_DATA_BACKEND_CONFIG_DIRECTORY: "/files"
               PLIKD_FEATURE_AUTHENTICATION: "forced"
             resources:
               requests:
@@ -91,12 +98,3 @@ spec:
         storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 10Gi
-
-    defaultPodOptions:
-      enableServiceLinks: false
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
-        fsGroup: 1001
-        fsGroupChangePolicy: "Always"
