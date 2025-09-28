@@ -28,8 +28,8 @@ spec:
             env:
               TZ: ${TIMEZONE}
               PLIKD_DOWNLOAD_DOMAIN: "https://dl.${SECRET_DOMAIN}"
-              PLIKD_METADATABACKENDCONFIG_FILE: "/config/plik.db"
-              PLIKD_DATABACKENDCONFIG_DIRECTORY: "/files"
+              PLIKD_DATA_BACKEND_CONFIG: '{"Directory":"/files"}'
+              PLIKD_METADATA_BACKEND_CONFIG: '{"File":"/config/plik.db"}'
               PLIKD_FEATURE_AUTHENTICATION: "forced"
             resources:
               requests:
