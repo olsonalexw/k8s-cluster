@@ -19,13 +19,6 @@ spec:
     controllers:
       main:
         type: deployment
-        pod:
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1001
-            runAsGroup: 1001
-            fsGroup: 1001
-            fsGroupChangePolicy: "Always"
         strategy: Recreate
         containers:
           main:
@@ -98,3 +91,12 @@ spec:
         storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 10Gi
+
+    defaultPodOptions:
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: "Always"
