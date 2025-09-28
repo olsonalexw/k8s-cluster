@@ -28,9 +28,9 @@ spec:
             env:
               TZ: ${TIMEZONE}
               PLIKD_DOWNLOAD_DOMAIN: "https://dl.${SECRET_DOMAIN}"
-              PLIKD_DATA_BACKEND_CONFIG: '{"Directory":"/files"}'
-              PLIKD_METADATA_BACKEND_CONFIG: '{"File":"/config/plik.db"}'
-              PLIKD_FEATURE_AUTHENTICATION: "forced"  # Forces login for uploads; downloads remain public
+              PLIKD_METADATABACKENDCONFIG_FILE: "/config/plik.db"  # Sets the File key in MetadataBackendConfig
+              PLIKD_DATABACKENDCONFIG_DIRECTORY: "/files"  # Sets the Directory key in DataBackendConfig
+              PLIKD_FEATURE_AUTHENTICATION: "forced"
             resources:
               requests:
                 cpu: 10m
