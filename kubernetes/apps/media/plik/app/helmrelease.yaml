@@ -51,7 +51,7 @@ spec:
         className: traefik-internal
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
         hosts:
           - host: &host "plik.${SECRET_DOMAIN}"
             paths:
