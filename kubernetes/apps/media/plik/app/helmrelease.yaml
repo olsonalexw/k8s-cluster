@@ -31,6 +31,8 @@ spec:
               PLIKD_DATA_BACKEND_CONFIG: '{"Directory":"/files"}'
               PLIKD_METADATA_BACKEND_CONFIG: '{"Driver":"sqlite3","ConnectionString":"/config/plik.db"}'
               PLIKD_FEATURE_AUTHENTICATION: "forced"
+              PLIKD_DEFAULT_TTL_STR: "2d"
+              PLIKD_SOURCE_IP_HEADER: "X-FORWARDED-FOR"
             resources:
               requests:
                 cpu: 10m
@@ -49,7 +51,7 @@ spec:
         className: traefik-internal
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
         hosts:
           - host: &host "plik.${SECRET_DOMAIN}"
             paths:
