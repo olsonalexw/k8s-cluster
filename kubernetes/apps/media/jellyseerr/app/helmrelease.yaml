@@ -43,6 +43,12 @@ spec:
             #   allowPrivilegeEscalation: false
             #   readOnlyRootFilesystem: true
             #   capabilities: { drop: ["ALL"] }
+              DB_TYPE: "postgres"
+              DB_HOST: postgres-pgbouncer.database.svc.cluster.local
+              DB_PORT: 5432
+              DB_NAME: jellyseerr
+              DB_USER: jellyseerr
+              DB_PASS: ""
             resources:
               requests:
                 cpu: 49m
