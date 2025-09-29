@@ -85,6 +85,11 @@ spec:
         - paperless
       password:
         type: AlphaNumeric
+    - name: jellyseerr
+      databases:
+        - jellyseerr
+      password:
+        type: AlphaNumeric
 
   backups:
     pgbackrest:
