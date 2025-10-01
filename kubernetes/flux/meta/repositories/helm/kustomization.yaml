@@ -17,6 +17,7 @@ resources:
   - ./ingress-nginx.yaml
   - ./jetstack.yaml
   - ./k8s-gateway.yaml
+  - ./nextcloud.yaml
   - ./nvidia-charts.yaml
   - ./node-feature-discovery-charts.yaml
   - ./metrics-server.yaml

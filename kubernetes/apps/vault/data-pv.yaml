@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-data-pv
+spec:
+  storageClassName: nfs-csi
+  capacity:
+    storage: 1Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: 192.168.1.2
+    path: /mnt/OlsonNAS/nfs/data
+  claimRef:
+    namespace: vault
+    name: nfs-data-pvc
+  mountOptions:
+    - nfsvers=4.2
+    - nconnect=16
+    - hard
+    - noatime
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-data-pvc
+  namespace: vault
+spec:
+  storageClassName: nfs-csi
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi
+  volumeName: nfs-data-pv
