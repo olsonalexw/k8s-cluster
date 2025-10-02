@@ -74,7 +74,7 @@ spec:
         size: 1Gi  # Ignored for existing
     nextcloud:
       host: nextcloud.${SECRET_DOMAIN}
-      datadir: /var/www/html/data
+      datadir: /var/www/html/nextcloud
       config:
         trusted_domains: nextcloud.${SECRET_DOMAIN}
         trusted_proxies: 10.69.0.0/16 10.96.0.0/16
@@ -174,9 +174,9 @@ spec:
     startupProbe:
       enabled: true
       initialDelaySeconds: 10
-      periodSeconds: 20
+      periodSeconds: 30
       timeoutSeconds: 5
-      failureThreshold: 30  # ~10min grace
+      failureThreshold: 120
       successThreshold: 1
     livenessProbe:
       initialDelaySeconds: 120
@@ -188,11 +188,6 @@ spec:
       periodSeconds: 20
       timeoutSeconds: 5
       failureThreshold: 3
-    podSecurityContext:  # Add this block for pod-level (volumes/fsGroup)
-      fsGroup: 33  # Ensures mounted volumes (NFS data, Redis persist) get GID 1001 for NFS compatibility
-      fsGroupChangePolicy: "OnRootMismatch"  # Force chown on every mount if needed
-      runAsNonRoot: false  # Allow root init pod-wide
-      # runAsUser: 0  # Optional: Explicit root start for safety
     # Monitoring
     serviceMonitor:
       enabled: true
