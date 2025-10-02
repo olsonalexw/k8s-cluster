@@ -35,7 +35,7 @@ spec:
     image:
       repository: nextcloud
       flavor: fpm-alpine
-      tag: 32.0-fpm-alpine
+      tag: 32-fpm-alpine
       pullPolicy: IfNotPresent
     nginx:
       enabled: true
@@ -76,13 +76,51 @@ spec:
         memcache.locking: \OC\Memcache\Redis
         redis.host: nextcloud-redis-master  # Internal service name
         redis.port: 6379
+      phpConfigs:
+            redis-session.ini: |  # Pre-creates the file; entrypoint skips or overwrites harmlessly
+              session.save_handler = redis
+              session.save_path = "tcp://nextcloud-redis-master:6379?serializer=php"  # No auth since auth.enabled: false
+            uploadLimit.ini: |  # Optional, like theirs—for large files
+              upload_max_filesize = 16G
+              post_max_size = 16G
+              max_input_time = 3600
+              max_execution_time = 3600
+            www.conf: |  # Optional, ensures FPM user/group matches image (33)
+              [www]
+              user = www-data
+              group = www-data
+              listen = 127.0.0.1:9000
+              pm = dynamic
+              pm.max_children = 57
+              pm.start_servers = 14
+              pm.min_spare_servers = 14
+              pm.max_spare_servers = 42
+              pm.max_requests = 500
+              pm.process_idle_timeout = 10s
+      configs:
+        custom.config.php: |-
+          <?php
+          $CONFIG = array (
+            'check_data_directory_permissions' => false,  # Skips lock/dir checks
+            # Add your other config here if needed (e.g., loglevel: 2)
+          );
+      securityContext:
+        runAsNonRoot: false # allows entrypoint to run as root, drops to UID
+      hooks:
+        post-installation: |-
+          php occ db:add-missing-indices
+        post-upgrade: |-
+          php occ maintenance:repair --include-expensive
+          php occ db:add-missing-indices
+          php occ db:add-missing-columns
+          php occ db:add-missing-primary-keys
     resources:
       requests:
         cpu: 100m
         memory: 512Mi
       limits:
-        cpu: 500m
-        memory: 1Gi
+        cpu: 1000m
+        memory: 3Gi
     cronjob:
       enabled: true
       # Runs every 5m by default
@@ -122,7 +160,13 @@ spec:
           enabled: true
           storageClass: nfs-csi  # Or openebs-hostpath for faster local caching
           size: 1Gi
-    # Enhanced probes for large file handling
+    startupProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 30  # ~10min grace
+      successThreshold: 1
     livenessProbe:
       initialDelaySeconds: 120
       periodSeconds: 30
@@ -133,11 +177,6 @@ spec:
       periodSeconds: 20
       timeoutSeconds: 5
       failureThreshold: 3
-    # Security hardening
-    securityContext:  # This applies to containers—relax for init
-      # runAsUser: 1001
-      # runAsGroup: 1001
-      # The image defaults to root init, then drops to 33:33
     podSecurityContext:  # Add this block for pod-level (volumes/fsGroup)
       fsGroup: 1001  # Ensures mounted volumes (NFS data, Redis persist) get GID 1001 for NFS compatibility
       fsGroupChangePolicy: "Always"  # Force chown on every mount if needed
