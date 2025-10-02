@@ -182,8 +182,8 @@ spec:
       timeoutSeconds: 5
       failureThreshold: 3
     podSecurityContext:  # Add this block for pod-level (volumes/fsGroup)
-      fsGroup: 1001  # Ensures mounted volumes (NFS data, Redis persist) get GID 1001 for NFS compatibility
-      fsGroupChangePolicy: "Always"  # Force chown on every mount if needed
+      fsGroup: 33  # Ensures mounted volumes (NFS data, Redis persist) get GID 1001 for NFS compatibility
+      fsGroupChangePolicy: "OnRootMismatch"  # Force chown on every mount if needed
       runAsNonRoot: false  # Allow root init pod-wide
       # runAsUser: 0  # Optional: Explicit root start for safety
     # Monitoring
