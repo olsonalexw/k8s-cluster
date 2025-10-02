@@ -19,10 +19,12 @@ spec:
     - name: csi-driver-nfs
       namespace: storage
   install:
+    timeout: 15m
     remediation:
       retries: 3
   upgrade:
     cleanupOnFail: true
+    timeout: 15m
     remediation:
       strategy: rollback
       retries: 3
@@ -80,7 +82,7 @@ spec:
             redis-session.ini: |  # Pre-creates the file; entrypoint skips or overwrites harmlessly
               session.save_handler = redis
               session.save_path = "tcp://nextcloud-redis-master:6379?serializer=php"  # No auth since auth.enabled: false
-            uploadLimit.ini: |  # Optional, like theirs—for large files
+            uploadLimit.ini: |  # Optional
               upload_max_filesize = 16G
               post_max_size = 16G
               max_input_time = 3600
@@ -155,6 +157,8 @@ spec:
       enabled: true  # Enables Redis for caching/locking to improve performance
       auth:
         enabled: false  # Disable password if not needed
+      replica:
+        replicaCount: 0
       master:
         persistence:
           enabled: true
