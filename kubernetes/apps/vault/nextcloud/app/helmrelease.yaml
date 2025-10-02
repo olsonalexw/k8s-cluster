@@ -28,7 +28,7 @@ spec:
       retries: 3
   valuesFrom:
     - kind: Secret
-      name: nextcloud-secrets
+      name: nextcloud-secret
       valuesKey: nextcloud-values.yaml
       optional: false
   values:
