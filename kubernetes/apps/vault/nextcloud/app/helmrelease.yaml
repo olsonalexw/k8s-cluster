@@ -132,8 +132,8 @@ spec:
       failureThreshold: 3
     # Security hardening
     securityContext:
-      runAsUser: 33
-      runAsGroup: 33
+      runAsUser: 1001
+      runAsGroup: 1001
       runAsNonRoot: true
       readOnlyRootFilesystem: true  # Mount /tmp as tmpfs for writes
       capabilities:
