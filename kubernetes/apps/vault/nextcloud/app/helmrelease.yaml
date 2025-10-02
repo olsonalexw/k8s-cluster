@@ -108,14 +108,14 @@ spec:
           );
       securityContext:
         runAsNonRoot: false # allows entrypoint to run as root, drops to UID
-      hooks:
-        post-installation: |-
-          php occ db:add-missing-indices
-        post-upgrade: |-
-          php occ maintenance:repair --include-expensive
-          php occ db:add-missing-indices
-          php occ db:add-missing-columns
-          php occ db:add-missing-primary-keys
+      # hooks:
+      #   post-installation: |-
+      #     php occ db:add-missing-indices
+      #   post-upgrade: |-
+      #     php occ maintenance:repair --include-expensive
+      #     php occ db:add-missing-indices
+      #     php occ db:add-missing-columns
+      #     php occ db:add-missing-primary-keys
     resources:
       requests:
         cpu: 100m
