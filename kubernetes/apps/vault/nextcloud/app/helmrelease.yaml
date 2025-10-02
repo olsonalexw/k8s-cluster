@@ -33,7 +33,7 @@ spec:
       optional: false
   values:
     image:
-      repository: nextcloud/apache
+      repository: nextcloud
       tag: "32"
       pullPolicy: IfNotPresent
     externalDatabase:
