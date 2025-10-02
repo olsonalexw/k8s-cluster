@@ -60,11 +60,18 @@ spec:
         passwordKey: password
     persistence:
       enabled: true
-      existingClaim: nfs-data-pvc
-      annotations: {}
-      storageClass: ""
+      # Dynamic for configs/core (/var/www/html/)
+      storageClass: nfs-csi
       accessMode: ReadWriteMany
-      size: 1Gi
+      size: 1Gi  # Small for configs/apps
+      # Separate static data persistence (/var/www/html/data)
+      nextcloudData:
+        enabled: true
+        existingClaim: nfs-data-pvc
+        annotations: {}
+        storageClass: ""
+        accessMode: ReadWriteMany
+        size: 1Gi  # Ignored for existing
     nextcloud:
       host: nextcloud.${SECRET_DOMAIN}
       datadir: /var/www/html/data
