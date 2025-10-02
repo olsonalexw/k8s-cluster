@@ -34,8 +34,11 @@ spec:
   values:
     image:
       repository: nextcloud
-      tag: "32"
+      flavor: fpm-alpine
+      tag: 32.0-fpm-alpine
       pullPolicy: IfNotPresent
+    nginx:
+      enabled: true
     externalDatabase:
       enabled: true
       type: postgresql
@@ -136,8 +139,8 @@ spec:
       runAsGroup: 1001
       # runAsNonRoot: true
       # readOnlyRootFilesystem: true  # Mount /tmp as tmpfs for writes
-      capabilities:
-        drop: ["ALL"]
+      # capabilities:
+      #   drop: ["ALL"]
     # Monitoring
     serviceMonitor:
       enabled: true
