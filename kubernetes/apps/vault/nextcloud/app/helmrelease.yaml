@@ -134,7 +134,6 @@ spec:
     securityContext:
       runAsUser: 33
       runAsGroup: 33
-      fsGroup: 33
       runAsNonRoot: true
       readOnlyRootFilesystem: true  # Mount /tmp as tmpfs for writes
       capabilities:
