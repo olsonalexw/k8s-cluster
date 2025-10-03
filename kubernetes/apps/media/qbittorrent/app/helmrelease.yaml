@@ -176,21 +176,11 @@ spec:
               - --repo=https://github.com/Carve/qbittorrent-webui-cjratliff.com
               - --ref=main
               - --period=86400s
-              - --root=/addons/git-root  # Dedicated subdir for git-sync state
-              - --link=../current  # Symlink latest checkout to /addons/current
-              - --group-write  # Ensure group-writable for fsGroup:1001
+              - --root=/addons
             resources:
               requests:
                 cpu: 20m
-                memory: 64M  # Slight bump for clone
-            securityContext:
-              runAsUser: 1001
-              runAsGroup: 1001
-              runAsNonRoot: true
-              allowPrivilegeEscalation: false
-              capabilities:
-                drop:
-                  - ALL
+                memory: 32M
 
     service:
       app:
