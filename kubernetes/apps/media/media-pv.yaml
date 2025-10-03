@@ -22,6 +22,10 @@ spec:
     - nconnect=16
     - hard
     - noatime
+    - fsc                    # Enables NFSv4 filesystem caching (data/attrs in kernel cache)
+    - actimeo=600            # 10-min attribute cache timeout (reduces metadata roundtrips; tune to 300-1800s based on file changes)
+    - rsize=1048576          # 1MB read block size (boosts sequential reads for media streaming/seeding)
+    - wsize=1048576          # 1MB write block (less relevant for seeding, but balances if you upload logs)
 
 ---
 apiVersion: v1
