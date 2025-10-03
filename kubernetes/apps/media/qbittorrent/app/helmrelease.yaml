@@ -167,6 +167,29 @@ spec:
           #       cpu: 50m
           #       memory: 37M
 
+          cjratliff-sync:
+            dependsOn: qbittorrent
+            image:
+              repository: registry.k8s.io/git-sync/git-sync
+              tag: v4.4.0
+            args:
+              - --repo=https://github.com/Carve/qbittorrent-webui-cjratliff.com
+              - --ref=main  # Stable branch; swap to a tag like v1.0 if needed
+              - --period=86400s
+              - --root=/themes/cjratliff
+            resources:
+              requests:
+                cpu: 20m
+                memory: 32M
+            securityContext:
+              runAsUser: 1001
+              runAsGroup: 1001
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+
     service:
       app:
         controller: qbittorrent
@@ -201,6 +224,8 @@ spec:
         advancedMounts:
           qbittorrent:
             qbittorrent:
+              - path: /config
+            cjratliff-sync:
               - path: /config
       media:
         enabled: true
