@@ -174,9 +174,9 @@ spec:
               tag: v4.4.0
             args:
               - --repo=https://github.com/Carve/qbittorrent-webui-cjratliff.com
-              - --ref=latest-release  # Stable branch; swap to a tag like v1.0 if needed
+              - --ref=main  # Stable branch; swap to a tag like v1.0 if needed
               - --period=86400s
-              - --root=/themes/cjratliff
+              - --root=/addons
             resources:
               requests:
                 cpu: 20m
@@ -216,8 +216,6 @@ spec:
         advancedMounts:
           qbittorrent:
             qbittorrent:
-              - path: /config
-            cjratliff-sync:
               - path: /config
       media:
         enabled: true
