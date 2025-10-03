@@ -78,12 +78,12 @@ spec:
           qbittorrent:
             dependsOn: wireguard-pia
             image:
-              repository: ghcr.io/onedr0p/qbittorrent
-              tag: 5.0.3
+              repository: linuxserver/qbittorrent
+              tag: 5.1.2
             env:
               TZ: ${TIMEZONE}
               UMASK: "022"
-              QBT_WEBUI_PORT: &port 80
+              WEBUI_PORT: &port 80
             resources:
               requests:
                 cpu: 100m
@@ -167,14 +167,14 @@ spec:
           #       cpu: 50m
           #       memory: 37M
 
-          cjratliff-sync:
+          cjratliff-ui:
             dependsOn: qbittorrent
             image:
               repository: registry.k8s.io/git-sync/git-sync
               tag: v4.4.0
             args:
               - --repo=https://github.com/Carve/qbittorrent-webui-cjratliff.com
-              - --ref=main
+              - --ref=stable
               - --period=86400s
               - --root=/addons
             resources:
