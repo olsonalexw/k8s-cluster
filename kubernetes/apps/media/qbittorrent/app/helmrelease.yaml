@@ -167,20 +167,20 @@ spec:
           #       cpu: 50m
           #       memory: 37M
 
-          cjratliff-sync:
-            dependsOn: qbittorrent
-            image:
-              repository: registry.k8s.io/git-sync/git-sync
-              tag: v4.4.0
-            args:
-              - --repo=https://github.com/Carve/qbittorrent-webui-cjratliff.com
-              - --ref=main
-              - --period=86400s
-              - --root=/addons
-            resources:
-              requests:
-                cpu: 20m
-                memory: 32M
+          # cjratliff-sync:
+          #   dependsOn: qbittorrent
+          #   image:
+          #     repository: registry.k8s.io/git-sync/git-sync
+          #     tag: v4.4.0
+          #   args:
+          #     - --repo=https://github.com/Carve/qbittorrent-webui-cjratliff.com
+          #     - --ref=main
+          #     - --period=86400s
+          #     - --root=/addons
+          #   resources:
+          #     requests:
+          #       cpu: 20m
+          #       memory: 32M
 
     service:
       app:
