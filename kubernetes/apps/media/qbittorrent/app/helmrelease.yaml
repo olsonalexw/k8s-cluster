@@ -174,13 +174,23 @@ spec:
               tag: v4.4.0
             args:
               - --repo=https://github.com/Carve/qbittorrent-webui-cjratliff.com
-              - --ref=main  # Stable branch; swap to a tag like v1.0 if needed
+              - --ref=main
               - --period=86400s
-              - --root=/addons
+              - --root=/addons/git-root  # Dedicated subdir for git-sync state
+              - --link=../current  # Symlink latest checkout to /addons/current
+              - --group-write  # Ensure group-writable for fsGroup:1001
             resources:
               requests:
                 cpu: 20m
-                memory: 32M
+                memory: 64M  # Slight bump for clone
+            securityContext:
+              runAsUser: 1001
+              runAsGroup: 1001
+              runAsNonRoot: true
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
 
     service:
       app:
