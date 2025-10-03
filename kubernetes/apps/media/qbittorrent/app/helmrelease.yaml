@@ -44,17 +44,32 @@ spec:
             supplementalGroups:
               - 65534
 
+        initContainers:
+          init-run:
+            image:
+              repository: busybox
+              tag: latest
+            command:
+              - /bin/sh
+              - -c
+              - |
+                mkdir -p /run
+                chown 1001:1001 /run
+                chmod 755 /run
+            securityContext:
+              runAsUser: 0  # Root privileges for init
+
         containers:
           wireguard-pia:
             image:
               repository: ghcr.io/thrnz/docker-wireguard-pia
-              tag: latest  # Pin to a version like 2024.09.24 if needed
+              tag: latest
             env:
               TZ: ${TIMEZONE}
               PORT_FORWARDING: "1"
               PORT_FILE: /pia-shared/port.dat
-              PORT_PERSIST: "1"  # Keeps same port across restarts
-              RECONNECT: "1"  # Auto-regen on drops
+              PORT_PERSIST: "1"
+              RECONNECT: "1"
               HEALTHCHECK_PING_TARGET: 8.8.8.8
               LOCAL_NETWORK: "10.69.0.0/16,10.96.0.0/16"
               MTU: 1420
@@ -243,3 +258,11 @@ spec:
               - path: /pia-shared
             port-sync:
               - path: /pia-shared
+      run:
+        type: emptyDir
+        advancedMounts:
+          qbittorrent:
+            init-run:
+              - path: /run
+            qbittorrent:
+              - path: /run
