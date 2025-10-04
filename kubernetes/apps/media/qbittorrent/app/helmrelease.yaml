@@ -58,6 +58,24 @@ spec:
                 chmod 755 /run
             securityContext:
               runAsUser: 0  # Root privileges for init
+          vuetorrent-build:
+            image:
+              repository: node
+              tag: 20-alpine
+            command:
+              - sh
+              - -c
+              - |
+                apk add --no-cache git
+                cd /addons
+                if [ ! -d "VueTorrent" ]; then
+                  git clone --depth 1 --branch v2.30.1 https://github.com/WDaan/VueTorrent.git VueTorrent
+                fi
+                cd VueTorrent
+                npm ci
+                npm run build
+            securityContext:
+              runAsUser: 0  # Root for git/npm
 
         containers:
           wireguard-pia:
