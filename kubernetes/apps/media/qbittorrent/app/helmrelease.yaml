@@ -167,20 +167,20 @@ spec:
                 cpu: 50m
                 memory: 50M
 
-          # vuetorrent:
-          #   dependsOn: qbittorrent
-          #   image:
-          #     repository: registry.k8s.io/git-sync/git-sync
-          #     tag: v4.4.0
-          #   args:
-          #     - --repo=https://github.com/WDaan/VueTorrent
-          #     - --ref=latest-release
-          #     - --period=86400s
-          #     - --root=/addons
-          #   resources:
-          #     requests:
-          #       cpu: 50m
-          #       memory: 37M
+          vuetorrent:
+            dependsOn: qbittorrent
+            image:
+              repository: registry.k8s.io/git-sync/git-sync
+              tag: v4.4.0
+            args:
+              - --repo=https://github.com/WDaan/VueTorrent
+              - --ref=latest-release
+              - --period=86400s
+              - --root=/addons
+            resources:
+              requests:
+                cpu: 50m
+                memory: 37M
 
           cjratliff-ui:
             dependsOn: qbittorrent
