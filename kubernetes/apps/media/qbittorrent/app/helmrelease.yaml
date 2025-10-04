@@ -59,26 +59,6 @@ spec:
             securityContext:
               runAsUser: 0  # Root privileges for init
 
-          vuetorrent-build:
-            image:
-              repository: node
-              tag: 20-alpine
-            command:
-              - sh
-              - -c
-              - |
-                apk add --no-cache git
-                cd /addons
-                if [ ! -d "VueTorrent" ]; then
-                  git clone --depth 1 --branch v2.30.1 https://github.com/WDaan/VueTorrent.git VueTorrent
-                fi
-                cd VueTorrent
-                npm ci
-                npm run build
-            securityContext:
-              runAsUser: 0  # Root for git/npm
-
-
         containers:
           wireguard-pia:
             image:
@@ -111,9 +91,7 @@ spec:
                 squat.ai/tun: 1
 
           qbittorrent:
-            dependsOn:
-              - wireguard-pia
-              - vuetorrent-build
+            dependsOn: wireguard-pia
             image:
               repository: linuxserver/qbittorrent
               tag: 5.1.2
@@ -189,6 +167,21 @@ spec:
                 cpu: 50m
                 memory: 50M
 
+          # vuetorrent:
+          #   dependsOn: qbittorrent
+          #   image:
+          #     repository: registry.k8s.io/git-sync/git-sync
+          #     tag: v4.4.0
+          #   args:
+          #     - --repo=https://github.com/WDaan/VueTorrent
+          #     - --ref=latest-release
+          #     - --period=86400s
+          #     - --root=/addons
+          #   resources:
+          #     requests:
+          #       cpu: 50m
+          #       memory: 37M
+
           cjratliff-ui:
             dependsOn: qbittorrent
             image:
@@ -254,10 +247,6 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /addons
-        advancedMounts:
-          qbittorrent:
-            vuetorrent-build:
-              - path: /addons
       pia-shared:
         enabled: true
         type: emptyDir
