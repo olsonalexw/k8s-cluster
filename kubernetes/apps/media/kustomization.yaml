@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - ./namespace.yaml
   - ./autobrr/ks.yaml
+  - ./downloads-pv.yaml
   - ./media-pv.yaml
   - ./jellyfin/ks.yaml
   - ./jellyseerr/ks.yaml
