@@ -45,7 +45,7 @@ spec:
               tag: latest
             env:
               TZ: ${TIMEZONE}
-              PORT_FORWARDING: "on"
+              VPN_PORT_FORWARDING: "on"
               HTTP_SERVER: "on"  # API at :8000 for port queries
               SHADOWSOCKS: "on"  # SOCKS5 proxy at :1080 (encrypted via Shadowsocks)
               HTTPPROXY: "on"  # HTTP proxy at :8888
