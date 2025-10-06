@@ -58,6 +58,31 @@ spec:
                 chmod 755 /run
             securityContext:
               runAsUser: 0  # Root privileges for init
+          vpn-route-fix:
+            image:
+              repository: busybox
+              tag: latest
+            command:
+              - /bin/sh
+              - -c
+              - |
+                # Install tools (BusyBox has ip, but add wg for safety)
+                apk add --no-cache wireguard-tools iproute2
+                # Copy conf from shared vol
+                cp /pia-shared/wg0.conf /etc/wireguard/
+                # Up wg0 (idempotent)
+                wg-quick up wg0
+                # Add routes for cluster CIDRs via eth0 (main table, avoids loops)
+                ip route add 10.69.0.0/16 via 10.69.1.70 dev eth0 table main
+                ip route add 10.96.0.0/16 via 10.69.1.70 dev eth0 table main
+                # Replace main default with wg0 (full tunnel)
+                ip route replace default via 10.7.193.112 dev wg0 table main  # Use your wg0 IP
+                # Persist (ip rules already from wg-quick)
+                echo "Routes fixed: VPN default active"
+            securityContext:
+              runAsUser: 0
+              capabilities:
+                add: ["NET_ADMIN"]
 
         containers:
           wireguard-pia:
@@ -262,6 +287,8 @@ spec:
             qbittorrent:
               - path: /pia-shared
             port-sync:
+              - path: /pia-shared
+            vpn-route-fix:
               - path: /pia-shared
       run:
         type: emptyDir
