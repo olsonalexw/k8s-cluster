@@ -31,11 +31,13 @@ spec:
       namespace: storage
     - name: generic-device-plugin
       namespace: kube-system
+    - name: gluetun
+      namespace: network
   values:
     controllers:
       qbittorrent:
         annotations:
-          secret.reloader.stakater.com/reload: qbittorrent
+          secret.reloader.stakater.com/reload: qbittorrent-secret
 
         pod:
           securityContext:
@@ -44,79 +46,8 @@ spec:
             supplementalGroups:
               - 65534
 
-        initContainers:
-          init-run:
-            image:
-              repository: busybox
-              tag: latest
-            command:
-              - /bin/sh
-              - -c
-              - |
-                mkdir -p /run
-                chown 1001:1001 /run
-                chmod 755 /run
-            securityContext:
-              runAsUser: 0  # Root privileges for init
-          vpn-route-fix:
-            image:
-              repository: busybox
-              tag: latest
-            command:
-              - /bin/sh
-              - -c
-              - |
-                # Install tools (BusyBox has ip, but add wg for safety)
-                apk add --no-cache wireguard-tools iproute2
-                # Copy conf from shared vol
-                cp /pia-shared/wg0.conf /etc/wireguard/
-                # Up wg0 (idempotent)
-                wg-quick up wg0
-                # Add routes for cluster CIDRs via eth0 (main table, avoids loops)
-                ip route add 10.69.0.0/16 via 10.69.1.70 dev eth0 table main
-                ip route add 10.96.0.0/16 via 10.69.1.70 dev eth0 table main
-                # Replace main default with wg0 (full tunnel)
-                ip route replace default via 10.7.193.112 dev wg0 table main  # Use your wg0 IP
-                # Persist (ip rules already from wg-quick)
-                echo "Routes fixed: VPN default active"
-            securityContext:
-              runAsUser: 0
-              capabilities:
-                add: ["NET_ADMIN"]
-
         containers:
-          wireguard-pia:
-            image:
-              repository: ghcr.io/thrnz/docker-wireguard-pia
-              tag: latest
-            env:
-              TZ: ${TIMEZONE}
-              PORT_FORWARDING: "1"
-              PORT_FILE: /pia-shared/port.dat
-              PORT_PERSIST: "1"
-              RECONNECT: "1"
-              HEALTHCHECK_PING_TARGET: 8.8.8.8
-              LOCAL_NETWORK: "10.69.0.0/16,10.96.0.0/16"
-              MTU: 1280
-            envFrom:
-              - secretRef:
-                  name: qbittorrent-secret
-            securityContext:
-              capabilities:
-                add:
-                  - NET_ADMIN
-              allowPrivilegeEscalation: false
-            resources:
-              requests:
-                cpu: 50m
-                memory: 50M
-              limits:
-                cpu: 200m
-                memory: 100M
-                squat.ai/tun: 1
-
           qbittorrent:
-            dependsOn: wireguard-pia
             image:
               repository: linuxserver/qbittorrent
               tag: 5.1.2
@@ -132,14 +63,14 @@ spec:
                 cpu: 1000m
                 memory: 4096M
             securityContext:
-              runAsUser: 0
+              runAsUser: 1001
               runAsGroup: 1001
-              runAsNonRoot: false
+              runAsNonRoot: true
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
-              # capabilities:
-              #   drop:
-              #     - ALL
+              capabilities:
+                drop:
+                  - ALL
 
           port-sync:
             image:
@@ -149,32 +80,37 @@ spec:
               - /bin/sh
               - -c
               - |
+                # Wait for qBittorrent
                 while ! curl --output /dev/null --silent --head --fail --connect-timeout 1 http://localhost:80; do sleep 5; done
                 sleep 10
+                # Wait for Gluetun API (cross-ns)
+                GLUETUN_API="gluetun.network.svc.cluster.local:8000"
+                while ! curl --output /dev/null --silent --head --fail --connect-timeout 1 http://$GLUETUN_API/health; do sleep 5; echo "Waiting for Gluetun API..."; done
                 PREV_PORT=0
                 while true; do
-                  if [ -f /pia-shared/port.dat ]; then
-                    NEW_PORT=$(cat /pia-shared/port.dat)
-                    if [ "$NEW_PORT" != "$PREV_PORT" ]; then
-                      curl -s --cookie-jar /tmp/qb-cookies.txt \
-                        -u "$QBIT_USER:$QBIT_PASS" \
-                        http://localhost:80/api/v2/auth/login
-                      curl -s --cookie /tmp/qb-cookies.txt -X POST \
-                        "http://localhost:80/api/v2/app/setPreferences" \
-                        -H "Content-Type: application/x-www-form-urlencoded" \
-                        -d "json={\"listen_port\": $NEW_PORT}"
-                      echo "Updated qBittorrent port to $NEW_PORT"
-                      PREV_PORT=$NEW_PORT
-                    fi
+                  # Query Gluetun API for PIA port forward (cross-ns)
+                  NEW_PORT=$(curl -s http://$GLUETUN_API/v1/port-forward | jq -r '.port // empty')
+                  if [ -n "$NEW_PORT" ] && [ "$NEW_PORT" != "$PREV_PORT" ]; then
+                    # Login to qBittorrent
+                    curl -s --cookie-jar /tmp/qb-cookies.txt \
+                      -u "$QBIT_USER:$QBIT_PASS" \
+                      http://localhost:80/api/v2/auth/login
+                    # Update listen port
+                    curl -s --cookie /tmp/qb-cookies.txt -X POST \
+                      "http://localhost:80/api/v2/app/setPreferences" \
+                      -H "Content-Type: application/x-www-form-urlencoded" \
+                      -d "json={\"listen_port\": $NEW_PORT}"
+                    echo "Updated qBittorrent port to $NEW_PORT"
+                    PREV_PORT=$NEW_PORT
                   fi
-                  sleep 300
+                  sleep 300  # Poll every 5 min
                 done
             env:
               TZ: ${TIMEZONE}
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
-            dependsOn: qbittorrent
+            dependsOn: [qbittorrent]
             securityContext:
               runAsUser: 1001
               runAsGroup: 1001
@@ -272,29 +208,14 @@ spec:
         advancedMounts:
           qbittorrent:
             port-sync:
-              - path: /config
+              - path: /config  # For cookies
       addons:
         type: emptyDir
         globalMounts:
           - path: /addons
-      pia-shared:
-        enabled: true
-        type: emptyDir
-        advancedMounts:
-          qbittorrent:
-            wireguard-pia:
-              - path: /pia-shared
-            qbittorrent:
-              - path: /pia-shared
-            port-sync:
-              - path: /pia-shared
-            vpn-route-fix:
-              - path: /pia-shared
       run:
         type: emptyDir
         advancedMounts:
           qbittorrent:
-            init-run:
-              - path: /run
             qbittorrent:
               - path: /run
