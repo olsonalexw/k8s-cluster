@@ -23,7 +23,7 @@ data:
     MIN_SEEDING_HOURS = 337
     MAX_SEEDERS = 15
     IPT_TAG = 'iptorrents'
-    DRY_RUN = True  # Set to False to actually delete
+    DRY_RUN = False  # Set to False to actually delete
 
     # Get all seeding torrents for IPT tag
     torrents = client.torrents_info(status_filter='seeding', tag=IPT_TAG)
