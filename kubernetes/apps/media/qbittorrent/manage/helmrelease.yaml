@@ -29,6 +29,30 @@ spec:
     - name: qbittorrent
       namespace: media
   values:
+    initContainers:
+      - name: symlink-large-pool
+        image: busybox:1.36
+        command:
+          - sh
+          - -c
+          - |
+            # Create symlink if /media mount exists
+            if [ -d "/media/downloads/qbittorrent" ]; then
+              mkdir -p /downloads/large_pool
+              ln -s /media/downloads/qbittorrent/complete /downloads/large_pool/complete
+              ln -s /media/downloads/qbittorrent/incomplete /downloads/large_pool/incomplete
+              echo "Symlinked /media to /downloads/large_pool"
+            else
+              echo "Warning: /media not mounted; skipping symlink"
+            fi
+        volumeMounts:
+          - name: downloads
+            mountPath: /downloads
+          - name: media
+            mountPath: /media
+        securityContext:
+          runAsUser: 1001
+
     controllers:
       main:
         type: cronjob
