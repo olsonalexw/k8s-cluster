@@ -51,7 +51,8 @@ spec:
               HTTPPROXY: "on"  # HTTP proxy at :8888
               FIREWALL: "on"
               FIREWALL_VPN_INPUT_PORT: "*"  # Allow all inbound for proxies/port forward
-              # LOG_LEVEL: info
+              IPTABLES_MODE: nft
+              LOG_LEVEL: debug
             envFrom:
               - secretRef:
                   name: gluetun-secret
