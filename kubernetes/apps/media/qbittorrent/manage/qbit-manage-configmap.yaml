@@ -11,17 +11,17 @@ data:
       pass: !ENV QBT_PASS
 
     directory:
-      root_dir: /media/downloads/qbittorrent/complete  # Base for orphaned/noHL/unregistered checks
-      remote_dir: /media  # Optional: Host path if qbit_manage is outside qBittorrent Docker
-      recycle_bin: /media/downloads/qbittorrent/complete/.RecycleBin  # For deleted file staging
+      root_dir: /downloads/qbittorrent/complete  # Base for orphaned/noHL/unregistered checks
+      remote_dir: /downloads  # Optional: Host path if qbit_manage is outside qBittorrent Docker
+      recycle_bin: /downloads/qbittorrent/complete/.RecycleBin  # For deleted file staging
       torrents_dir: /config/qBittorrent/BT_backup  # Optional: qBittorrent's .torrent dir for backups
-      orphaned_dir: /media/downloads/qbittorrent/complete/orphaned_data  # Disposable orphaned files
+      orphaned_dir: /downloads/qbittorrent/complete/orphaned_data  # Disposable orphaned files
 
     cat:  # Mandatory: Map ALL qBittorrent categories to their complete save paths
-      uncategorized: /media/downloads/qbittorrent/complete/*  # Catch-all for uncategorized
-      manual: /media/downloads/qbittorrent/complete/manual/*
-      series: /media/downloads/qbittorrent/complete/series/*  # Use * for subdirs (e.g., seasons)
-      movies: /media/downloads/qbittorrent/complete/movies/*
+      uncategorized: /downloads/qbittorrent/*  # Catch-all for uncategorized
+      manual: /downloads/qbittorrent/complete/manual/*
+      series: /downloads/qbittorrent/complete/series/*  # Use * for subdirs (e.g., seasons)
+      movies: /downloads/qbittorrent/complete/movies/*
 
     nohardlinks:  # NEW: List of categories to check for external hardlinks
       - uncategorized:  # Catch-all

@@ -1,4 +1,3 @@
----
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -24,45 +23,63 @@ data:
     MIN_SEEDING_HOURS = 337
     MAX_SEEDERS = 15
     IPT_TAG = 'iptorrents'
-    DRY_RUN = False  # Set to False to actually delete
+    DRY_RUN = true  # Set to False to actually delete
 
     # Get all seeding torrents for IPT tag
     torrents = client.torrents_info(status_filter='seeding', tag=IPT_TAG)
 
-    # Classify torrents
-    protected = []  # Must keep: ratio < MIN_RATIO AND seeding_hours < MIN_SEEDING_HOURS
-    eligible = []   # Can delete: ratio >= MIN_RATIO OR seeding_hours >= MIN_SEEDING_HOURS
+    # Prepare data for each torrent
+    torrent_data = []
     for t in torrents:
-        seeding_hours = t.seeding_time / 3600
-        if t.ratio < MIN_RATIO and seeding_hours < MIN_SEEDING_HOURS:
-            protected.append(t)
-        else:
-            productivity = (t.uploaded / 1e9) / max(seeding_hours, 1)  # GB/hour; avoid div0
-            eligible.append((t.hash, productivity, t.name))
+        seeding_hours = t.seeding_time / 3600.0
+        productivity = (t.uploaded / 1e9) / max(seeding_hours, 1)  # GB/hour; avoid div0
+        is_eligible = t.ratio >= MIN_RATIO or seeding_hours >= MIN_SEEDING_HOURS
+        torrent_data.append((productivity, is_eligible, t.hash, t.name, seeding_hours, t.ratio))
 
-    total = len(protected) + len(eligible)
-    print(f"Total seeding: {total} (protected: {len(protected)}, eligible: {len(eligible)})")
+    total = len(torrent_data)
+    print(f"Total seeding torrents with tag '{IPT_TAG}': {total}")
+    print("\nProductivity report:")
+    print("-" * 80)
+    print(f"{'Name':<50} {'Prod (GB/h)':<12} {'Hours':<8} {'Ratio':<6} {'Eligible'}")
+    print("-" * 80)
+    # Sort by productivity descending for nicer print (highest first)
+    sorted_for_print = sorted(torrent_data, key=lambda x: x[0], reverse=True)
+    for prod, eligible, hash_val, name, hours, ratio in sorted_for_print:
+        print(f"{name[:49]:<50} {prod:<12.4f} {hours:<8.1f} {ratio:<6.3f} {eligible}")
 
-    # If total <= MAX_SEEDERS, do nothing
     if total <= MAX_SEEDERS:
-        print("Total at or below limit; no deletions needed.")
+        print(f"\nTotal at or below {MAX_SEEDERS}; no deletions needed.")
     else:
-        # Calculate how many eligible to keep (fill to MAX_SEEDERS after keeping all protected)
-        num_to_keep_eligible = max(0, MAX_SEEDERS - len(protected))
+        excess = total - MAX_SEEDERS
+        print(f"\nExcess torrents: {excess}. Identifying candidates for deletion...")
 
-        if num_to_keep_eligible < len(eligible):
-            # Sort eligible by productivity desc (highest first)
-            eligible.sort(key=lambda x: x[1], reverse=True)
+        # Sort by productivity ascending (least productive first)
+        sorted_torrents = sorted(torrent_data, key=lambda x: x[0])
 
-            # Delete the bottom (least productive) ones
-            to_delete = eligible[num_to_keep_eligible:]
-            for hash_val, prod, name in to_delete:
+        # Candidates are the least productive 'excess' torrents
+        candidates = sorted_torrents[:excess]
+        to_delete = []
+        for prod, eligible, hash_val, name, hours, ratio in candidates:
+            if eligible:
+                to_delete.append((hash_val, name, prod))
+            else:
+                print(f"  Skipping {name[:50]} (prod: {prod:.4f} GB/h) - not eligible (ratio: {ratio:.3f}, hours: {hours:.1f})")
+
+        num_to_delete = len(to_delete)
+        if num_to_delete > 0:
+            print(f"\nEligible for deletion: {num_to_delete}")
+            print("-" * 60)
+            print(f"{'Name':<50} {'Prod (GB/h)'}")
+            print("-" * 60)
+            for hash_val, name, prod in sorted(to_delete, key=lambda x: x[2]):  # sort by prod asc for display
                 if DRY_RUN:
-                    print(f"Would delete torrent: {name} (hash: {hash_val}, productivity: {prod:.4f} GB/h)")
+                    print(f"Would delete: {name[:49]:<50} {prod:<12.4f}")
                 else:
+                    print(f"Deleting:    {name[:49]:<50} {prod:<12.4f}")
                     client.torrents_delete(delete_local_files=True, torrent_hashes=hash_val)
                     time.sleep(1)  # Avoid API flood
         else:
-            print("Cannot reduce below protected count; no deletions possible.")
+            print(f"\nNo eligible candidates among the {excess} least productive torrents; no deletions.")
 
-    print(f"Processed {len(eligible)} eligible. Trimmed to maintain ~{MAX_SEEDERS} total if possible.")
+        final_total = total - num_to_delete
+        print(f"\nProcessed {total} torrents. Will have {final_total} seeding torrents remaining.")

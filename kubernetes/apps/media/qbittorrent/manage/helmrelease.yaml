@@ -172,3 +172,8 @@ spec:
         existingClaim: nfs-media-pvc
         globalMounts:
           - path: /media
+      downloads:
+        enabled: true
+        existingClaim: nfs-downloads-pvc
+        globalMounts:
+          - path: /downloads
