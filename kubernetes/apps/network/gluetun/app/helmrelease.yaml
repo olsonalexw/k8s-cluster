@@ -76,6 +76,7 @@ spec:
 
     service:
       main:  # Exposes proxies via ClusterIP (internal access only)
+        controller: gluetun
         ports:
           http:  # HTTP proxy
             port: 8888
