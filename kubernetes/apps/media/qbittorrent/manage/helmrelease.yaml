@@ -38,10 +38,10 @@ spec:
           - |
             # Create symlink if /media mount exists
             if [ -d "/media/downloads/qbittorrent" ]; then
-              mkdir -p /downloads/large_pool
-              ln -s /media/downloads/qbittorrent/complete /downloads/large_pool/complete
-              ln -s /media/downloads/qbittorrent/incomplete /downloads/large_pool/incomplete
-              echo "Symlinked /media to /downloads/large_pool"
+              mkdir -p /downloads/manual
+              ln -s /media/downloads/qbittorrent/complete /downloads/manual/complete
+              ln -s /media/downloads/qbittorrent/incomplete /downloads/manual/incomplete
+              echo "Symlinked /media to /downloads/manual"
             else
               echo "Warning: /media not mounted; skipping symlink"
             fi

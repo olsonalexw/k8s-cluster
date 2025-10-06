@@ -72,7 +72,7 @@ spec:
               RECONNECT: "1"
               HEALTHCHECK_PING_TARGET: 8.8.8.8
               LOCAL_NETWORK: "10.69.0.0/16,10.96.0.0/16"
-              MTU: 1420
+              MTU: 1280
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
