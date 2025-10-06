@@ -107,14 +107,14 @@ spec:
                 cpu: 1000m
                 memory: 4096M
             securityContext:
-              runAsUser: 0
+              runAsUser: 1001
               runAsGroup: 1001
-              runAsNonRoot: false
+              runAsNonRoot: true
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: false
-              # capabilities:
-              #   drop:
-              #     - ALL
+              capabilities:
+                drop:
+                  - ALL
 
           port-sync:
             image:
@@ -182,20 +182,20 @@ spec:
           #       cpu: 50m
           #       memory: 37M
 
-          cjratliff-ui:
-            dependsOn: qbittorrent
-            image:
-              repository: registry.k8s.io/git-sync/git-sync
-              tag: v4.4.0
-            args:
-              - --repo=https://github.com/Carve/qbittorrent-webui-cjratliff.com
-              - --ref=stable
-              - --period=86400s
-              - --root=/addons
-            resources:
-              requests:
-                cpu: 20m
-                memory: 32M
+          # cjratliff-ui:
+          #   dependsOn: qbittorrent
+          #   image:
+          #     repository: registry.k8s.io/git-sync/git-sync
+          #     tag: v4.4.0
+          #   args:
+          #     - --repo=https://github.com/Carve/qbittorrent-webui-cjratliff.com
+          #     - --ref=stable
+          #     - --period=86400s
+          #     - --root=/addons
+          #   resources:
+          #     requests:
+          #       cpu: 20m
+          #       memory: 32M
 
     service:
       app:
