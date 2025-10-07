@@ -31,8 +31,6 @@ spec:
       namespace: storage
     - name: generic-device-plugin
       namespace: kube-system
-    - name: gluetun
-      namespace: network
   values:
     controllers:
       qbittorrent:
@@ -62,7 +60,35 @@ spec:
               runAsUser: 0
 
         containers:
+          wireguard-pia:
+            image:
+              repository: pyunramura/wireguard-pia
+              tag: latest
+            env:
+              TZ: ${TIMEZONE}
+              PORT_FORWARD: "true"
+              PORT_FILE: /pia-shared/port.dat
+              MTU: 1420
+              FIREWALL: "true"
+            envFrom:
+              - secretRef:
+                  name: qbittorrent-secret  # Loads PIA_TOKEN, REGION, LAN_NETWORK
+            securityContext:
+              capabilities:
+                add:
+                  - NET_ADMIN
+              allowPrivilegeEscalation: false
+            resources:
+              requests:
+                cpu: 50m
+                memory: 50M
+              limits:
+                cpu: 200m
+                memory: 100M
+                squat.ai/tun: 1
+
           qbittorrent:
+            dependsOn: [wireguard-pia]
             image:
               repository: linuxserver/qbittorrent
               tag: 5.1.2
@@ -98,25 +124,23 @@ spec:
                 # Wait for qBittorrent
                 while ! curl --output /dev/null --silent --head --fail --connect-timeout 1 http://localhost:80; do sleep 5; done
                 sleep 10
-                # Wait for Gluetun API (cross-ns)
-                GLUETUN_API="gluetun.network.svc.cluster.local:8000"
-                while ! curl --output /dev/null --silent --head --fail --connect-timeout 1 http://$GLUETUN_API/health; do sleep 5; echo "Waiting for Gluetun API..."; done
                 PREV_PORT=0
                 while true; do
-                  # Query Gluetun API for PIA port forward (cross-ns)
-                  NEW_PORT=$(curl -s http://$GLUETUN_API/v1/port-forward | jq -r '.port // empty')
-                  if [ -n "$NEW_PORT" ] && [ "$NEW_PORT" != "$PREV_PORT" ]; then
-                    # Login to qBittorrent
-                    curl -s --cookie-jar /tmp/qb-cookies.txt \
-                      -u "$QBIT_USER:$QBIT_PASS" \
-                      http://localhost:80/api/v2/auth/login
-                    # Update listen port
-                    curl -s --cookie /tmp/qb-cookies.txt -X POST \
-                      "http://localhost:80/api/v2/app/setPreferences" \
-                      -H "Content-Type: application/x-www-form-urlencoded" \
-                      -d "json={\"listen_port\": $NEW_PORT}"
-                    echo "Updated qBittorrent port to $NEW_PORT"
-                    PREV_PORT=$NEW_PORT
+                  if [ -f /pia-shared/port.dat ]; then
+                    NEW_PORT=$(cat /pia-shared/port.dat)
+                    if [ -n "$NEW_PORT" ] && [ "$NEW_PORT" != "$PREV_PORT" ]; then
+                      # Login to qBittorrent
+                      curl -s --cookie-jar /tmp/qb-cookies.txt \
+                        -u "$QBIT_USER:$QBIT_PASS" \
+                        http://localhost:80/api/v2/auth/login
+                      # Update listen port
+                      curl -s --cookie /tmp/qb-cookies.txt -X POST \
+                        "http://localhost:80/api/v2/app/setPreferences" \
+                        -H "Content-Type: application/x-www-form-urlencoded" \
+                        -d "json={\"listen_port\": $NEW_PORT}"
+                      echo "Updated qBittorrent port to $NEW_PORT"
+                      PREV_PORT=$NEW_PORT
+                    fi
                   fi
                   sleep 300  # Poll every 5 min
                 done
@@ -125,7 +149,7 @@ spec:
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
-            dependsOn: [qbittorrent]
+            dependsOn: [qbittorrent, wireguard-pia]  # Wait for VPN and qBittorrent
             securityContext:
               runAsUser: 1001
               runAsGroup: 1001
@@ -224,6 +248,17 @@ spec:
           qbittorrent:
             port-sync:
               - path: /config  # For cookies
+      pia-shared:
+        enabled: true
+        type: emptyDir
+        advancedMounts:
+          qbittorrent:
+            wireguard-pia:
+              - path: /pia-shared
+            qbittorrent:
+              - path: /pia-shared
+            port-sync:
+              - path: /pia-shared
       addons:
         type: emptyDir
         globalMounts:
