@@ -62,7 +62,9 @@ spec:
         containers:
           pia-tun:
             image:
-              repository: olsonalexw/k8s-wireguard-pia@sha256:56ea985b0545a8d4c275016dd8d3030785546744db8bf259cf9e108dc5c287d7
+              repository: olsonalexw/k8s-wireguard-pia
+              tag: latest@sha256:56ea985b0545a8d4c275016dd8d3030785546744db8bf259cf9e108dc5c287d7
+              pullPolicy: Always
             env:
               TZ: ${TIMEZONE}
               PORT_FORWARDING: "true"
