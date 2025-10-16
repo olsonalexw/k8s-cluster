@@ -3,7 +3,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: gluetun
+  name: pia-tun
   namespace: network
 spec:
   interval: 30m
@@ -29,9 +29,9 @@ spec:
     keepHistory: false
   values:
     controllers:
-      gluetun:
+      pia-tun:
         annotations:
-          secret.reloader.stakater.com/reload: gluetun-secret
+          secret.reloader.stakater.com/reload: pia-tun-secret
 
         pod:
           securityContext:
@@ -39,23 +39,20 @@ spec:
             fsGroupChangePolicy: "OnRootMismatch"
 
         containers:
-          gluetun:
+          pia-tun:
             image:
-              repository: qmcgaw/gluetun
+              repository: olsonalexw/k8s-wireguard-pia
               tag: latest
             env:
               TZ: ${TIMEZONE}
-              VPN_PORT_FORWARDING: "on"
-              HTTP_SERVER: "on"  # API at :8000 for port queries
-              SHADOWSOCKS: "on"  # SOCKS5 proxy at :1080 (encrypted via Shadowsocks)
-              HTTPPROXY: "on"  # HTTP proxy at :8888
-              FIREWALL: "on"
-              FIREWALL_VPN_INPUT_PORT: "*"  # Allow all inbound for proxies/port forward
-              IPTABLES_MODE: nft
-              LOG_LEVEL: debug
+              PORT_FORWARDING: "true"
+              LOCAL_NETWORKS: "10.69.0.0/16"
+              PORT_API_ENABLED: "true"
+              PORT_API_URL: "qbittorrent.media.svc.cluster.local"
+              METRICS: "true"
             envFrom:
               - secretRef:
-                  name: gluetun-secret
+                  name: pia-tun-secret
             securityContext:
               runAsUser: 0
               runAsNonRoot: false
@@ -76,17 +73,17 @@ spec:
 
     service:
       main:  # Exposes proxies via ClusterIP (internal access only)
-        controller: gluetun
+        controller: pia-tun
         ports:
           http:  # HTTP proxy
             port: 8888
             targetPort: 8888
-          socks5:  # Shadowsocks/SOCKS5
+          socks5:  # SOCKS5
             port: 1080
             targetPort: 1080
-          api:  # Port forward API
-            port: 8000
-            targetPort: 8000
+          metrics:
+            port: 9090
+            targetPort: 9090
           wireguard:  # wg0 for direct binds (if needed)
             port: 51820
             targetPort: 51820
@@ -95,8 +92,8 @@ spec:
     persistence:
       config:
         enabled: true
-        type: emptyDir  # Ephemeral for logs/state; use NFS if persistent needed
+        type: emptyDir  # Ephemeral for logs/state
         advancedMounts:
-          gluetun:
-            gluetun:
-              - path: /gluetun  # Gluetun config/logs
+          pia-tun:
+            pia-tun:
+              - path: /

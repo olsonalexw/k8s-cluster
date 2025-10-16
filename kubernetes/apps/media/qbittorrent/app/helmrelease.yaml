@@ -60,24 +60,27 @@ spec:
               runAsUser: 0
 
         containers:
-          wireguard-pia:
+          pia-tun:
             image:
-              repository: pyunramura/wireguard-pia
+              repository: olsonalexw/k8s-wireguard-pia
               tag: latest
             env:
               TZ: ${TIMEZONE}
-              PORT_FORWARD: "true"
-              PORT_FILE: /pia-shared/port.dat
-              MTU: 1420
-              FIREWALL: "true"
+              PORT_FORWARDING: "true"
+              LOCAL_NETWORKS: "10.69.0.0/16"
+              PORT_API_ENABLED: "true"
+              PORT_API_TYPE: "qbittorrent"
+              PORT_API_URL: "http://localhost:80"
             envFrom:
               - secretRef:
-                  name: qbittorrent-secret  # Loads PIA_TOKEN, REGION, LAN_NETWORK
+                  name: qbittorrent-secret
             securityContext:
+              allowPrivilegeEscalation: false
               capabilities:
                 add:
-                  - NET_ADMIN
-              allowPrivilegeEscalation: false
+                  - NET_ADMIN  # For WireGuard/iptables
+                drop:
+                  - ALL
             resources:
               requests:
                 cpu: 50m
@@ -85,10 +88,10 @@ spec:
               limits:
                 cpu: 200m
                 memory: 100M
-                squat.ai/tun: 1
+                squat.ai/tun: 1  # TUN device limit
 
           qbittorrent:
-            dependsOn: [wireguard-pia]
+            dependsOn: [pia-tun]
             image:
               repository: linuxserver/qbittorrent
               tag: 5.1.2
@@ -149,7 +152,7 @@ spec:
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
-            dependsOn: [qbittorrent, wireguard-pia]  # Wait for VPN and qBittorrent
+            dependsOn: [qbittorrent, pia-tun]  # Wait for VPN and qBittorrent
             securityContext:
               runAsUser: 1001
               runAsGroup: 1001
@@ -253,7 +256,7 @@ spec:
         type: emptyDir
         advancedMounts:
           qbittorrent:
-            wireguard-pia:
+            pia-tun:
               - path: /pia-shared
             qbittorrent:
               - path: /pia-shared
