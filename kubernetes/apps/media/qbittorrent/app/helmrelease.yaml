@@ -41,6 +41,8 @@ spec:
           securityContext:
             fsGroup: 1001
             fsGroupChangePolicy: "OnRootMismatch"
+            runAsGroup: 1001
+            runAsNonRoot: true
             supplementalGroups:
               - 65534
 
