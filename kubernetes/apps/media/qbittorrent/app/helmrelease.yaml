@@ -85,6 +85,7 @@ spec:
               tag: 5.1.2
             env:
               TZ: ${TIMEZONE}
+              PUID: "1001"
               UMASK: "022"
               WEBUI_PORT: &port 80
             resources:
