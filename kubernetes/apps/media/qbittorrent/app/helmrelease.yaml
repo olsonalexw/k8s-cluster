@@ -68,8 +68,8 @@ spec:
           qbittorrent:
             dependsOn: [pia-tun]
             image:
-              repository: linuxserver/qbittorrent
-              tag: libtorrentv1
+              repository: ghcr.io/home-operations/qbittorrent
+              tag: 5.1.2
             env:
               TZ: ${TIMEZONE}
               UMASK: "022"
