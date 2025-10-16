@@ -1,4 +1,3 @@
----
 # yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -40,24 +39,10 @@ spec:
         pod:
           securityContext:
             fsGroup: 1001
-            fsGroupChangePolicy: "OnRootMismatch"
+            runAsGroup: 1001
+            runAsNonRoot: true
             supplementalGroups:
               - 65534
-
-        initContainers:
-          init-run:
-            image:
-              repository: busybox
-              tag: latest
-            command:
-              - /bin/sh
-              - -c
-              - |
-                mkdir -p /run
-                chown 1001:1001 /run
-                chmod 755 /run
-            securityContext:
-              runAsUser: 0
 
         containers:
           pia-tun:
@@ -94,11 +79,10 @@ spec:
           qbittorrent:
             dependsOn: [pia-tun]
             image:
-              repository: linuxserver/qbittorrent
+              repository: ghcr.io/home-operations/qbittorrent  # ✅ SWAP: Fixes s6-overlay /run perms automatically
               tag: 5.1.2
             env:
               TZ: ${TIMEZONE}
-              PUID: "1001"
               UMASK: "022"
               WEBUI_PORT: &port 80
             resources:
@@ -268,9 +252,9 @@ spec:
         type: emptyDir
         globalMounts:
           - path: /addons
-      run:
-        type: emptyDir
-        advancedMounts:
-          qbittorrent:
-            qbittorrent:
-              - path: /run
+      # run:
+      #   type: emptyDir
+      #   advancedMounts:
+      #     qbittorrent:
+      #       qbittorrent:
+      #         - path: /run
