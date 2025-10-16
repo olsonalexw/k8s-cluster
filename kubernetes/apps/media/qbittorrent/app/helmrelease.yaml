@@ -69,7 +69,7 @@ spec:
             dependsOn: [pia-tun]
             image:
               repository: ghcr.io/home-operations/qbittorrent
-              tag: 5.1.2
+              tag: 4.6.4
             env:
               TZ: ${TIMEZONE}
               UMASK: "022"
