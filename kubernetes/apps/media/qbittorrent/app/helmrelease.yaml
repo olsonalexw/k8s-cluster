@@ -50,7 +50,7 @@ spec:
             env:
               TZ: ${TIMEZONE}
               PORT_FORWARDING: "true"
-              LOCAL_NETWORKS: "10.69.0.0/16,127.0.0.1/8,192.168.1.0/24"
+              LOCAL_NETWORK: "10.69.0.0/16,127.0.0.1/8"
               PORT_API_ENABLED: "true"
               PORT_API_TYPE: "qbittorrent"
               PORT_API_URL: "http://localhost:80"
