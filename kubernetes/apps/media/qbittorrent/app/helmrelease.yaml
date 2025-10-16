@@ -39,10 +39,7 @@ spec:
         pod:
           securityContext:
             fsGroup: 1001
-            runAsGroup: 1001
-            runAsNonRoot: true
-            supplementalGroups:
-              - 65534
+            fsGroupChangePolicy: "OnRootMismatch"
 
         containers:
           pia-tun:
@@ -67,19 +64,19 @@ spec:
                   - NET_ADMIN  # For WireGuard/iptables
                 drop:
                   - ALL
-            resources:
-              requests:
-                cpu: 50m
-                memory: 50M
-              limits:
-                cpu: 200m
-                memory: 100M
-                squat.ai/tun: 1  # TUN device limit
+            # resources:
+            #   requests:
+            #     cpu: 50m
+            #     memory: 50M
+            #   limits:
+            #     cpu: 200m
+            #     memory: 100M
+            #     squat.ai/tun: 1  # TUN device limit
 
           qbittorrent:
             dependsOn: [pia-tun]
             image:
-              repository: ghcr.io/home-operations/qbittorrent  # ✅ SWAP: Fixes s6-overlay /run perms automatically
+              repository: ghcr.io/home-operations/qbittorrent
               tag: 5.1.2
             env:
               TZ: ${TIMEZONE}
@@ -97,7 +94,7 @@ spec:
               runAsGroup: 1001
               runAsNonRoot: true
               allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
+              readOnlyRootFilesystem: true
               capabilities:
                 drop:
                   - ALL
