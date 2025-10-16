@@ -46,21 +46,6 @@ spec:
             supplementalGroups:
               - 65534
 
-        initContainers:
-          init-run:
-            image:
-              repository: busybox
-              tag: latest
-            command:
-              - /bin/sh
-              - -c
-              - |
-                mkdir -p /run
-                chown 1001:1001 /run
-                chmod 755 /run
-            securityContext:
-              runAsUser: 0
-
         containers:
           pia-tun:
             image:
@@ -70,7 +55,7 @@ spec:
             env:
               TZ: ${TIMEZONE}
               PORT_FORWARDING: "true"
-              LOCAL_NETWORKS: "10.69.0.0/16"
+              LOCAL_NETWORKS: "10.69.0.0/16,127.0.0.1/8"
               PORT_API_ENABLED: "true"
               PORT_API_TYPE: "qbittorrent"
               PORT_API_URL: "http://localhost:80"
@@ -119,59 +104,59 @@ spec:
                 drop:
                   - ALL
 
-          port-sync:
-            image:
-              repository: curlimages/curl
-              tag: latest
-            command:
-              - /bin/sh
-              - -c
-              - |
-                # Wait for qBittorrent
-                while ! curl --output /dev/null --silent --head --fail --connect-timeout 1 http://localhost:80; do sleep 5; done
-                sleep 10
-                PREV_PORT=0
-                while true; do
-                  if [ -f /pia-shared/port.dat ]; then
-                    NEW_PORT=$(cat /pia-shared/port.dat)
-                    if [ -n "$NEW_PORT" ] && [ "$NEW_PORT" != "$PREV_PORT" ]; then
-                      # Login to qBittorrent
-                      curl -s --cookie-jar /tmp/qb-cookies.txt \
-                        -u "$QBIT_USER:$QBIT_PASS" \
-                        http://localhost:80/api/v2/auth/login
-                      # Update listen port
-                      curl -s --cookie /tmp/qb-cookies.txt -X POST \
-                        "http://localhost:80/api/v2/app/setPreferences" \
-                        -H "Content-Type: application/x-www-form-urlencoded" \
-                        -d "json={\"listen_port\": $NEW_PORT}"
-                      echo "Updated qBittorrent port to $NEW_PORT"
-                      PREV_PORT=$NEW_PORT
-                    fi
-                  fi
-                  sleep 300  # Poll every 5 min
-                done
-            env:
-              TZ: ${TIMEZONE}
-            envFrom:
-              - secretRef:
-                  name: qbittorrent-secret
-            dependsOn: [qbittorrent, pia-tun]  # Wait for VPN and qBittorrent
-            securityContext:
-              runAsUser: 1001
-              runAsGroup: 1001
-              runAsNonRoot: true
-              allowPrivilegeEscalation: false
-              readOnlyRootFilesystem: false
-              capabilities:
-                drop:
-                  - ALL
-            resources:
-              requests:
-                cpu: 10m
-                memory: 24M
-              limits:
-                cpu: 50m
-                memory: 50M
+          # port-sync:
+          #   image:
+          #     repository: curlimages/curl
+          #     tag: latest
+          #   command:
+          #     - /bin/sh
+          #     - -c
+          #     - |
+          #       # Wait for qBittorrent
+          #       while ! curl --output /dev/null --silent --head --fail --connect-timeout 1 http://localhost:80; do sleep 5; done
+          #       sleep 10
+          #       PREV_PORT=0
+          #       while true; do
+          #         if [ -f /pia-shared/port.dat ]; then
+          #           NEW_PORT=$(cat /pia-shared/port.dat)
+          #           if [ -n "$NEW_PORT" ] && [ "$NEW_PORT" != "$PREV_PORT" ]; then
+          #             # Login to qBittorrent
+          #             curl -s --cookie-jar /tmp/qb-cookies.txt \
+          #               -u "$QBIT_USER:$QBIT_PASS" \
+          #               http://localhost:80/api/v2/auth/login
+          #             # Update listen port
+          #             curl -s --cookie /tmp/qb-cookies.txt -X POST \
+          #               "http://localhost:80/api/v2/app/setPreferences" \
+          #               -H "Content-Type: application/x-www-form-urlencoded" \
+          #               -d "json={\"listen_port\": $NEW_PORT}"
+          #             echo "Updated qBittorrent port to $NEW_PORT"
+          #             PREV_PORT=$NEW_PORT
+          #           fi
+          #         fi
+          #         sleep 300  # Poll every 5 min
+          #       done
+          #   env:
+          #     TZ: ${TIMEZONE}
+          #   envFrom:
+          #     - secretRef:
+          #         name: qbittorrent-secret
+          #   dependsOn: [qbittorrent, pia-tun]  # Wait for VPN and qBittorrent
+          #   securityContext:
+          #     runAsUser: 1001
+          #     runAsGroup: 1001
+          #     runAsNonRoot: true
+          #     allowPrivilegeEscalation: false
+          #     readOnlyRootFilesystem: false
+          #     capabilities:
+          #       drop:
+          #         - ALL
+          #   resources:
+          #     requests:
+          #       cpu: 10m
+          #       memory: 24M
+          #     limits:
+          #       cpu: 50m
+          #       memory: 50M
 
           # vuetorrent:
           #   dependsOn: qbittorrent
@@ -254,24 +239,24 @@ spec:
           qbittorrent:
             port-sync:
               - path: /config  # For cookies
-      pia-shared:
-        enabled: true
-        type: emptyDir
-        advancedMounts:
-          qbittorrent:
-            pia-tun:
-              - path: /pia-shared
-            qbittorrent:
-              - path: /pia-shared
-            port-sync:
-              - path: /pia-shared
+      # pia-shared:
+      #   enabled: true
+      #   type: emptyDir
+      #   advancedMounts:
+      #     qbittorrent:
+      #       pia-tun:
+      #         - path: /pia-shared
+      #       qbittorrent:
+      #         - path: /pia-shared
+      #       port-sync:
+      #         - path: /pia-shared
       addons:
         type: emptyDir
         globalMounts:
           - path: /addons
-      run:
-        type: emptyDir
-        advancedMounts:
-          qbittorrent:
-            qbittorrent:
-              - path: /run
+      # run:
+      #   type: emptyDir
+      #   advancedMounts:
+      #     qbittorrent:
+      #       qbittorrent:
+      #         - path: /run
