@@ -28,63 +28,29 @@ spec:
     controllers:
       sabnzbd:
         annotations:
-          configmap.reloader.stakater.com/reload: sabnzbd-dnsdist
-          reloader.stakater.com/auto: "true"
+          secret.reloader.stakater.com/reload: sabnzbd-secret
         containers:
-          dnsdist:
+          pia-tun:
             image:
-              repository: docker.io/powerdns/dnsdist-19
-              tag: 1.9.8
-            resources:
-              requests:
-                cpu: 50m
-                memory: 50M
-              limits:
-                cpu: 100m
-                memory: 200M
-          gluetun:
-            dependsOn: dnsdist
-            image:
-              repository: ghcr.io/qdm12/gluetun
-              tag: v3.40.0
+              repository: olsonalexw/k8s-wireguard-pia
+              tag: latest@sha256:56ea985b0545a8d4c275016dd8d3030785546744db8bf259cf9e108dc5c287d7
+              pullPolicy: Always
             env:
               TZ: ${TIMEZONE}
-              DOT: "off"
-              DNS_ADDRESS: "127.0.0.2"
-              PORT_FORWARD_ONLY: off
-              # VPN_TYPE: wireguard
-              VPN_INTERFACE: tun0 # wg0=wireguard
-              # VPN_SERVICE_PROVIDER: protonvpn
-              VPN_PORT_FORWARDING: off
-              # VPN_PORT_FORWARDING_PROVIDER: protonvpn
-              FIREWALL_INPUT_PORTS: 8080,8888
-              FIREWALL_OUTBOUND_SUBNETS: 10.69.0.0/16,10.96.0.0/16 # Allow access to k8s subnets
-              # WIREGUARD_MTU: 8900
-              SHADOWSOCKS: off
-              SHADOWSOCKS_LOG: on
-              # SHADOWSOCKS_LISTENING_PORT: 1080
-              HTTPPROXY: on
+              LOCAL_NETWORK: "10.69.0.0/16,10.96.0.0/16"
+              ENABLE_PROXY: "true"
             envFrom:
               - secretRef:
                   name: sabnzbd-secret
             securityContext:
-              runAsUser: 0
-              runAsGroup: 0
-              runAsNonRoot: false
+              allowPrivilegeEscalation: false
               capabilities:
                 add:
                   - NET_ADMIN
-              allowPrivilegeEscalation: true
-            resources:
-              requests:
-                cpu: 50m
-                memory: 50M
-              limits:
-                # cpu: 400m
-                # memory: 300M
-                squat.ai/tun: 1
+                drop:
+                  - ALL
           app:
-            dependsOn: gluetun
+            dependsOn: pia-tun
             image:
               repository: ghcr.io/buroa/sabnzbd
               tag: 4.4.1@sha256:47390397a14b387dacdcf608a93e0ff4531791ffc44c4a7ad4a8daa91781148e
@@ -92,37 +58,6 @@ spec:
               SABNZBD__PORT: 8080
               SABNZBD__HOST_WHITELIST_ENTRIES: sabnzbd.media.svc.cluster.local, sabnzbd.${SECRET_DOMAIN}
               TZ: ${TIMEZONE}
-            # envFrom:
-            #   - secretRef:
-            #       name: sabnzbd-secret
-            # probes:
-            #   liveness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         path: /api?mode=version
-            #         port: *port
-            #       initialDelaySeconds: 0
-            #       periodSeconds: 10
-            #       timeoutSeconds: 1
-            #       failureThreshold: 3
-            #   readiness: *probes
-            #   startup:
-            #     enabled: true
-            #     spec:
-            #       failureThreshold: 30
-            #       periodSeconds: 10
-            resources:
-              requests:
-                cpu: 15m
-                memory: 127M
-              # limits:
-              #   memory: 2048M
-            # securityContext:
-            #   allowPrivilegeEscalation: false
-            #   readOnlyRootFilesystem: true
-            #   capabilities: { drop: ["ALL"] }
     service:
       sabnzbd:
         controller: *app
@@ -158,16 +93,6 @@ spec:
         existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
       tmp:
         type: emptyDir
-      dnsdist:
-        type: configMap
-        name: sabnzbd-dnsdist
-        defaultMode: 0755
-        advancedMounts:
-          sabnzbd:
-            dnsdist:
-              - path: /etc/dnsdist/dnsdist.conf
-                subPath: dnsdist.conf
-                readOnly: false
     defaultPodOptions:
       securityContext:
         runAsNonRoot: true
