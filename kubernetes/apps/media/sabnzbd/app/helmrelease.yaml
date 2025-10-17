@@ -30,11 +30,6 @@ spec:
         annotations:
           secret.reloader.stakater.com/reload: sabnzbd-secret
 
-        pod:
-          securityContext:
-            fsGroup: 1001
-            fsGroupChangePolicy: "OnRootMismatch"
-
         containers:
           pia-tun:
             image:
@@ -99,3 +94,7 @@ spec:
         existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
       tmp:
         type: emptyDir
+    defaultPodOptions:
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: "OnRootMismatch"
