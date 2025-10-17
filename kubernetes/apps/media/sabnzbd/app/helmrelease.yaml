@@ -57,9 +57,11 @@ spec:
               repository: ghcr.io/buroa/sabnzbd
               tag: 4.4.1@sha256:47390397a14b387dacdcf608a93e0ff4531791ffc44c4a7ad4a8daa91781148e
             env:
+              TZ: ${TIMEZONE}
               SABNZBD__PORT: 8080
               SABNZBD__HOST_WHITELIST_ENTRIES: sabnzbd.media.svc.cluster.local, sabnzbd.${SECRET_DOMAIN}
-              TZ: ${TIMEZONE}
+              PUID: 1001
+              PGID: 1001
     service:
       sabnzbd:
         controller: *app
