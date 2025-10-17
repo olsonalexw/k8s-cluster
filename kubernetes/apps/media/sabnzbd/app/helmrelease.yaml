@@ -66,10 +66,8 @@ spec:
         ports:
           http:
             port: 8080
-            targetContainer: app
           socks5:
             port: 1080
-            targetContainer: pia-tun
     ingress:
       sabnzbd:
         enabled: true
