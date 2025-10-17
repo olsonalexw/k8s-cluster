@@ -39,11 +39,12 @@ spec:
             env:
               TZ: ${TIMEZONE}
               LOCAL_NETWORK: "10.69.0.0/16,10.96.0.0/16"
-              ENABLE_PROXY: "true"
+              PROXY_ENABLED: "true"
             envFrom:
               - secretRef:
                   name: sabnzbd-secret
             securityContext:
+              runAsNonRoot: false
               allowPrivilegeEscalation: false
               capabilities:
                 add:
@@ -65,6 +66,10 @@ spec:
         ports:
           http:
             port: 8080
+            targetContainer: app
+          socks5:
+            port: 1080
+            targetContainer: pia-tun
     ingress:
       sabnzbd:
         enabled: true
@@ -96,5 +101,8 @@ spec:
         type: emptyDir
     defaultPodOptions:
       securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
         fsGroup: 1001
-        fsGroupChangePolicy: "OnRootMismatch"
+        fsGroupChangePolicy: "Always"
