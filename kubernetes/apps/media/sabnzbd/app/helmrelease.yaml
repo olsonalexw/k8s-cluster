@@ -60,8 +60,10 @@ spec:
               TZ: ${TIMEZONE}
               SABNZBD__PORT: 8080
               SABNZBD__HOST_WHITELIST_ENTRIES: sabnzbd.media.svc.cluster.local, sabnzbd.${SECRET_DOMAIN}
-              PUID: 1001
-              PGID: 1001
+            securityContext:
+              runAsUser: 1001
+              runAsGroup: 1001
+              runAsNonRoot: true
     service:
       sabnzbd:
         controller: *app
