@@ -54,12 +54,15 @@ spec:
               PORT_API_ENABLED: "true"
               PORT_API_TYPE: "qbittorrent"
               PORT_API_URL: "http://localhost:80"
-              MTU: "1280"
+              MTU: "1360"
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
             securityContext:
               allowPrivilegeEscalation: false
+              sysctls:
+                - name: net.ipv4.tcp_congestion_control
+                  value: bbr
               capabilities:
                 add:
                   - NET_ADMIN  # For WireGuard/iptables
