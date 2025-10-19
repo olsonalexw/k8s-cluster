@@ -36,13 +36,11 @@ data:
       - movies:
           ignore_root_dir: true
           # exclude_tags: []
-      - ratio:  # Added: For ratio torrents
+      - ratio:
           ignore_root_dir: true
           # exclude_tags: []
 
     tracker:
-      iptorrents.com:  # Adjust if the tracker URL keyword is different
-        tag: iptorrents
       stackoverflow.tech:
         tag: iptorrents
       empirehost.me:

@@ -7,7 +7,6 @@ data:
     from qbittorrentapi import Client
     import os
     import time
-
     print("Starting trim script")
 
     # Connect to qBittorrent
@@ -34,7 +33,7 @@ data:
         seeding_hours = t.seeding_time / 3600.0
         productivity = (t.uploaded / 1e9) / max(seeding_hours, 1)  # GB/hour; avoid div0
         is_eligible = t.ratio >= MIN_RATIO or seeding_hours >= MIN_SEEDING_HOURS
-        torrent_data.append((productivity, is_eligible, t.hash, t.name, seeding_hours, t.ratio))
+        torrent_data.append((productivity, is_eligible, t.hash, t.name, seeding_hours, t.ratio, t.category))
 
     total = len(torrent_data)
     print(f"Total seeding torrents with tag '{IPT_TAG}': {total}")
@@ -44,7 +43,7 @@ data:
     print("-" * 80)
     # Sort by productivity descending for nicer print (highest first)
     sorted_for_print = sorted(torrent_data, key=lambda x: x[0], reverse=True)
-    for prod, eligible, hash_val, name, hours, ratio in sorted_for_print:
+    for prod, eligible, hash_val, name, hours, ratio, category in sorted_for_print:
         print(f"{name[:49]:<50} {prod:<12.4f} {hours:<8.1f} {ratio:<6.3f} {eligible}")
 
     if total <= MAX_SEEDERS:
@@ -59,11 +58,13 @@ data:
         # Candidates are the least productive 'excess' torrents
         candidates = sorted_torrents[:excess]
         to_delete = []
-        for prod, eligible, hash_val, name, hours, ratio in candidates:
-            if eligible:
-                to_delete.append((hash_val, name, prod))
-            else:
+        for prod, eligible, hash_val, name, hours, ratio, category in candidates:
+            if not eligible:
                 print(f"  Skipping {name[:50]} (prod: {prod:.4f} GB/h) - not eligible (ratio: {ratio:.3f}, hours: {hours:.1f})")
+            elif category == "manual":
+                print(f"  Skipping {name[:50]} (prod: {prod:.4f} GB/h) - manual category")
+            else:
+                to_delete.append((hash_val, name, prod))
 
         num_to_delete = len(to_delete)
         if num_to_delete > 0:

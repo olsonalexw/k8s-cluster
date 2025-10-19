@@ -49,22 +49,20 @@ spec:
               pullPolicy: Always
             env:
               TZ: ${TIMEZONE}
-              PORT_FORWARDING: "true"
               LOCAL_NETWORK: "10.69.0.0/16,10.96.0.0/16"
+              PORT_FORWARDING: "true"
               PORT_API_ENABLED: "true"
               PORT_API_TYPE: "qbittorrent"
               PORT_API_URL: "http://localhost:80"
+              METRICS: "true"
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
             securityContext:
               allowPrivilegeEscalation: false
-              sysctls:
-                - name: net.ipv4.tcp_congestion_control
-                  value: bbr
               capabilities:
                 add:
-                  - NET_ADMIN  # For WireGuard/iptables
+                  - NET_ADMIN
                 drop:
                   - ALL
 
@@ -86,36 +84,6 @@ spec:
               capabilities:
                 drop:
                   - ALL
-
-          # vuetorrent:
-          #   dependsOn: qbittorrent
-          #   image:
-          #     repository: registry.k8s.io/git-sync/git-sync
-          #     tag: v4.4.0
-          #   args:
-          #     - --repo=https://github.com/WDaan/VueTorrent
-          #     - --ref=latest-release
-          #     - --period=86400s
-          #     - --root=/addons
-          #   resources:
-          #     requests:
-          #       cpu: 50m
-          #       memory: 37M
-
-          # cjratliff-ui:
-          #   dependsOn: qbittorrent
-          #   image:
-          #     repository: registry.k8s.io/git-sync/git-sync
-          #     tag: v4.4.0
-          #   args:
-          #     - --repo=https://github.com/Carve/qbittorrent-webui-cjratliff.com
-          #     - --ref=stable
-          #     - --period=86400s
-          #     - --root=/addons
-          #   resources:
-          #     requests:
-          #       cpu: 20m
-          #       memory: 32M
 
     service:
       app:
@@ -162,13 +130,3 @@ spec:
         existingClaim: nfs-downloads-pvc
         globalMounts:
           - path: /downloads
-      empty-config:
-        type: emptyDir
-        advancedMounts:
-          qbittorrent:
-            port-sync:
-              - path: /config  # For cookies
-      # addons:
-      #   type: emptyDir
-      #   globalMounts:
-      #     - path: /addons
