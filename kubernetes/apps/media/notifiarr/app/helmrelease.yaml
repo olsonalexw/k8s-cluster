@@ -59,6 +59,7 @@ spec:
                 memory: 1G
 
     defaultPodOptions:
+      hostname: k8s-notifiarr
       securityContext:
         runAsNonRoot: true
         runAsUser: 1001
