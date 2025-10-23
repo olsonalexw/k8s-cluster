@@ -9,7 +9,7 @@ data:
     import os
     import time
     import json
-    from urllib.request import Request, build_opener, HTTPCookieProcessor
+    from urllib.request import Request, build_opener, HTTPCookieProcessor, URLError
     from urllib.parse import urlencode
     from http.cookiejar import CookieJar
 
@@ -19,6 +19,10 @@ data:
     host = 'http://localhost:80'
     username = os.getenv('QBT_USER')
     password = os.getenv('QBT_PASS')
+
+    if not username or not password:
+        print("Missing QBT_USER or QBT_PASS env vars!")
+        sys.exit(1)
 
     if len(sys.argv) < 2:
         print("No torrent name provided")
@@ -35,10 +39,14 @@ data:
     # Login to qBittorrent API
     login_data = urlencode({'username': username, 'password': password}).encode()
     login_req = Request(host + '/api/v2/auth/login', data=login_data, method='POST')
-    with opener.open(login_req) as login_resp:
-        if login_resp.read().decode() != 'Ok.':
-            print("Login failed!")
-            sys.exit(1)
+    try:
+        with opener.open(login_req) as login_resp:
+            if login_resp.read().decode() != 'Ok.':
+                print("Login failed!")
+                sys.exit(1)
+    except URLError as e:
+        print(f"Login connection failed: {e}")
+        sys.exit(1)
 
     # Helper for API calls
     def api_call(path, params=None, method='GET'):
@@ -47,14 +55,25 @@ data:
         if params and method == 'POST':
             data = urlencode(params).encode()
         req = Request(url, data=data, method=method)
-        with opener.open(req) as resp:
-            content = resp.read().decode()
-            if content:
-                return json.loads(content)
+        try:
+            with opener.open(req) as resp:
+                content = resp.read().decode()
+                if content:
+                    try:
+                        return json.loads(content)
+                    except json.JSONDecodeError:
+                        return content  # Fallback for plain text responses (e.g., "Ok.")
+                return None
+        except URLError as e:
+            print(f"API call failed ({path}): {e}")
             return None
 
     # Find torrent hash by exact name match
     torrents = api_call('torrents/info')
+    if not torrents:
+        print("Failed to fetch torrents list!")
+        sys.exit(1)
+
     torrent_hash = None
     for t in torrents:
         if t['name'] == torrent_name:
@@ -72,13 +91,17 @@ data:
             print("Failed to get torrent info")
             break
         info = info_list[0]
-        if info['dl_speed'] > 0 or info['state'] not in ['stalledDL', 'stalledUP']:
-            print(f"Unstalled after {attempt} attempts!")
+        state = info.get('state', 'unknown')
+        if info.get('dlspeed', 0) > 0 or state not in ['stalledDL', 'stalledUP']:
+            print(f"Unstalled after {attempt} attempts! (State: {state})")
             break
 
         # Force reannounce
-        api_call('torrents/reannounce', {'hashes': torrent_hash}, 'POST')
-        print(f"Reannounced (attempt {attempt + 1}/{max_attempts})")
+        result = api_call('torrents/reannounce', {'hashes': torrent_hash}, 'POST')
+        if result != 'Ok.':
+            print(f"Reannounce failed: {result}")
+        else:
+            print(f"Reannounced (attempt {attempt + 1}/{max_attempts})")
 
         time.sleep(reannounce_interval)
 
