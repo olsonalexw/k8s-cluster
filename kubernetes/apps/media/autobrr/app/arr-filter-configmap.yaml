@@ -18,32 +18,32 @@ data:
     echo "DEBUG: INFO_URL='$INFO_URL'" >&2
     echo "DEBUG: PROTOCOL=$PROTOCOL" >&2
 
-    # Build JSON
-    PAYLOAD=$(cat <<EOF
-    {
-      "title": "${TORRENT_NAME}",
-      "releaseTitle": "${TORRENT_NAME}",
-      "size": ${SIZE:-0},
-      "indexer": "${INDEXER_NAME:-Unknown}",
-      "indexerId": 0,
-      "downloadUrl": "${DOWNLOAD_URL}",
-      "magnetUrl": "",
-      "link": "${INFO_URL}",
-      "protocol": "${PROTOCOL:-torrent}",
-      "languages": [
-        {
-          "id": 1,
-          "name": "English"
-        }
-      ],
-      "customFormats": [],
-      "customFormatScores": [],
-      "releaseHash": "",
-      "commentUrl": "",
-      "publishDate": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-    }
-    EOF
-    )
+    # Build JSON with jq (robust escaping)
+    PAYLOAD=$(jq -n \
+      --arg title "$TORRENT_NAME" \
+      --arg releaseTitle "$TORRENT_NAME" \
+      --arg size "$SIZE" \
+      --arg indexer "$INDEXER_NAME" \
+      --arg downloadUrl "$DOWNLOAD_URL" \
+      --arg link "$INFO_URL" \
+      --arg protocol "$PROTOCOL" \
+      '{
+        title: $title,
+        releaseTitle: $releaseTitle,
+        size: ($size | tonumber // 0),
+        indexer: ($indexer // "Unknown"),
+        indexerId: 0,
+        downloadUrl: $downloadUrl,
+        magnetUrl: "",
+        link: $link,
+        protocol: ($protocol // "torrent"),
+        languages: [{id: 1, name: "English"}],
+        customFormats: [],
+        customFormatScores: [],
+        releaseHash: "",
+        commentUrl: "",
+        publishDate: "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
+      }')
     echo "DEBUG: PAYLOAD=$PAYLOAD" >&2
 
     # Send
@@ -53,12 +53,12 @@ data:
 
     echo "DEBUG: RESPONSE=$RESPONSE" >&2
 
-    # Check
-    if echo "$RESPONSE" | jq -e '.[0].rejected == false' > /dev/null 2>&1; then
-      echo "Approved: ${TORRENT_NAME}" >&2
+    # Check (skip if validation error array)
+    if echo "$RESPONSE" | jq -e 'type == "array" and .[0].rejected == false' > /dev/null 2>&1; then
+      echo "Approved: $TORRENT_NAME" >&2
       exit 0
     else
-      echo "Rejected: ${TORRENT_NAME}" >&2
-      echo "$RESPONSE" | jq -r '.[0].rejections // empty | .[]' >&2 2>/dev/null || echo "No rejection details (check validation)" >&2
+      echo "Rejected: $TORRENT_NAME" >&2
+      echo "$RESPONSE" | jq -r 'if type == "array" then .[0].rejections // empty | .[] else .[] end' >&2 2>/dev/null || echo "Validation error or no details" >&2
       exit 1
     fi
