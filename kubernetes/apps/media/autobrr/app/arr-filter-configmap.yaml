@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: arr-filter
+data:
+  arr-filter.sh: |
+    #!/bin/sh
+    # Combined Radarr/Sonarr filter script
+    # Usage: /scripts/arr-filter-script.sh <ENDPOINT_URL>
+    # Debug: Print all env vars (remove after confirmation)
+    echo "=== DEBUG: All env vars ===" >&2
+    env >&2
+    echo "=== DEBUG: Torrent-related vars ===" >&2
+    env | grep -i torrent \| size \| index \| download \| info \| protocol >&2
+    echo "=== END DEBUG ===" >&2
+
+    ENDPOINT="$1"
+    if [ -z "$ENDPOINT" ]; then
+      echo "Error: Provide ENDPOINT as argument (e.g., Radarr or Sonarr URL)" >&2
+      exit 1
+    fi
+
+    # Build JSON payload (uses env vars from autobrr; adjust names if needed based on logs)
+    PAYLOAD=$(cat <<EOF
+    {
+      "title": "${TORRENT_NAME:-${TORRENT_TITLE}}",
+      "releaseTitle": "${TORRENT_NAME:-${TORRENT_TITLE}}",
+      "size": ${TORRENT_SIZE:-0},
+      "indexer": "${TORRENT_INDEXER:-${INDEXER_NAME:-${TORRENT_TRACKER}}}",
+      "indexerId": 0,
+      "downloadUrl": "${TORRENT_URL:-${DOWNLOAD_URL}}",
+      "link": "${TORRENT_INFO_URL:-${TORRENT_LINK}}",
+      "protocol": "${TORRENT_PROTOCOL:-torrent}",
+      "languages": [
+        {
+          "id": 1,
+          "name": "English"
+        }
+      ],
+      "customFormats": [],
+      "customFormatScores": [],
+      "releaseHash": "",
+      "commentUrl": "",
+      "publishDate": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    }
+    EOF
+    )
+
+    # Send to Radarr/Sonarr
+    RESPONSE=$(curl -s -X POST "$ENDPOINT" \
+      -H "Content-Type: application/json" \
+      -d "$PAYLOAD")
+
+    # Check rejection (handles upgrades/rejects)
+    if echo "$RESPONSE" | jq -e '.[0].rejected == false' > /dev/null 2>&1; then
+      echo "Approved: ${TORRENT_NAME:-${TORRENT_TITLE}}" >&2
+      exit 0
+    else
+      echo "Rejected: ${TORRENT_NAME:-${TORRENT_TITLE}}" >&2
+      echo "$RESPONSE" | jq '.[0].rejections[]' >&2
+      exit 1
+    fi

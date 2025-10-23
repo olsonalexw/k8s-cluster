@@ -43,22 +43,6 @@ spec:
               AUTOBRR__METRICS_PORT: &metricsPort 9094
               AUTOBRR__CHECK_FOR_UPDATES: false
               AUTOBRR__LOG_LEVEL: INFO
-            # envFrom:
-            #   - secretRef:
-            #       name: autobrr-secret
-            # probes:
-            #   liveness: &probes
-            #     enabled: true
-            #     custom: true
-            #     spec:
-            #       httpGet:
-            #         path: /api/healthz/liveness
-            #         port: *port
-            #       initialDelaySeconds: 0
-            #       periodSeconds: 10
-            #       timeoutSeconds: 1
-            #       failureThreshold: 3
-            #   readiness: *probes
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -119,3 +103,13 @@ spec:
           - path: /config/log
       tmp:
         type: emptyDir
+      arr-filter:
+        enabled: true
+        type: configMap
+        name: arr-filter
+        defaultMode: 0755
+        advancedMounts:
+          autobrr:
+            main:
+              - path: /scripts/arr-filter.sh
+                subPath: arr-filter.sh
