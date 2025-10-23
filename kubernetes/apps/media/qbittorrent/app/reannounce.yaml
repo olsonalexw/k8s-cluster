@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qbittorrent-reannounce-script
+data:
+  reannounce.py: |
+    #!/usr/bin/env python3
+    import sys
+    import os
+    import time
+    import json
+    from urllib.request import Request, build_opener, HTTPCookieProcessor
+    from urllib.parse import urlencode
+    from http.cookiejar import CookieJar
+
+    print("Starting reannounce script")
+
+    # Config: Update intervals/attempts if needed
+    host = 'http://localhost:80'
+    username = os.getenv('QBT_USER')
+    password = os.getenv('QBT_PASS')
+
+    if len(sys.argv) < 2:
+        print("No torrent name provided")
+        sys.exit(1)
+
+    torrent_name = sys.argv[1]
+    reannounce_interval = 7  # Seconds
+    max_attempts = 20
+
+    # Setup cookie handler for auth
+    cj = CookieJar()
+    opener = build_opener(HTTPCookieProcessor(cj))
+
+    # Login to qBittorrent API
+    login_data = urlencode({'username': username, 'password': password}).encode()
+    login_req = Request(host + '/api/v2/auth/login', data=login_data, method='POST')
+    with opener.open(login_req) as login_resp:
+        if login_resp.read().decode() != 'Ok.':
+            print("Login failed!")
+            sys.exit(1)
+
+    # Helper for API calls
+    def api_call(path, params=None, method='GET'):
+        url = host + '/api/v2/' + path
+        data = None
+        if params and method == 'POST':
+            data = urlencode(params).encode()
+        req = Request(url, data=data, method=method)
+        with opener.open(req) as resp:
+            content = resp.read().decode()
+            if content:
+                return json.loads(content)
+            return None
+
+    # Find torrent hash by exact name match
+    torrents = api_call('torrents/info')
+    torrent_hash = None
+    for t in torrents:
+        if t['name'] == torrent_name:
+            torrent_hash = t['hash']
+            break
+
+    if not torrent_hash:
+        print(f"Torrent '{torrent_name}' not found!")
+        sys.exit(1)
+
+    # Loop reannounce until unstalled or max attempts
+    for attempt in range(max_attempts):
+        info_list = api_call('torrents/info?hashes=' + torrent_hash)
+        if not info_list:
+            print("Failed to get torrent info")
+            break
+        info = info_list[0]
+        if info['dl_speed'] > 0 or info['state'] not in ['stalledDL', 'stalledUP']:
+            print(f"Unstalled after {attempt} attempts!")
+            break
+
+        # Force reannounce
+        api_call('torrents/reannounce', {'hashes': torrent_hash}, 'POST')
+        print(f"Reannounced (attempt {attempt + 1}/{max_attempts})")
+
+        time.sleep(reannounce_interval)
+
+    print("Done.")

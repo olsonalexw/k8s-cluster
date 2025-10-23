@@ -130,3 +130,13 @@ spec:
         existingClaim: nfs-downloads-pvc
         globalMounts:
           - path: /downloads
+      reannounce-script:
+        enabled: true
+        type: configMap
+        name: qbittorrent-reannounce-script
+        defaultMode: 0755
+        advancedMounts:
+          qbittorrent:
+            qbittorrent:
+              - path: /scripts/reannounce.py
+                subPath: reannounce.py
