@@ -5,4 +5,3 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./qbittorrent-secret.sops.yaml
-  - ./reannounce.yaml
