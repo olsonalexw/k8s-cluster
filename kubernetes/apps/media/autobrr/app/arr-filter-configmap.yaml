@@ -11,14 +11,7 @@ data:
       exit 1
     fi
 
-    # Debug: Echo vars (remove after test)
-    echo "DEBUG: TORRENT_NAME='$TORRENT_NAME'" >&2
-    echo "DEBUG: SIZE=$SIZE" >&2
-    echo "DEBUG: DOWNLOAD_URL='$DOWNLOAD_URL'" >&2
-    echo "DEBUG: INFO_URL='$INFO_URL'" >&2
-    echo "DEBUG: PROTOCOL=$PROTOCOL" >&2
-
-    # Build JSON with jq (robust escaping)
+    # Build JSON with jq
     PAYLOAD=$(jq -n \
       --arg title "$TORRENT_NAME" \
       --arg releaseTitle "$TORRENT_NAME" \
@@ -44,21 +37,18 @@ data:
         commentUrl: "",
         publishDate: "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"
       }')
-    echo "DEBUG: PAYLOAD=$PAYLOAD" >&2
 
     # Send
     RESPONSE=$(curl -s -X POST "$ENDPOINT" \
       -H "Content-Type: application/json" \
       -d "$PAYLOAD")
 
-    echo "DEBUG: RESPONSE=$RESPONSE" >&2
-
-    # Check (skip if validation error array)
+    # Check
     if echo "$RESPONSE" | jq -e 'type == "array" and .[0].rejected == false' > /dev/null 2>&1; then
       echo "Approved: $TORRENT_NAME" >&2
       exit 0
     else
       echo "Rejected: $TORRENT_NAME" >&2
-      echo "$RESPONSE" | jq -r 'if type == "array" then .[0].rejections // empty | .[] else .[] end' >&2 2>/dev/null || echo "Validation error or no details" >&2
+      echo "$RESPONSE" | jq -r 'if type == "array" then .[0].rejections // empty | .[] else .[] end' >&2 2>/dev/null || true
       exit 1
     fi
