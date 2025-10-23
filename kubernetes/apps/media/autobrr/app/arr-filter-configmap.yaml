@@ -5,24 +5,29 @@ metadata:
 data:
   arr-filter.sh: |
     #!/bin/sh
-    # Combined Radarr/Sonarr filter script
-    # Usage: /scripts/arr-filter-script.sh <ENDPOINT_URL>
-
     ENDPOINT="$1"
     if [ -z "$ENDPOINT" ]; then
-      echo "Error: Provide ENDPOINT as argument (e.g., Radarr or Sonarr URL)" >&2
+      echo "Error: Provide ENDPOINT as argument" >&2
       exit 1
     fi
 
-    # Build JSON payload (confirmed env vars)
+    # Debug: Echo vars (remove after test)
+    echo "DEBUG: TORRENT_NAME='$TORRENT_NAME'" >&2
+    echo "DEBUG: SIZE=$SIZE" >&2
+    echo "DEBUG: DOWNLOAD_URL='$DOWNLOAD_URL'" >&2
+    echo "DEBUG: INFO_URL='$INFO_URL'" >&2
+    echo "DEBUG: PROTOCOL=$PROTOCOL" >&2
+
+    # Build JSON
     PAYLOAD=$(cat <<EOF
     {
       "title": "${TORRENT_NAME}",
       "releaseTitle": "${TORRENT_NAME}",
       "size": ${SIZE:-0},
-      "indexer": "${INDEXER_NAME}",
+      "indexer": "${INDEXER_NAME:-Unknown}",
       "indexerId": 0,
       "downloadUrl": "${DOWNLOAD_URL}",
+      "magnetUrl": "",
       "link": "${INFO_URL}",
       "protocol": "${PROTOCOL:-torrent}",
       "languages": [
@@ -39,19 +44,21 @@ data:
     }
     EOF
     )
+    echo "DEBUG: PAYLOAD=$PAYLOAD" >&2
 
-    # Send to Radarr/Sonarr
+    # Send
     RESPONSE=$(curl -s -X POST "$ENDPOINT" \
       -H "Content-Type: application/json" \
       -d "$PAYLOAD")
 
-    # Check rejection (handles upgrades/rejects)
+    echo "DEBUG: RESPONSE=$RESPONSE" >&2
+
+    # Check
     if echo "$RESPONSE" | jq -e '.[0].rejected == false' > /dev/null 2>&1; then
       echo "Approved: ${TORRENT_NAME}" >&2
       exit 0
     else
       echo "Rejected: ${TORRENT_NAME}" >&2
-      # Log rejections safely (no error on empty/null)
-      echo "$RESPONSE" | jq -r '.[0].rejections // empty | .[]' >&2 2>/dev/null || echo "No rejection details" >&2
+      echo "$RESPONSE" | jq -r '.[0].rejections // empty | .[]' >&2 2>/dev/null || echo "No rejection details (check validation)" >&2
       exit 1
     fi
