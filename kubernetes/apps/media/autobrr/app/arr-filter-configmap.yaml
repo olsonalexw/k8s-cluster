@@ -7,12 +7,6 @@ data:
     #!/bin/sh
     # Combined Radarr/Sonarr filter script
     # Usage: /scripts/arr-filter-script.sh <ENDPOINT_URL>
-    # Debug: Print all env vars (remove after confirmation)
-    echo "=== DEBUG: All env vars ===" >&2
-    env >&2
-    echo "=== DEBUG: Torrent-related vars ===" >&2
-    env | grep -i torrent \| size \| index \| download \| info \| protocol >&2
-    echo "=== END DEBUG ===" >&2
 
     ENDPOINT="$1"
     if [ -z "$ENDPOINT" ]; then
@@ -20,17 +14,17 @@ data:
       exit 1
     fi
 
-    # Build JSON payload (uses env vars from autobrr; adjust names if needed based on logs)
+    # Build JSON payload (confirmed env vars)
     PAYLOAD=$(cat <<EOF
     {
-      "title": "${TORRENT_NAME:-${TORRENT_TITLE}}",
-      "releaseTitle": "${TORRENT_NAME:-${TORRENT_TITLE}}",
-      "size": ${TORRENT_SIZE:-0},
-      "indexer": "${TORRENT_INDEXER:-${INDEXER_NAME:-${TORRENT_TRACKER}}}",
+      "title": "${TORRENT_NAME}",
+      "releaseTitle": "${TORRENT_NAME}",
+      "size": ${SIZE:-0},
+      "indexer": "${INDEXER_NAME}",
       "indexerId": 0,
-      "downloadUrl": "${TORRENT_URL:-${DOWNLOAD_URL}}",
-      "link": "${TORRENT_INFO_URL:-${TORRENT_LINK}}",
-      "protocol": "${TORRENT_PROTOCOL:-torrent}",
+      "downloadUrl": "${DOWNLOAD_URL}",
+      "link": "${INFO_URL}",
+      "protocol": "${PROTOCOL:-torrent}",
       "languages": [
         {
           "id": 1,
@@ -53,10 +47,11 @@ data:
 
     # Check rejection (handles upgrades/rejects)
     if echo "$RESPONSE" | jq -e '.[0].rejected == false' > /dev/null 2>&1; then
-      echo "Approved: ${TORRENT_NAME:-${TORRENT_TITLE}}" >&2
+      echo "Approved: ${TORRENT_NAME}" >&2
       exit 0
     else
-      echo "Rejected: ${TORRENT_NAME:-${TORRENT_TITLE}}" >&2
-      echo "$RESPONSE" | jq '.[0].rejections[]' >&2
+      echo "Rejected: ${TORRENT_NAME}" >&2
+      # Log rejections safely (no error on empty/null)
+      echo "$RESPONSE" | jq -r '.[0].rejections // empty | .[]' >&2 2>/dev/null || echo "No rejection details" >&2
       exit 1
     fi
