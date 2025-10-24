@@ -61,10 +61,8 @@ data:
         for prod, eligible, hash_val, name, hours, ratio, category in candidates:
             if not eligible:
                 print(f"  Skipping {name[:50]} (prod: {prod:.4f} GB/h) - not eligible (ratio: {ratio:.3f}, hours: {hours:.1f})")
-            elif category == "manual":
-                print(f"  Skipping {name[:50]} (prod: {prod:.4f} GB/h) - manual category")
             else:
-                to_delete.append((hash_val, name, prod))
+                to_delete.append((hash_val, name, prod, category))
 
         num_to_delete = len(to_delete)
         if num_to_delete > 0:
@@ -72,12 +70,14 @@ data:
             print("-" * 60)
             print(f"{'Name':<50} {'Prod (GB/h)'}")
             print("-" * 60)
-            for hash_val, name, prod in sorted(to_delete, key=lambda x: x[2]):  # sort by prod asc for display
+            for hash_val, name, prod, category in sorted(to_delete, key=lambda x: x[2]):  # sort by prod asc for display
                 if DRY_RUN:
                     print(f"Would delete: {name[:49]:<50} {prod:<12.4f}")
                 else:
-                    print(f"Deleting:    {name[:49]:<50} {prod:<12.4f}")
-                    client.torrents_delete(delete_local_files=True, torrent_hashes=hash_val)
+                    delete_files = category != "manual"
+                    action = "Deleting (with files)" if delete_files else "Deleting (keep files)"
+                    print(f"{action}: {name[:49]:<50} {prod:<12.4f}")
+                    client.torrents_delete(delete_local_files=delete_files, torrent_hashes=hash_val)
                     time.sleep(1)  # Avoid API flood
         else:
             print(f"\nNo eligible candidates among the {excess} least productive torrents; no deletions.")
