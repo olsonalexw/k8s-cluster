@@ -7,6 +7,7 @@ data:
     from qbittorrentapi import Client
     import os
     import time
+    import json
     print("Starting trim script")
 
     # Connect to qBittorrent
@@ -24,16 +25,58 @@ data:
     IPT_TAG = 'iptorrents'
     DRY_RUN = False  # Set to False to actually delete
 
+    # History file for tracking per-torrent snapshots
+    history_file = '/downloads/seeder_history.json'
+    try:
+        with open(history_file, 'r') as f:
+            history = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        history = {}
+
+    current_ts = time.time()
+
     # Get all seeding torrents for IPT tag
     torrents = client.torrents_info(status_filter='seeding', tag=IPT_TAG)
 
     # Prepare data for each torrent
     torrent_data = []
     for t in torrents:
-        seeding_hours = t.seeding_time / 3600.0
-        productivity = (t.uploaded / 1e9) / max(seeding_hours, 1)  # GB/hour; avoid div0
+        h = t.hash
+        current_up = t.uploaded
+        current_st = t.seeding_time
+        delta_up = current_up
+        delta_st = current_st
+        if h in history and history[h]:
+            hist_list = sorted(history[h], key=lambda x: x['ts'])
+            three_days_ago = current_ts - 3 * 86400
+            for entry in hist_list:
+                if entry['ts'] >= three_days_ago:
+                    delta_up = current_up - entry['up']
+                    delta_st = current_st - entry['st']
+                    break
+        prod_hours = max(delta_st / 3600.0, 1e-6)  # Avoid div0
+        productivity = (delta_up / 1e9) / prod_hours
+        seeding_hours = current_st / 3600.0
         is_eligible = t.ratio >= MIN_RATIO or seeding_hours >= MIN_SEEDING_HOURS
-        torrent_data.append((productivity, is_eligible, t.hash, t.name, seeding_hours, t.ratio, t.category))
+        torrent_data.append((productivity, is_eligible, h, t.name, seeding_hours, t.ratio, t.category))
+
+    # Update history with current snapshots (after processing)
+    new_history = {}
+    for t in torrents:
+        h = t.hash
+        if h not in new_history:
+            new_history[h] = []
+        if h in history:
+            new_history[h] = history[h][:]
+        new_history[h].append({'ts': current_ts, 'up': t.uploaded, 'st': t.seeding_time})
+        # Prune old entries (keep ~5 days for buffer)
+        hist_list = sorted(new_history[h], key=lambda x: x['ts'])
+        prune_ts = current_ts - 5 * 86400
+        hist_list = [e for e in hist_list if e['ts'] >= prune_ts]
+        new_history[h] = hist_list
+
+    with open(history_file, 'w') as f:
+        json.dump(new_history, f)
 
     total = len(torrent_data)
     print(f"Total seeding torrents with tag '{IPT_TAG}': {total}")
