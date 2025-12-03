@@ -45,14 +45,15 @@ spec:
           pia-tun:
             image:
               repository: olsonalexw/k8s-wireguard-pia
-              tag: latest@sha256:33f313684b6f0e0c52e8f67ea58a8220a4241e5e40eaf48590d2c87261b5bda7
+              tag: develop@sha256:0023f4a01ae54b93a98301937ef1df25d3f2edd9bd5702641b535cbe7969dfd5
               pullPolicy: Always
             env:
               TZ: ${TIMEZONE}
               LOCAL_NETWORK: "10.69.0.0/16,10.96.0.0/16"
-              PORT_FORWARDING: "true"
+              LOCAL_PORTS: 80
               PORT_API_TYPE: "qbittorrent"
               PORT_API_URL: "http://localhost:80"
+              PF_SIGNATURE_REFRESH_DAYS: 1
               METRICS: "true"
             envFrom:
               - secretRef:
