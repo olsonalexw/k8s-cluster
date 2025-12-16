@@ -76,7 +76,7 @@ spec:
     grafana:
       enabled: true
       adminUser: ${GRAFANA_USER}
-      adminPassword: ${GRAFANA_PASS}
+      adminPassword: "${GRAFANA_PASS}"
       persistence:
         enabled: true
         storageClassName: nfs-csi
