@@ -25,10 +25,10 @@ spec:
       enabled: true
       alertmanagerSpec:
         externalUrl: https://alertmanager.${SECRET_DOMAIN}
-        alertmanagerConfiguration:
-          name: alertmanager
-          global:
-            resolveTimeout: 5m
+        # alertmanagerConfiguration:
+        #   name: alertmanager
+        #   global:
+        #     resolveTimeout: 5m
         storage:
           volumeClaimTemplate:
             spec:
