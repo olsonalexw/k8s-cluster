@@ -22,6 +22,7 @@ spec:
   values:
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
+      enabled: true
       alertmanagerSpec:
         externalUrl: https://alertmanager.${SECRET_DOMAIN}
         alertmanagerConfiguration:
