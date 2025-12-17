@@ -50,7 +50,7 @@ spec:
             env:
               TZ: ${TIMEZONE}
               LOCAL_NETWORK: "10.69.0.0/16,10.96.0.0/16"
-              LOCAL_PORTS: 80
+              LOCAL_PORTS: 80,9090
               PORT_API_TYPE: "qbittorrent"
               PORT_API_URL: "http://localhost:80"
               PF_SIGNATURE_REFRESH_DAYS: 1
@@ -91,6 +91,14 @@ spec:
         ports:
           http:
             port: *port
+          metrics:
+            port: 9090
+
+    serviceMonitor:
+      app:
+        serviceName: qbittorrent
+        endpoints:
+          - port: metrics
 
     ingress:
       qbittorrent:
