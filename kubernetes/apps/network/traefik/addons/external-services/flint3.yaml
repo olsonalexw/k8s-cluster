@@ -39,7 +39,7 @@ metadata:
 spec:
   ingressClassName: traefik-internal
   rules:
-    - host: "router.awolson.com"
+    - host: "router.${SECRET_DOMAIN}"
       http:
         paths:
           - path: /
@@ -51,5 +51,5 @@ spec:
                   number: 443
   tls:
     - hosts:
-        - "router.awolson.com"
-      secretName: "awolson-com-production-tls"
+        - *host
+      secretName: "${SECRET_DOMAIN/./-}-production-tls"
