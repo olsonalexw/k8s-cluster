@@ -6,3 +6,4 @@ resources:
   # - ./proxmox.yaml
   #- ./plex-ext.yaml
   - ./flint3.yaml
+  - ./truenas.yaml
