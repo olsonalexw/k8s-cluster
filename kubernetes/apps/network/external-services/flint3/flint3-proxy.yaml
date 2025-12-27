@@ -1,5 +1,5 @@
 ---
-# ServersTransport: Allows Traefik to connect to the router's self-signed HTTPS without verification errors
+# Optional but recommended: ServersTransport to skip self-signed cert verification
 apiVersion: traefik.io/v1alpha1
 kind: ServersTransport
 metadata:
@@ -9,20 +9,18 @@ spec:
   insecureSkipVerify: true
 
 ---
-# TraefikService: Defines the backend target (your Flint 3 router over HTTPS)
-apiVersion: traefik.io/v1alpha1
-kind: TraefikService
+# Kubernetes Service (ExternalName) pointing to your Flint 3's real IP
+apiVersion: v1
+kind: Service
 metadata:
   name: flint3-webui
   namespace: network
 spec:
-  loadBalancer:
-    servers:
-      - url: "https://192.168.1.1/"
-    serversTransport: flint3-insecure
+  type: ExternalName
+  externalName: 192.168.1.1          # Flint 3's LAN IP
 
 ---
-# IngressRoute: The public-facing route with valid Let's Encrypt TLS
+# IngressRoute referencing the ExternalName Service
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -36,8 +34,12 @@ spec:
       kind: Rule
       services:
         - name: flint3-webui
-          kind: TraefikService
-          passHostHeader: true    # Helps if the GL.iNet panel relies on the original Host header
+          kind: Service                   # ← Standard Kubernetes Service
+          port:
+            number: 443                   # Target the router's HTTPS port
+          scheme: https                   # Tell Traefik to use HTTPS to backend
+          serversTransport: flint3-insecure  # Skip cert verification
+          passHostHeader: true            # Often needed for GL.iNet panels
       middlewares:
         - name: network-chain-no-auth-restrict-networks@kubernetescrd
   tls:
