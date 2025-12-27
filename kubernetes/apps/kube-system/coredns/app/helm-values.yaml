@@ -15,7 +15,7 @@ servers:
     use_tcp: true
     plugins:
       - name: forward
-        parameters: . ${IPAM_IP_ADGUARDHOME_INTERNAL}
+        parameters: . ${IPAM_IP_ADGUARDHOME}
   - zones:
       - zone: .
         scheme: dns://
