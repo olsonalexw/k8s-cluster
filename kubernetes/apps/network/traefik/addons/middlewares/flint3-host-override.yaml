@@ -1,0 +1,9 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: flint3-host-override
+  namespace: network
+spec:
+  headers:
+    customRequestHeaders:
+      Host: "192.168.1.1"

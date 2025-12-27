@@ -10,6 +10,7 @@ resources:
   - ./compress.yaml
   # - ./crowdsec.yaml
   # - ./errors.yaml
+  - ./flint3-host-override.yaml
   - ./ip.yaml
   - ./redirect.yaml
   - ./secure.yaml

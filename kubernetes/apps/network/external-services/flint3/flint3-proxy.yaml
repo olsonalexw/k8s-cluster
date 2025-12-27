@@ -35,11 +35,12 @@ spec:
       services:
         - name: flint3-webui
           kind: Service
-          port: 443                       # ← Scalar integer (or "https" if named)
-          scheme: https                   # Use HTTPS to backend
+          port: 443
+          scheme: https
           serversTransport: flint3-insecure
           passHostHeader: true
       middlewares:
         - name: network-chain-no-auth-restrict-networks@kubernetescrd
+        - name: flint3-host-override
   tls:
     secretName: "${SECRET_DOMAIN/./-}-production-tls"
