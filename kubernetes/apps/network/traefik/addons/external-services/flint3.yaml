@@ -39,7 +39,7 @@ metadata:
 spec:
   ingressClassName: traefik-internal
   rules:
-    - host: "router.${SECRET_DOMAIN}"
+    - host: &host "router.${SECRET_DOMAIN}"
       http:
         paths:
           - path: /
