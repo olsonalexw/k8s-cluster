@@ -1,0 +1,44 @@
+---
+# ServersTransport: Allows Traefik to connect to the router's self-signed HTTPS without verification errors
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+  name: flint3-insecure
+  namespace: network
+spec:
+  insecureSkipVerify: true
+
+---
+# TraefikService: Defines the backend target (your Flint 3 router over HTTPS)
+apiVersion: traefik.io/v1alpha1
+kind: TraefikService
+metadata:
+  name: flint3-webui
+  namespace: network
+spec:
+  loadBalancer:
+    servers:
+      - url: "https://192.168.1.1/"
+    serversTransport: flint3-insecure
+
+---
+# IngressRoute: The public-facing route with valid Let's Encrypt TLS
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: flint3-webui
+  namespace: network
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`router.${SECRET_DOMAIN}`)
+      kind: Rule
+      services:
+        - name: flint3-webui
+          kind: TraefikService
+          passHostHeader: true    # Helps if the GL.iNet panel relies on the original Host header
+      middlewares:
+        - name: network-chain-no-auth-restrict-networks@kubernetescrd
+  tls:
+    secretName: "${SECRET_DOMAIN/./-}-production-tls"
