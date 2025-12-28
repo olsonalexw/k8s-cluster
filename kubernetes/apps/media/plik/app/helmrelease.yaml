@@ -58,6 +58,7 @@ spec:
           gethomepage.dev/icon: plik.png
           gethomepage.dev/description: Temp File Hosting
           gethomepage.dev/href: https://plik.${SECRET_DOMAIN}
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=plik"
         hosts:
           - host: &host "plik.${SECRET_DOMAIN}"
             paths:

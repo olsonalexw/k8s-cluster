@@ -142,6 +142,7 @@ spec:
           gethomepage.dev/icon: goldilocks.png
           gethomepage.dev/description: Goldilocks Utility
           gethomepage.dev/href: https://goldilocks.${SECRET_DOMAIN}
+          gethomepage.dev/pod-selector: "app.kubernetes.io/name=goldilocks-dashboard"
         hosts:
           - host: &host "goldilocks.${SECRET_DOMAIN}"
             paths:
