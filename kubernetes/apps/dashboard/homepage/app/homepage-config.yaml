@@ -5,6 +5,9 @@ metadata:
 data:
   kubernetes.yaml: |
     mode: cluster
+    ingress: true
+    traefik: true
+    gateway: true
   settings: ""
   bookmarks.yaml: |
     - AI:
@@ -99,137 +102,7 @@ data:
             - icon: https://play-lh.googleusercontent.com/xcIH2rg95sUMnhLZiQmMMuuj-GL2VuKtDjfmbvGbf5ODUCTob2DyxOoc_ZRCp9s96w=w240-h480-rw
               href: https://app.privacy.com/home
   docker.yaml: ""
-    # Contents of docker.yaml
-    # - name: Docker Hub
-    #   url: https://hub.docker.com
-  services.yaml: |
-    - Admin:
-        - Router:
-            href: router.${SECRET_DOMAIN}
-            description: Router Admin Page
-            icon: https://1000logos.net/wp-content/uploads/2016/10/Asus-Logo.png
-            siteMonitor: router.network.svc.cluster.local
-        - TrueNAS:
-            href: truenas.${SECRET_DOMAIN}
-            description: Network Attached Storage
-            icon: truenas.svg # https://avatars.githubusercontent.com/u/53482242?s=280&v=4
-            siteMonitor: truenas.network.svc.cluster.local
-            widget:
-              type: truenas
-              url: truenas.network.svc.cluster.local
-              key: ${HOMEPAGE_VAR_TRUENAS_API_KEY}
-              enablePools: "true"
-        - Goldilocks:
-            href: goldilocks.${SECRET_DOMAIN}
-            description: Goldilocks QoS
-            icon: https://www.fairwinds.com/hubfs/Icons/Fairwinds_Website_Icon_OPA_v1.svg
-            siteMonitor: goldilocks.observability.svc.cluster.local
-    - Services:
-        - Adguard:
-            href: adguardhome.${SECRET_DOMAIN}
-            description: DNS Services
-            icon: https://static-00.iconduck.com/assets.00/adguard-home-icon-2023x2048-zxumr62h.png
-            siteMonitor: adguardhome.network.svc.cluster.local
-            widget:
-              type: adguard
-              url: adguardhome.network.svc.cluster.local
-              username: ${HOMEPAGE_VAR_ADGUARD_USERNAME}
-              password: ${HOMEPAGE_VAR_ADGUARD_PASSWORD}
-              fields: ["queries", "blocked"]
-        - Nextcloud:
-            href: nextcloud.${SECRET_DOMAIN}
-            description: Personal File Hosting
-            icon: https://img.icons8.com/?size=512&id=2dCsJ8Pa920S&format=png
-            siteMonitor: nextcloud.${SECRET_DOMAIN}
-        - VaultWarden:
-            href: vaultwarden.${SECRET_DOMAIN}
-            description: Personal Password Manager
-            icon: https://img.icons8.com/?size=512&id=RR3DYslPXr2j&format=png
-            siteMonitor: vaultwarden.security.svc.cluster.local
-        - Cloudflare-DDNS:
-            href: https://dash.cloudflare.com/
-            description: DNS Updater
-            icon: https://img.icons8.com/?size=512&id=13682&format=png
-            siteMonitor: https://dash.cloudflare.com/
-        - Paperless:
-            href: paperless.${SECRET_DOMAIN}
-            description: Document Manager
-            icon: https://artifacthub.io/image/3ad49bcb-4897-4e64-8d0c-f6dda84377a4@3x
-            siteMonitor: paperless.${SECRET_DOMAIN}
-    - Media:
-        - Jellyfin:
-            href: jellyfin.${SECRET_DOMAIN}
-            description: Streaming Media Service
-            icon: https://play-lh.googleusercontent.com/SxdWPR-oZQt9tqph0pyU62_CbyfdQX9g1R5_Nd_vwdkV0IIDceNsytVgdzyHHJGdAwM
-            siteMonitor: jellyfin.media.svc.cluster.local
-            widget:
-              type: jellyfin
-              url: jellyfin.media.svc.cluster.local
-              key: ${HOMEPAGE_VAR_JELLYFIN_API_KEY}
-              # enableBlocks: true # optional, defaults to false
-              # enableNowPlaying: true # optional, defaults to true
-              # enableUser: true # optional, defaults to false
-              # showEpisodeNumber: true # optional, defaults to false
-              # expandOneStreamToTwoRows: false # optional, defaults to true
-        - JellySeerr:
-            href: jellyseerr.${SECRET_DOMAIN}
-            description: Request TV Shows and Movies via WebUI
-            icon: https://static-00.iconduck.com/assets.00/jellyseerr-icon-2048x1968-ox8q7e49.png
-            siteMonitor: jellyseerr.media.svc.cluster.local
-            widget:
-              type: jellyseerr
-              url: jellyseerr.media.svc.cluster.local
-              key: ${HOMEPAGE_VAR_JELLYSEERR_API_KEY}
-        - Radarr:
-            href: radarr.${SECRET_DOMAIN}
-            description: Movies Management
-            icon: https://static-00.iconduck.com/assets.00/radarr-icon-462x512-bydv4e4f.png
-            siteMonitor: radarr.media.svc.cluster.local
-        - Sonarr:
-            href: sonarr.${SECRET_DOMAIN}
-            description: TV Shows Management
-            icon: https://res.cloudinary.com/razordarkamg/image/upload/v1621212884/SonarrV3_pufacd.png
-            siteMonitor: sonarr.media.svc.cluster.local
-
-    - Tools:
-        - Notifiarr:
-            href: notifiarr.${SECRET_DOMAIN}
-            description: Discord Notifications for Services
-            icon: https://notifiarr.com/images/logo/notifiarr.png
-            siteMonitor: notifiarr.media.svc.cluster.local
-        - Prowlarr:
-            href: prowlarr.${SECRET_DOMAIN}
-            description: Indexer Manager
-            icon: https://static-00.iconduck.com/assets.00/prowlarr-icon-2048x2048-2pxvehfe.png
-            siteMonitor: prowlarr.media.svc.cluster.local
-        - SABnzbd:
-            href: sabnzbd.${SECRET_DOMAIN}
-            description: Usenet Download Client
-            icon: https://static-00.iconduck.com/assets.00/sabnzbd-text-icon-256x256-k89vgimn.png
-            siteMonitor: sabnzbd.media.svc.cluster.local
-            widget:
-              type: sabnzbd
-              url: sabnzbd.media.svc.cluster.local
-              key: ${HOMEPAGE_VAR_SABNZBD_API_KEY}
-        - qBittorrent:
-            href: qbittorrent.${SECRET_DOMAIN}
-            description: Torrent Download Client
-            icon: https://upload.wikimedia.org/wikipedia/commons/6/66/New_qBittorrent_Logo.svg
-            siteMonitor: qbittorrent.media.svc.cluster.local
-            widget:
-              type: qbittorrent
-              url: qbittorrent.media.svc.cluster.local
-              enableLeechProgress: true # optional, defaults to false
-        - Autobrr:
-            href: autobrr.${SECRET_DOMAIN}
-            description: IRC Watcher
-            icon: https://static-00.iconduck.com/assets.00/autobrr-icon-2048x1872-2oskmtt1.png
-            siteMonitor: autobrr.media.svc.cluster.local
-        - Visual Studio:
-            href: code.${SECRET_DOMAIN}
-            description: Coding Server
-            icon: https://raw.githubusercontent.com/vscode-icons/vscode-icons/master/images/logo@3x.png
-            siteMonitor: code.${SECRET_DOMAIN}
+  services.yaml: ""
   settings.yaml: |
     background:
       image: https://i.ibb.co/Q7FSHG3v/photo-1622737133809-d95047b9e675.jpg # https://i.redd.it/7pgm8d9j1er71.png # https://images4.alphacoders.com/106/1068731.jpg
@@ -245,6 +118,34 @@ data:
     hideErrors: true
     hideVersion: true
     # headerStyle: boxed
+    # layout:
+    #   Home Automation:
+    #     style: column
+    #     icon: home-assistant
+    #   LLM/Ai:
+    #     style: column
+    #     icon: open-webui
+    #   Apps:
+    #     style: column
+    #     icon: immich
+    #   Development:
+    #     style: column
+    #     icon: code-server
+    #   Security:
+    #     style: column
+    #     icon: pocket-id
+    #   Social:
+    #     style: column
+    #     icon: mastodon
+    #   Media:
+    #     style: column
+    #     icon: jellyfin
+    #   Downloads:
+    #     style: column
+    #     icon: sonarr
+    #   Kubernetes:
+    #     style: column
+    #     icon: kubernetes
   widgets.yaml: |
     # - resources:
     #     cpu: true
