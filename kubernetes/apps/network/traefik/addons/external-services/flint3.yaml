@@ -39,12 +39,12 @@ metadata:
     gethomepage.dev/enabled: "true"
     gethomepage.dev/name: Flint3
     gethomepage.dev/group: Server
-    gethomepage.dev/icon: flint3.png
+    gethomepage.dev/icon: router.png
     gethomepage.dev/description: GL.iNet Router
     gethomepage.dev/href: https://router.${SECRET_DOMAIN}
     gethomepage.dev/siteMonitor: https://192.168.1.1
-    gethomepage.dev/ping: "true"
-    gethomepage.dev/statusStyle: dot
+    # gethomepage.dev/ping: "true"
+    # gethomepage.dev/statusStyle: dot
 spec:
   ingressClassName: traefik-internal
   rules:
