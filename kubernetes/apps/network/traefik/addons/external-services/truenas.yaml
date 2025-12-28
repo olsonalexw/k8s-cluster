@@ -43,6 +43,7 @@ metadata:
     gethomepage.dev/description: Storage Machine
     gethomepage.dev/href: https://truenas.${SECRET_DOMAIN}
     gethomepage.dev/siteMonitor: https://192.168.1.2
+    gethomepage.dev/pod-selector: ""
     # gethomepage.dev/ping: "true"
     # gethomepage.dev/statusStyle: dot
 spec:
