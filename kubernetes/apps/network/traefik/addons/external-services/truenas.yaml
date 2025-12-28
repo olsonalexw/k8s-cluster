@@ -36,6 +36,12 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
     traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: TrueNAS
+    gethomepage.dev/group: Server
+    gethomepage.dev/icon: truenas.png
+    gethomepage.dev/description: Storage Machine
+    gethomepage.dev/href: https://truenas.${SECRET_DOMAIN}
 spec:
   ingressClassName: traefik-internal
   rules:

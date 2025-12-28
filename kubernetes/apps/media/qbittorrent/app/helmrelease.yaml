@@ -106,6 +106,12 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: qbittorrent
+          gethomepage.dev/group: Media
+          gethomepage.dev/icon: qbittorrent.png
+          gethomepage.dev/description: BitTorrent Client
+          gethomepage.dev/href: https://qbittorrent.${SECRET_DOMAIN}
         hosts:
           - host: &host qbittorrent.${SECRET_DOMAIN}
             paths:

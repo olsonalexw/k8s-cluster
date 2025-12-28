@@ -69,6 +69,12 @@ spec:
           external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Jelyseerr
+          gethomepage.dev/group: Media
+          gethomepage.dev/icon: jellyseerr.png
+          gethomepage.dev/description: Media Request Agent
+          gethomepage.dev/href: https://jellyseerr.${SECRET_DOMAIN}
         hosts:
           - host: &host "jellyseerr.${SECRET_DOMAIN}"
             paths:

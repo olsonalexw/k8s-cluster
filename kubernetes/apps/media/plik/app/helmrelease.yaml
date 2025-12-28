@@ -52,6 +52,12 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Plik
+          gethomepage.dev/group: Media
+          gethomepage.dev/icon: plik.png
+          gethomepage.dev/description: Temp File Hosting
+          gethomepage.dev/href: https://plik.${SECRET_DOMAIN}
         hosts:
           - host: &host "plik.${SECRET_DOMAIN}"
             paths:

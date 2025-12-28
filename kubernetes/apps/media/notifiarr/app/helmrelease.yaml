@@ -82,6 +82,12 @@ spec:
         annotations:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
+          gethomepage.dev/enabled: "true"
+          gethomepage.dev/name: Notifiarr
+          gethomepage.dev/group: Media
+          gethomepage.dev/icon: notifiarr.png
+          gethomepage.dev/description: Notify Agent
+          gethomepage.dev/href: https://notifiarr.${SECRET_DOMAIN}
         hosts:
           - host: "notifiarr.${SECRET_DOMAIN}"
             paths:

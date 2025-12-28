@@ -7,6 +7,12 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
     traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Prometheus
+    gethomepage.dev/group: Observability
+    gethomepage.dev/icon: prometheus.png
+    gethomepage.dev/description: Metrics Monitor
+    gethomepage.dev/href: https://prometheus.${SECRET_DOMAIN}
 spec:
   ingressClassName: traefik-internal
   rules:
@@ -33,6 +39,12 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
     traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: grafana
+    gethomepage.dev/group: Observability
+    gethomepage.dev/icon: grafana.png
+    gethomepage.dev/description: Data Visualizer
+    gethomepage.dev/href: https://grafana.${SECRET_DOMAIN}
 spec:
   ingressClassName: traefik-internal
   rules:
@@ -59,6 +71,12 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
     traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Alertmanager
+    gethomepage.dev/group: Observability
+    gethomepage.dev/icon: alertmanager.png
+    gethomepage.dev/description: Metrics-based Alerts
+    gethomepage.dev/href: https://alertmanager.${SECRET_DOMAIN}
 spec:
   ingressClassName: traefik-internal
   rules:
