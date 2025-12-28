@@ -118,34 +118,10 @@ data:
     hideErrors: true
     hideVersion: true
     # headerStyle: boxed
-    # layout:
-    #   Home Automation:
-    #     style: column
-    #     icon: home-assistant
-    #   LLM/Ai:
-    #     style: column
-    #     icon: open-webui
-    #   Apps:
-    #     style: column
-    #     icon: immich
-    #   Development:
-    #     style: column
-    #     icon: code-server
-    #   Security:
-    #     style: column
-    #     icon: pocket-id
-    #   Social:
-    #     style: column
-    #     icon: mastodon
-    #   Media:
-    #     style: column
-    #     icon: jellyfin
-    #   Downloads:
-    #     style: column
-    #     icon: sonarr
-    #   Kubernetes:
-    #     style: column
-    #     icon: kubernetes
+    layout:
+      Media:
+        style: row
+        columns: 4
   widgets.yaml: |
     # - resources:
     #     cpu: true
