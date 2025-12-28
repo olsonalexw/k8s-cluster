@@ -70,7 +70,7 @@ spec:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
           gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Jelyseerr
+          gethomepage.dev/name: Jellyseerr
           gethomepage.dev/group: Media
           gethomepage.dev/icon: jellyseerr.png
           gethomepage.dev/description: Media Request Agent
