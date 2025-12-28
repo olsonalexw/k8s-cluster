@@ -44,7 +44,7 @@ metadata:
   namespace: network
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-    traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+    traefik.ingress.kubernetes.io/router.middlewares: "network-chain-external-services-no-auth-restrict-networks@kubernetescrd"
     traefik.ingress.kubernetes.io/service.serverstransport: "network-truenas-transport@kubernetescrd"
     gethomepage.dev/enabled: "true"
     gethomepage.dev/name: TrueNAS
