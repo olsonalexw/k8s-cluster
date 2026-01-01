@@ -16,6 +16,8 @@ spec:
         name: bjw-s
         namespace: flux-system
   dependsOn:
+    - name: nvidia-device-plugin
+      namespace: kube-system
     - name: csi-driver-nfs
       namespace: storage
   values:
@@ -32,12 +34,16 @@ spec:
               TZ: ${TIMEZONE}
               PUID: "1001"
               PGID: "1001"
+              NVIDIA_VISIBLE_DEVICES: all
+              VIDIA_DRIVER_CAPABILITIES: compute,video,utility
             resources:
               requests:
-                cpu: 49m
-                memory: 2049M
+                cpu: 250m
+                memory: 2048M
+                nvidia.com/gpu: 1
               limits:
-                memory: 4046M
+                memory: 4096M
+                nvidia.com/gpu: 1
     service:
       main:
         controller: main
@@ -73,17 +79,20 @@ spec:
       config:
         enabled: true
         type: persistentVolumeClaim
-        storageClass: nfs-csi          # Dynamic PVC in /kubernetes/appdata
+        storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 2Gi
       media:
         enabled: true
-        existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
+        existingClaim: nfs-media-pvc
       transcode:
         enabled: true
         type: emptyDir
 
     defaultPodOptions:
+      runtimeClassName: nvidia
+      nodeSelector:
+        nvidia.feature.node.kubernetes.io/gpu: "true"
       enableServiceLinks: false
       securityContext:
         runAsNonRoot: true
