@@ -34,7 +34,7 @@ spec:
               TZ: ${TIMEZONE}
               PUID: "1001"
               PGID: "1001"
-              # NVIDIA_VISIBLE_DEVICES: all
+              NVIDIA_VISIBLE_DEVICES: all
               # NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
             resources:
               requests:
