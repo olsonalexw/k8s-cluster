@@ -28,8 +28,8 @@ spec:
         containers:
           main:
             image:
-              # repository: plexinc/pms-docker
-              repository: linuxserver/plex
+              repository: plexinc/pms-docker
+              # repository: linuxserver/plex
               tag: latest
             env:
               TZ: ${TIMEZONE}
