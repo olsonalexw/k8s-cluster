@@ -91,7 +91,7 @@ spec:
         type: emptyDir
 
     defaultPodOptions:
-      runtimeClassName: nvidia
+      # runtimeClassName: nvidia
       nodeSelector:
         nvidia.feature.node.kubernetes.io/gpu: "true"
       enableServiceLinks: false
