@@ -28,7 +28,8 @@ spec:
         containers:
           main:
             image:
-              repository: plexinc/pms-docker
+              repository: ghcr.io/home-operations/plex
+              # repository: plexinc/pms-docker
               # repository: linuxserver/plex
               tag: latest
             env:
