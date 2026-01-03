@@ -30,7 +30,7 @@ spec:
             image:
               # repository: ghcr.io/home-operations/plex
               # repository: plexinc/pms-docker
-              repository: lscr.io/linuxserver/plex
+              repository: linuxserver/plex
               tag: latest
             env:
               TZ: ${TIMEZONE}
