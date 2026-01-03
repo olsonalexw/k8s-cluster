@@ -21,33 +21,41 @@ spec:
     - name: csi-driver-nfs
       namespace: storage
   values:
+    initContainers:
+      setup-nvidia-libs:
+        image: alpine:latest
+        command:
+          - /bin/sh
+          - -c
+          - |
+            # Link the driver files into our clean volume
+            ln -sf /usr/local/glibc/usr/lib/libnvidia-encode.so* /nvidia-libs/
+            ln -sf /usr/local/glibc/usr/lib/libnvcuvid.so* /nvidia-libs/
+            ln -sf /usr/local/glibc/usr/lib/libcuda.so* /nvidia-libs/
+        securityContext:
+          runAsUser: 0
+
     controllers:
       main:
         type: deployment
         strategy: Recreate
-        initContainers:
-          setup-nvidia-libs:
-            image: alpine:latest
-            command:
-              - /bin/sh
-              - -c
-              - |
-                mkdir -p /nvidia-libs
-                ln -sf /usr/local/glibc/usr/lib/libnvidia-encode.so* /nvidia-libs/
-                ln -sf /usr/local/glibc/usr/lib/libnvcuvid.so* /nvidia-libs/
-                ln -sf /usr/local/glibc/usr/lib/libcuda.so* /nvidia-libs/
         containers:
           main:
             image:
               repository: lscr.io/linuxserver/plex
               tag: latest
             env:
-              TZ: America/Detroit
+              TZ: ${TIMEZONE}
               PUID: "1001"
               PGID: "1001"
               NVIDIA_VISIBLE_DEVICES: all
               NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
               LD_LIBRARY_PATH: "/nvidia-libs"
+            resources:
+              requests:
+                nvidia.com/gpu: 1
+              limits:
+                nvidia.com/gpu: 1
         type: deployment
         strategy: Recreate
         containers:
@@ -115,22 +123,18 @@ spec:
       transcode:
         enabled: true
         type: emptyDir
-      nvidia-libs:
-        type: emptyDir
-        advancedMounts:
-          main:
-            setup-nvidia-libs:
-              - path: /nvidia-libs
-            main:
-              - path: /nvidia-libs
       talos-glibc:
+        enabled: true
         type: hostPath
         hostPath: /usr/local/glibc
-        advancedMounts:
-          main:
-            setup-nvidia-libs:
-              - path: /usr/local/glibc
-                readOnly: true
+        globalMounts:
+          - path: /usr/local/glibc
+            readOnly: true
+      nvidia-libs:
+        enabled: true
+        type: emptyDir
+        globalMounts:
+          - path: /nvidia-libs
 
     defaultPodOptions:
       runtimeClassName: nvidia
