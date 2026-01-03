@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: nvidia-device-plugin
-      version: 0.17.0
+      version: 0.18.1
       sourceRef:
         kind: HelmRepository
         name: nvidia-charts
@@ -45,4 +45,4 @@ spec:
               failRequestsGreaterThanOne: false
               resources:
                 - name: nvidia.com/gpu
-                  replicas: 6
+                  # replicas: 6
