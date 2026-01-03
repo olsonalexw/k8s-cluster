@@ -31,14 +31,14 @@ spec:
               # repository: ghcr.io/home-operations/plex
               # repository: plexinc/pms-docker
               repository: lscr.io/linuxserver/plex
-              tag: latest
+              tag: 1.40.5.8921-836b8086e
             env:
               TZ: ${TIMEZONE}
               PUID: "1001"
               PGID: "1001"
               NVIDIA_VISIBLE_DEVICES: all
               NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
-              LD_LIBRARY_PATH: "/usr/local/glibc/usr/lib"
+              # LD_LIBRARY_PATH: "/usr/local/glibc/usr/lib"
             resources:
               requests:
                 cpu: 49m
