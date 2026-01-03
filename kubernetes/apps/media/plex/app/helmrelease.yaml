@@ -31,7 +31,7 @@ spec:
               # repository: ghcr.io/home-operations/plex
               # repository: plexinc/pms-docker
               repository: lscr.io/linuxserver/plex
-              tag: 1.40.5.8921-836b8086e
+              tag: latest
             env:
               TZ: ${TIMEZONE}
               PUID: "1001"
