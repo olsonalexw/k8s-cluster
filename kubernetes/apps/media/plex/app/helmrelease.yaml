@@ -17,7 +17,7 @@ spec:
         namespace: flux-system
   dependsOn:
     - name: nvidia-device-plugin
-      namespace: kube-systemwik
+      namespace: kube-system
     - name: csi-driver-nfs
       namespace: storage
   values:
