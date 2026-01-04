@@ -25,6 +25,20 @@ spec:
       main:
         type: deployment
         strategy: Recreate
+        initContainers:
+          cuda-symlink:
+            image: busybox:1.36  # lightweight, reliable
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                set -e
+                ln -sf /usr/local/glibc/usr/lib/libcuda.so.1 /usr/lib/libcuda.so.1
+                ln -sf /usr/local/glibc/usr/lib/libcuda.so   /usr/lib/libcuda.so
+                ln -sf /usr/local/glibc/usr/lib/libcuda.so.570.195.03 /usr/lib/libcuda.so.570.195.03
+                # Optional: symlink other NVENC libs if needed later
+                # ln -sf /usr/local/glibc/usr/lib/libnvidia-encode.so* /usr/lib/
+                echo "Symlinks created:"
+                ls -l /usr/lib | grep cuda || echo "No symlinks visible?"
         containers:
           main:
             image:
