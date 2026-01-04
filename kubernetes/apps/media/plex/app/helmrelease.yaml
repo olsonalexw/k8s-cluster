@@ -41,17 +41,11 @@ spec:
                 ln -sf /usr/local/glibc/usr/lib/libcuda.so.1 /plex-libs/lib/libcuda.so.1
                 ln -sf /usr/local/glibc/usr/lib/libcuda.so /plex-libs/lib/libcuda.so
                 ln -sf /usr/local/glibc/usr/lib/libcuda.so.570.195.03 /plex-libs/lib/libcuda.so.570.195.03
-                for lib in /usr/local/glibc/usr/lib/libnvidia-encode.so* /usr/local/glibc/usr/lib/libnvcuvid.so* /usr/local/glibc/usr/lib/libnvidia-ml.so* /usr/local/glibc/usr/lib/libcudadebugger.so* ; do
-                  if [ -f "$$lib" ]; then
-                    base=$$(basename "$$lib")
-                    ln -sf "$$lib" /plex-libs/lib/"$$base"
-                  fi
-                done
                 echo "Symlinks created in shared volume:"
-                ls -l /plex-libs/lib | grep -E 'cuda|nvidia|cuvid|encode|ml|debugger' || echo "No matching symlinks"
+                ls -l /plex-libs/lib
             volumeMounts:
               - mountPath: /plex-libs
-                name: plex-libs  # ← Shares with main
+                name: plex-libs
         containers:
           main:
             image:
