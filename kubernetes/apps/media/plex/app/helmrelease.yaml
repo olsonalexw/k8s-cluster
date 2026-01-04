@@ -42,8 +42,9 @@ spec:
                 ln -sf /usr/local/glibc/usr/lib/libcuda.so /plex-libs/lib/libcuda.so
                 ln -sf /usr/local/glibc/usr/lib/libcuda.so.570.195.03 /plex-libs/lib/libcuda.so.570.195.03
                 for lib in /usr/local/glibc/usr/lib/libnvidia-encode.so* /usr/local/glibc/usr/lib/libnvcuvid.so* /usr/local/glibc/usr/lib/libnvidia-ml.so* /usr/local/glibc/usr/lib/libcudadebugger.so* ; do
-                  if [ -f "$lib" ]; then
-                    ln -sf "$lib" /plex-libs/lib/$(basename "$lib")
+                  if [ -f "$$lib" ]; then
+                    base=$$(basename "$$lib")
+                    ln -sf "$$lib" /plex-libs/lib/"$$base"
                   fi
                 done
                 echo "Symlinks created in shared volume:"
