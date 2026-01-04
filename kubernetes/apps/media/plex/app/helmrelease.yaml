@@ -76,9 +76,6 @@ spec:
               limits:
                 memory: 4046M
                 nvidia.com/gpu: 1
-        volumes:
-          - name: plex-libs
-            emptyDir: {}
 
     service:
       main:
@@ -115,7 +112,8 @@ spec:
       plex-libs:
         enabled: true
         type: emptyDir
-        medium: ""
+        globalMounts:
+          - path: /plex-libs
       config:
         enabled: true
         type: persistentVolumeClaim
