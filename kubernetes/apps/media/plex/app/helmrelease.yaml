@@ -37,11 +37,12 @@ spec:
             args:
               - |
                 set -e
-                ln -sf /usr/local/glibc/usr/lib/libcuda.so.1 /usr/lib/libcuda.so.1
-                ln -sf /usr/local/glibc/usr/lib/libcuda.so   /usr/lib/libcuda.so
-                ln -sf /usr/local/glibc/usr/lib/libcuda.so.570.195.03 /usr/lib/libcuda.so.570.195.03
-                echo "Symlinks created:"
-                ls -l /usr/lib | grep cuda || echo "No symlinks visible?"
+                mkdir -p /usr/lib/plexmediaserver/lib
+                ln -sf /usr/local/glibc/usr/lib/libcuda.so.1 /usr/lib/plexmediaserver/lib/libcuda.so.1
+                ln -sf /usr/local/glibc/usr/lib/libcuda.so   /usr/lib/plexmediaserver/lib/libcuda.so
+                ln -sf /usr/local/glibc/usr/lib/libcuda.so.570.195.03 /usr/lib/plexmediaserver/lib/libcuda.so.570.195.03
+                echo "Symlinks created in Plex lib dir:"
+                ls -l /usr/lib/plexmediaserver/lib | grep cuda || echo "No symlinks visible?"
         containers:
           main:
             image:
