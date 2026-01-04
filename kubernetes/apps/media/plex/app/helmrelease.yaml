@@ -43,6 +43,9 @@ spec:
                 ln -sf /usr/local/glibc/usr/lib/libcuda.so.570.195.03 /usr/lib/plexmediaserver/lib/libcuda.so.570.195.03
                 echo "Symlinks created in Plex lib dir:"
                 ls -l /usr/lib/plexmediaserver/lib | grep cuda || echo "No symlinks visible?"
+            volumeMounts:
+              - mountPath: /plex-libs
+                name: plex-libs
         containers:
           main:
             image:
@@ -56,7 +59,10 @@ spec:
               PGID: "1001"
               NVIDIA_VISIBLE_DEVICES: all
               NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
-              # LD_LIBRARY_PATH: "/usr/local/glibc/usr/lib"
+              LD_LIBRARY_PATH: "/plex-libs/lib:/usr/lib/plexmediaserver/lib:/usr/local/glibc/usr/lib:/usr/lib:${LD_LIBRARY_PATH}"
+            volumeMounts:
+              - mountPath: /plex-libs
+                name: plex-libs
             resources:
               requests:
                 cpu: 49m
@@ -98,6 +104,10 @@ spec:
             secretName: "${SECRET_DOMAIN/./-}-production-tls"
 
     persistence:
+      plex-libs:
+        enabled: true
+        type: emptyDir
+        medium: ""
       config:
         enabled: true
         type: persistentVolumeClaim
