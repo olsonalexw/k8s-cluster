@@ -37,15 +37,20 @@ spec:
             args:
               - |
                 set -e
-                mkdir -p /usr/lib/plexmediaserver/lib
-                ln -sf /usr/local/glibc/usr/lib/libcuda.so.1 /usr/lib/plexmediaserver/lib/libcuda.so.1
-                ln -sf /usr/local/glibc/usr/lib/libcuda.so   /usr/lib/plexmediaserver/lib/libcuda.so
-                ln -sf /usr/local/glibc/usr/lib/libcuda.so.570.195.03 /usr/lib/plexmediaserver/lib/libcuda.so.570.195.03
-                echo "Symlinks created in Plex lib dir:"
-                ls -l /usr/lib/plexmediaserver/lib | grep cuda || echo "No symlinks visible?"
+                mkdir -p /plex-libs/lib
+                ln -sf /usr/local/glibc/usr/lib/libcuda.so.1 /plex-libs/lib/libcuda.so.1
+                ln -sf /usr/local/glibc/usr/lib/libcuda.so /plex-libs/lib/libcuda.so
+                ln -sf /usr/local/glibc/usr/lib/libcuda.so.570.195.03 /plex-libs/lib/libcuda.so.570.195.03
+                for lib in /usr/local/glibc/usr/lib/libnvidia-encode.so* /usr/local/glibc/usr/lib/libnvcuvid.so* /usr/local/glibc/usr/lib/libnvidia-ml.so* /usr/local/glibc/usr/lib/libcudadebugger.so* ; do
+                  if [ -f "$lib" ]; then
+                    ln -sf "$lib" /plex-libs/lib/$(basename "$lib")
+                  fi
+                done
+                echo "Symlinks created in shared volume:"
+                ls -l /plex-libs/lib | grep -E 'cuda|nvidia|cuvid|encode|ml|debugger' || echo "No matching symlinks"
             volumeMounts:
               - mountPath: /plex-libs
-                name: plex-libs
+                name: plex-libs  # ← Shares with main
         containers:
           main:
             image:
