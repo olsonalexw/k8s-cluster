@@ -35,7 +35,13 @@ spec:
               - /bin/sh
               - -c
             args:
-              - "set -e && mkdir -p /plex-libs/lib && ln -sf /usr/local/glibc/usr/lib/libcuda.so.1 /plex-libs/lib/libcuda.so.1 && ln -sf /usr/local/glibc/usr/lib/libcuda.so /plex-libs/lib/libcuda.so && ln -sf /usr/local/glibc/usr/lib/libcuda.so.570.195.03 /plex-libs/lib/libcuda.so.570.195.03 && echo 'Core symlinks created in shared volume:' && ls -l /plex-libs/lib"
+              - set -e
+              - mkdir -p /plex-libs/lib
+              - ln -sf /usr/local/glibc/usr/lib/libcuda.so.1 /plex-libs/lib/libcuda.so.1
+              - ln -sf /usr/local/glibc/usr/lib/libcuda.so /plex-libs/lib/libcuda.so
+              - ln -sf /usr/local/glibc/usr/lib/libcuda.so.570.195.03 /plex-libs/lib/libcuda.so.570.195.03
+              - echo "Core symlinks created in shared volume:"
+              - ls -l /plex-libs/lib
             volumeMounts:
               - mountPath: /plex-libs
                 name: plex-libs
