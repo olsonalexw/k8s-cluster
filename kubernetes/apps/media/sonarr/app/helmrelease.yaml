@@ -26,20 +26,12 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/onedr0p/sonarr
+              repository: ghcr.io/home-operations/sonarr
               pullPolicy: IfNotPresent
-              tag: 4.0.12.2823
+              tag: 4.0.16@sha256:3597fd572f4599c67abbeb8afd3cb85bce8a9e389f0779b7ea1273781544d15c
             env:
-              - name: TZ
-                value: "America/Detroit"
-              - name: SONARR__INSTANCE_NAME
-                value: "Sonarr"
-              - name: SONARR__PORT
-                value: "8989"
-              - name: SONARR__APPLICATION_URL
-                value: "https://sonarr.${SECRET_DOMAIN}"
-              - name: SONARR__LOG_LEVEL
-                value: "info"
+              TZ: "America/Detroit"
+              SONARR__APPLICATION_URL: "https://sonarr.${SECRET_DOMAIN}"
             resources:
               requests:
                 cpu: 15m
@@ -79,12 +71,12 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: nfs-csi     # Dynamic PVC in /kubernetes/appdata
+        storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 2Gi
       media:
         enabled: true
-        existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
+        existingClaim: nfs-media-pvc
       downloads:
         enabled: true
         existingClaim: nfs-downloads-pvc
