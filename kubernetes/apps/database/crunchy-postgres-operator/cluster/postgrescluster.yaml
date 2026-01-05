@@ -85,9 +85,9 @@ spec:
         - paperless
       password:
         type: AlphaNumeric
-    - name: jellyseerr
+    - name: seerr
       databases:
-        - jellyseerr
+        - seerr
       password:
         type: AlphaNumeric
 
