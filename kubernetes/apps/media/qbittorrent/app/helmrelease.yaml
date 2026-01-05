@@ -50,9 +50,9 @@ spec:
             env:
               TZ: ${TIMEZONE}
               LOCAL_NETWORK: "10.69.0.0/16,10.96.0.0/16"
-              LOCAL_PORTS: 80,9090
+              LOCAL_PORTS: 8080,9090
               PORT_API_TYPE: "qbittorrent"
-              PORT_API_URL: "http://localhost:80"
+              PORT_API_URL: "http://localhost:8080"
               PF_SIGNATURE_REFRESH_DAYS: 1
               METRICS: "true"
             envFrom:
@@ -81,7 +81,7 @@ spec:
             env:
               TZ: ${TIMEZONE}
               UMASK: "022"
-              WEBUI_PORT: &port 80
+              # WEBUI_PORT: &port 8080 # Does nothing with image: ghcr.io/home-operations/qbittorrent
             resources:
               requests:
                 cpu: 22m
