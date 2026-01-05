@@ -54,7 +54,7 @@ spec:
               # repository: ghcr.io/home-operations/plex
               # repository: plexinc/pms-docker
               repository: linuxserver/plex
-              tag: latest
+              tag: 1.42.2@sha256:1720efa8e919a724ff3003cce7c1c0ae91a54e097ca3c8f6713a780c6fd73432
             env:
               TZ: ${TIMEZONE}
               PUID: "1001"
@@ -80,10 +80,11 @@ spec:
     ingress:
       main:
         enabled: true
-        className: traefik-internal
+        className: traefik-external
         annotations:
+          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
+          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
           gethomepage.dev/enabled: "true"
           gethomepage.dev/name: Plex
           gethomepage.dev/group: Media
