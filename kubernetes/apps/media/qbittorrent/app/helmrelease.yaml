@@ -58,6 +58,13 @@ spec:
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
+            resources:
+              requests:
+                cpu: 10m
+                memory: 53M
+              limits:
+                cpu: 15m
+                memory: 91M
             securityContext:
               allowPrivilegeEscalation: false
               capabilities:
