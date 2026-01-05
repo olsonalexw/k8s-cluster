@@ -75,6 +75,12 @@ spec:
               TZ: ${TIMEZONE}
               UMASK: "022"
               WEBUI_PORT: &port 80
+            resources:
+              requests:
+                cpu: 22m
+                memory: 1643M
+              limits:
+                memory: 3864M
             securityContext:
               runAsUser: 1001
               runAsGroup: 1001
