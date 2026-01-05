@@ -16,9 +16,6 @@ spec:
         kind: HelmRepository
         name: bjw-s
         namespace: flux-system
-  dependsOn:
-    - name: csi-driver-nfs
-      namespace: storage
   values:
     controllers:
       main:
@@ -27,20 +24,12 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/onedr0p/radarr
+              repository: ghcr.io/home-operations/radarr
               pullPolicy: IfNotPresent
-              tag: 5.17.2.9580
+              tag: 6.1.0@sha256:ba33a817917792a589f1223e2da9d336692f9eb626b15ff8c7f06afcab4356bd
             env:
-              - name: TZ
-                value: "America/Detroit"
-              - name: RADARR__INSTANCE_NAME
-                value: "Radarr"
-              - name: RADARR__PORT
-                value: "7878"
-              - name: RADARR__APPLICATION_URL
-                value: "https://radarr.${SECRET_DOMAIN}"
-              - name: RADARR__LOG_LEVEL
-                value: "info"
+              TZ: "America/Detroit"
+              RADARR__APPLICATION_URL: "https://radarr.${SECRET_DOMAIN}"
             resources:
               requests:
                 cpu: 15m
@@ -80,12 +69,12 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: nfs-csi     # Dynamic PVC in /kubernetes/appdata
+        storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 2Gi
       media:
         enabled: true
-        existingClaim: nfs-media-pvc   # Uses static PVC for /kubernetes/media
+        existingClaim: nfs-media-pvc
       downloads:
         enabled: true
         existingClaim: nfs-downloads-pvc
