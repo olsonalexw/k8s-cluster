@@ -26,20 +26,11 @@ spec:
         containers:
           main:
             image:
-              repository: ghcr.io/onedr0p/prowlarr
+              repository: ghcr.io/home-operations/prowlarr
+              tag: sha256:4394dff2311238bf5c31e006872122ed4e5f6bf042d33528d80acd44a09c57f7
               pullPolicy: IfNotPresent
-              tag: 1.30.2.4939
             env:
-              - name: TZ
-                value: "America/Detroit"
-              - name: PROWLARR__INSTANCE_NAME
-                value: "Prowlarr"
-              - name: PROWLARR__PORT
-                value: "8989"
-              - name: PROWLARR__APPLICATION_URL
-                value: "https://prowlarr.${SECRET_DOMAIN}"
-              - name: PROWLARR__LOG_LEVEL
-                value: "info"
+              TZ: ${TIMEZONE}
             resources:
               requests:
                 cpu: 15m
