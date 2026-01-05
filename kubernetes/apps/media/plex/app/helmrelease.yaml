@@ -18,8 +18,6 @@ spec:
   dependsOn:
     - name: nvidia-device-plugin
       namespace: kube-system
-    - name: csi-driver-nfs
-      namespace: storage
   values:
     controllers:
       main:
