@@ -31,13 +31,9 @@ spec:
           main:
             image:
               repository: ghcr.io/notifiarr/notifiarr
-              tag: v0.8.3@sha256:1798fc4236e75c5601b747e367f66a3dd25b412fb834552d2517aced36792be1
+              tag: v0.9.1@sha256:10c9d20bc359f61d610461c11fb3b719cee75b7d4a0d8a3e5b3d00b9a31c48dd
             env:
               TZ: ${TIMEZONE}
-              # DN_UPSTREAMS_0: "[10.96.0.0/16,10.69.0.0/16]"
-              # TMPDIR: /tmp
-              # DN_RADARR_0_URL: http://radarr.media.svc.cluster.local
-              # DN_SONARR_0_URL: http://sonarr.media.svc.cluster.local
             probes:
               liveness:
                 enabled: true
@@ -102,7 +98,7 @@ spec:
     persistence:
       config:
         enabled: true
-        storageClass: nfs-csi     # Dynamic PVC in /kubernetes/appdata
+        storageClass: nfs-csi
         accessMode: ReadWriteMany
         size: 2Gi
       tmp:
