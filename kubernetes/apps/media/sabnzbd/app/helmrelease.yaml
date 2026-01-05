@@ -59,6 +59,7 @@ spec:
               PUID: "1001"
               PGID: "1001"
               UMASK: "022"
+              SABNZBD__HOST_WHITELIST_ENTRIES: sabnzbd.media.svc.cluster.local, sabnzbd.${SECRET_DOMAIN}
             securityContext:
               runAsUser: 1001
               runAsGroup: 1001
