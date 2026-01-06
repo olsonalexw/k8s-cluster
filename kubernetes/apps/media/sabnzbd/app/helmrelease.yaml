@@ -46,7 +46,6 @@ spec:
                 cpu: 11m
                 memory: 50M
               limits:
-                cpu: 11m
                 memory: 50M
             securityContext:
               runAsNonRoot: false
@@ -72,7 +71,6 @@ spec:
                 cpu: 10m
                 memory: 1641M
               limits:
-                cpu: 23m
                 memory: 3561M
             securityContext:
               runAsUser: 1001
