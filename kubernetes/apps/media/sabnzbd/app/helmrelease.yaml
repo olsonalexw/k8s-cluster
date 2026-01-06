@@ -41,6 +41,13 @@ spec:
             envFrom:
               - secretRef:
                   name: sabnzbd-secret
+            resources:
+              requests:
+                cpu: 11m
+                memory: 50M
+              limits:
+                cpu: 11m
+                memory: 50M
             securityContext:
               runAsNonRoot: false
               allowPrivilegeEscalation: false
@@ -60,6 +67,13 @@ spec:
               PGID: "1001"
               UMASK: "022"
               SABNZBD__HOST_WHITELIST_ENTRIES: sabnzbd.media.svc.cluster.local, sabnzbd.${SECRET_DOMAIN}
+            resources:
+              requests:
+                cpu: 10m
+                memory: 1641M
+              limits:
+                cpu: 23m
+                memory: 3561M
             securityContext:
               runAsUser: 1001
               runAsGroup: 1001
