@@ -8,6 +8,7 @@ spec:
     spec:
       chart: kube-prometheus-stack
       version: 80.4.1
+      type: oci
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
