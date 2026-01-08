@@ -66,10 +66,6 @@ spec:
       enabled: true
       adminUser: ${GRAFANA_USER}
       adminPassword: "${GRAFANA_PASS}"
-      persistence:
-        enabled: true
-        storageClassName: nfs-csi
-        size: 5Gi
       sidecar:
         dashboards:
           enabled: true
@@ -79,6 +75,17 @@ spec:
       grafana.ini:
         server:
           root_url: https://grafana.${SECRET_DOMAIN}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      persistence:
+        enabled: true
+        storageClassName: nfs-csi
+        size: 5Gi
+      initChownData:
+        enabled: false
     additionalPrometheusRulesMap:
       dockerhub-rules:
         groups:
