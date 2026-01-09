@@ -31,6 +31,11 @@ spec:
       replicated:
         mayastor:
           enabled: false
+    preUpgradeHook:
+      image:
+        registry: registry.k8s.io
+        repository: kubectl
+        tag: v1.35.0
     openebs-crds:
       csi:
         volumeSnapshots:
