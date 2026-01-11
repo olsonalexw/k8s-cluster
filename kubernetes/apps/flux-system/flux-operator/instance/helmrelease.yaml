@@ -28,5 +28,3 @@ spec:
   valuesFrom:
     - kind: ConfigMap
       name: flux-instance-helm-values
-  distribution:
-    version: "2.6.4"
