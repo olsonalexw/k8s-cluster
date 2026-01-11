@@ -1,5 +1,7 @@
 ---
 instance:
+  distribution:
+    version: "2.6.4"
   cluster:
     networkPolicy: false
   components:
