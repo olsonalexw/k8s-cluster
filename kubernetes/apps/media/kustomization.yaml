@@ -8,7 +8,7 @@ resources:
   - ./downloads-pv.yaml
   - ./media-pv.yaml
   - ./jellyfin/ks.yaml
-  - ./jellyseerr/ks.yaml
+  # - ./jellyseerr/ks.yaml  # removed for Plex for the time being
   - ./notifiarr/ks.yaml
   - ./plex/ks.yaml    # many issues with libraries due to talos (/usr/lib/x86_64-linux-gnu/libresolv.so.2 and
   #                       nvidia ones like /usr/local/glibc/usr/lib/libnvidia-encode.so*)
