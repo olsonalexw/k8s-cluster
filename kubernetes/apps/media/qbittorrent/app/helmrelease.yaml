@@ -25,11 +25,6 @@ spec:
       retries: 3
   uninstall:
     keepHistory: false
-  dependsOn:
-    - name: csi-driver-nfs
-      namespace: storage
-    - name: generic-device-plugin
-      namespace: kube-system
   values:
     controllers:
       qbittorrent:
@@ -44,13 +39,13 @@ spec:
         containers:
           pia-tun:
             image:
-              repository: olsonalexw/k8s-wireguard-pia
-              tag: develop@sha256:4c26dbbab4aaae63ce54990d26c0d7ee17824710d0a0982d772d8db012d7a457
+              repository: ghcr.io/x0lie/pia-tun
+              tag: develop@sha256:c1aa4e673948bd6dcaa85c9d41afc81b01f9f8adad2f41e9e8321d34b4bab811
               pullPolicy: Always
             env:
               TZ: ${TIMEZONE}
               LOCAL_NETWORK: "10.69.0.0/16,10.96.0.0/16"
-              LOCAL_PORTS: 8080,9090
+              LOCAL_PORTS: 8080
               PORT_API_TYPE: "qbittorrent"
               PORT_API_URL: "http://localhost:8080"
               PF_SIGNATURE_REFRESH_DAYS: 1
@@ -63,7 +58,6 @@ spec:
                 cpu: 10m
                 memory: 53M
               limits:
-                cpu: 15m
                 memory: 91M
             securityContext:
               allowPrivilegeEscalation: false
@@ -80,14 +74,11 @@ spec:
               tag: 5.1.4
             env:
               TZ: ${TIMEZONE}
-              UMASK: "022"
-              # WEBUI_PORT: &port 8080 # Does nothing with image: ghcr.io/home-operations/qbittorrent
             resources:
               requests:
                 cpu: 22m
                 memory: 2280M
               limits:
-                cpu: 231m
                 memory: 6413M
             securityContext:
               runAsUser: 1001
