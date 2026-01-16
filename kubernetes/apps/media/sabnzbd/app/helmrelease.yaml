@@ -30,13 +30,13 @@ spec:
         containers:
           pia-tun:
             image:
-              repository: olsonalexw/k8s-wireguard-pia
-              tag: develop@sha256:4c26dbbab4aaae63ce54990d26c0d7ee17824710d0a0982d772d8db012d7a457
+              repository: ghcr.io/x0lie/pia-tun
+              tag: develop
               pullPolicy: Always
             env:
               TZ: ${TIMEZONE}
-              LOCAL_NETWORK: "10.69.0.0/16,10.96.0.0/16"
-              LOCAL_PORTS: 8080
+              LOCAL_NETWORKS: "10.69.0.0/16,10.96.0.0/16"
+              LOCAL_PORTS: 8080,1080,9090
               PROXY_ENABLED: "true"
             envFrom:
               - secretRef:
@@ -84,6 +84,8 @@ spec:
             port: 8080
           socks5:
             port: 1080
+          metrics:
+            port: 9090
     ingress:
       sabnzbd:
         enabled: true
