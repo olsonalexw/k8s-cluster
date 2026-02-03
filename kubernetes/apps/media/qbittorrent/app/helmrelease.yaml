@@ -29,7 +29,7 @@ spec:
           pia-tun:
             image:
               repository: ghcr.io/x0lie/pia-tun
-              tag: develop
+              tag: develop@sha256:26dc8aa3f0fa5e687798d197c2f38c0a15fa52c3d5a87d442d9c8defd5ea1207
               pullPolicy: Always
             env:
               TZ: ${TIMEZONE}
