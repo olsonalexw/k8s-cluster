@@ -53,16 +53,6 @@ spec:
                   - NET_ADMIN
                 drop:
                   - ALL
-            readinessProbe:
-              httpGet:
-                path: /health
-                port: 9090
-                scheme: HTTP
-              initialDelaySeconds: 20
-              periodSeconds: 30
-              timeoutSeconds: 5
-              successThreshold: 1
-              failureThreshold: 3
 
           qbittorrent:
             dependsOn: [pia-tun]
