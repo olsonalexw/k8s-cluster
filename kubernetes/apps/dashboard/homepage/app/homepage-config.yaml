@@ -11,18 +11,21 @@ data:
   settings: ""
   bookmarks.yaml: |
     - AI:
-        - DeepSeek:
-            - icon: https://custom.typingmind.com/assets/models/deepseek.png
-              href: https://chat.deepseek.com/
-        - Perplexity:
-            - icon: https://img.icons8.com/?size=512&id=kzJWN5jCDzpq&format=png
-              href: https://www.perplexity.ai/
-        - ChatGPT:
-            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/800px-ChatGPT_logo.svg.png
-              href: https://chat.openai.com/
+        - Claude:
+            - icon: https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/claude-ai-icon.png
+              href: https://claude.ai
         - Grok:
             - icon: https://registry.npmmirror.com/@lobehub/icons-static-png/1.13.0/files/dark/grok.png
               href: https://x.com/i/grok
+        - ChatGPT:
+            - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/800px-ChatGPT_logo.svg.png
+              href: https://chat.openai.com/
+        - Perplexity:
+            - icon: https://img.icons8.com/?size=512&id=kzJWN5jCDzpq&format=png
+              href: https://www.perplexity.ai/
+        - DeepSeek:
+            - icon: https://custom.typingmind.com/assets/models/deepseek.png
+              href: https://chat.deepseek.com/
         - v0:
             - icon: https://registry.npmmirror.com/@lobehub/icons-static-png/1.13.0/files/dark/v0.png
               href: https://v0.dev/
