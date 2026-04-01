@@ -33,6 +33,8 @@ spec:
               pullPolicy: Always
             env:
               TZ: ${TIMEZONE}
+              LOG_LEVEL: "debug"
+              LOCAL_NETWORKS: "10.69.0.0/16"
               PS_CLIENT: "qbittorrent"
             envFrom:
               - secretRef:
