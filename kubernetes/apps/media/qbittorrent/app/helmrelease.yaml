@@ -29,14 +29,11 @@ spec:
           pia-tun:
             image:
               repository: ghcr.io/x0lie/pia-tun
-              tag: develop@sha256:26dc8aa3f0fa5e687798d197c2f38c0a15fa52c3d5a87d442d9c8defd5ea1207
+              tag: develop@sha256:2bf15a6963d8cc702f1d9645709d8a65cfb313ce93d0dba5cfdde128d3eb588c
               pullPolicy: Always
             env:
               TZ: ${TIMEZONE}
-              LOCAL_NETWORKS: "10.69.0.0/16,10.96.0.0/16"
-              LOCAL_PORTS: 8080,9090
               PS_CLIENT: "qbittorrent"
-              PF_SIGNATURE_REFRESH_DAYS: 1
             envFrom:
               - secretRef:
                   name: qbittorrent-secret
