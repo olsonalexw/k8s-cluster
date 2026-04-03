@@ -31,12 +31,10 @@ spec:
           pia-tun:
             image:
               repository: ghcr.io/x0lie/pia-tun
-              tag: develop
-              pullPolicy: Always
+              tag: develop@sha256:f8765efc4219081782b64c4af3ed650c88f4930849356fd8a6060e9347d01345
             env:
               TZ: ${TIMEZONE}
-              LOCAL_NETWORKS: "10.69.0.0/16,10.96.0.0/16"
-              LOCAL_PORTS: 8080,1080,9090
+              LOCAL_NETWORKS: "10.96.0.0/16"
               PROXY_ENABLED: "true"
             envFrom:
               - secretRef:
