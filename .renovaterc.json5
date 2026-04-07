@@ -20,6 +20,7 @@
     ":timezone(America/New_York)",
   ],
   dependencyDashboardTitle: "Renovate Dashboard Overview",
+  commitMessageAction: "update",
   suppressNotifications: [
     "prEditedNotification",
     "prIgnoreNotification",
