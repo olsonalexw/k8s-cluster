@@ -37,7 +37,7 @@ spec:
     image:
       repository: nextcloud
       flavor: fpm-alpine
-      tag: 32-fpm-alpine
+      tag: 33-fpm-alpine
       pullPolicy: IfNotPresent
     nginx:
       enabled: true
