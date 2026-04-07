@@ -25,7 +25,7 @@
     "prIgnoreNotification",
   ],
   schedule: [
-    'friday before 6am',
+    'before 6am on monday',
   ],
   ignorePaths: [
     '**/*.sops.*',
