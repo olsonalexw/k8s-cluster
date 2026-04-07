@@ -2,24 +2,13 @@
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   packageRules: [
     {
-      matchUpdateTypes: ["major"],
-      semanticCommitType: "feat",
-      commitMessagePrefix: "{{semanticCommitType}}({{semanticCommitScope}})!:",
-      commitMessageExtra: "( {{currentVersion}} ➔ {{newVersion}} )",
-    },
-    {
-      matchUpdateTypes: ["minor"],
-      semanticCommitType: "feat",
-      commitMessageExtra: "( {{currentVersion}} ➔ {{newVersion}} )",
-    },
-    {
-      matchUpdateTypes: ["patch"],
-      semanticCommitType: "fix",
+      matchUpdateTypes: ["major", "minor", "patch"],
+      commitMessagePrefix: "chore({{semanticCommitScope}}):",
       commitMessageExtra: "( {{currentVersion}} ➔ {{newVersion}} )",
     },
     {
       matchUpdateTypes: ["digest"],
-      semanticCommitType: "chore",
+      commitMessagePrefix: "chore({{semanticCommitScope}}):",
       commitMessageExtra: "( {{currentDigestShort}} ➔ {{newDigestShort}} )",
     },
     {
@@ -34,7 +23,6 @@
     },
     {
       matchManagers: ["github-actions"],
-      semanticCommitType: "ci",
       semanticCommitScope: "github-action",
       commitMessageTopic: "action {{depName}}",
     },
