@@ -24,6 +24,12 @@
     "prEditedNotification",
     "prIgnoreNotification",
   ],
+  schedule: [
+    'friday before 6am',
+  ],
+  ignorePaths: [
+    '**/*.sops.*',
+  ],
   flux: {
     managerFilePatterns: ["/\\.yaml$/"],
   },
