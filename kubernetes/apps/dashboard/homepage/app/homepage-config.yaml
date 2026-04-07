@@ -70,7 +70,7 @@ data:
               href: https://github.com/
         - Mend:
             - icon: https://avatars.githubusercontent.com/u/105765982?s=280&v=4
-            - href: https://developer.mend.io/github/x0lie
+              href: https://developer.mend.io/github/x0lie
         - Google Fi:
             - icon: https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Google_Fi_Logo.svg/1200px-Google_Fi_Logo.svg.png
               href: https://fi.google.com/account
