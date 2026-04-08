@@ -32,9 +32,10 @@ spec:
           app:
             image:
               repository: ghcr.io/gethomepage/homepage
-              tag: v0.10.9@sha256:b6d732817572f9af99ec168b10641b8f7820f30cfa5a5cc5c68f1e291804bec8
+              tag: v1.12.3@sha256:cc84f2f5eb3c7734353701ccbaa24ed02dacb0d119114e50e4251e2005f3990a
             env:
               TZ: ${TIMEZONE}
+              HOMEPAGE_ALLOWED_HOSTS: &host "${SECRET_DOMAIN}"
             envFrom:
               - secretRef:
                   name: homepage-external-secret
@@ -59,7 +60,7 @@ spec:
           traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
           traefik.ingress.kubernetes.io/router.middlewares: "network-chain-basic-auth@kubernetescrd"
         hosts:
-          - host: &host "${SECRET_DOMAIN}"
+          - host: *host
             paths:
               - path: /
                 service:
