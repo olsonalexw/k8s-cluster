@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/traefik/traefik-helm-chart/refs/tags/v39.0.7/traefik/values.schema.json
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
@@ -8,7 +9,7 @@ spec:
   chart:
     spec:
       chart: traefik
-      version: 34.5.0
+      version: 39.0.7
       sourceRef:
         kind: HelmRepository
         name: traefik-charts
@@ -73,28 +74,30 @@ spec:
         services: [{"kind":"TraefikService","name":"api@internal"}]
         tls:
           secretName: "${SECRET_DOMAIN/./-}-production-tls"
-
-
-    globalArguments:
-      - "--serversTransport.insecureSkipVerify=true"
-      - "--global.sendanonymoususage=false"
     additionalArguments:
-      - "--entrypoints.web.transport.respondingTimeouts.readTimeout=0"
-      - "--entrypoints.websecure.transport.respondingTimeouts.readTimeout=0"
+      - "--serversTransport.insecureSkipVerify=true"
     ports:
       traefik:
         expose:
           default: false
       web:
-        redirection:
-          entryPoint:
-            to: websecure
-            scheme: https
-            permanent: true
+        http:
+          redirections:
+            entryPoint:
+              to: websecure
+              scheme: https
+              permanent: true
+        transport:
+          respondingTimeouts:
+            readTimeout: "0"
       websecure:
-        tls:
-          enabled: true
-          options: default
+        http:
+          tls:
+            enabled: true
+            options: default
+        transport:
+          respondingTimeouts:
+            readTimeout: "0"
         forwardedHeaders:
           trustedIPs:
             - 10.0.0.0/8
@@ -115,8 +118,6 @@ spec:
         entryPoint: metrics
         service:
           enabled: true
-    pilot:
-      enabled: false
     providers:
       kubernetesCRD:
         enabled: true
