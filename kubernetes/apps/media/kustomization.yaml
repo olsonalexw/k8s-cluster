@@ -10,12 +10,10 @@ resources:
   # - ./jellyfin/ks.yaml    # removed for Plex for the time being
   - ./seerr/ks.yaml
   - ./notifiarr/ks.yaml
-  - ./plex/ks.yaml    # many issues with libraries due to talos (/usr/lib/x86_64-linux-gnu/libresolv.so.2 and
-  #                       nvidia ones like /usr/local/glibc/usr/lib/libnvidia-encode.so*)
+  - ./plex/ks.yaml
   - ./prowlarr/ks.yaml
   - ./qbittorrent/ks.yaml
   - ./radarr/ks.yaml
   - ./sabnzbd/ks.yaml
   - ./sonarr/ks.yaml
-  - ./gluetun-service.yaml
   - ./plik/ks.yaml
