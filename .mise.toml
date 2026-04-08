@@ -1,7 +1,0 @@
-[env]
-KUBECONFIG = "{{config_root}}/kubeconfig"
-TALOSCONFIG = "{{config_root}}/talosconfig"
-
-[tools]
-"uv" = "latest"
-"pipx:flux-local" = "latest"
