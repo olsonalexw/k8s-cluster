@@ -30,8 +30,8 @@ spec:
         containers:
           seerr:
             image:
-              repository: ghcr.io/fallenbagel/jellyseerr
-              tag: latest
+              repository: ghcr.io/seerr-team/seerr
+              tag: v3.1.0
             env:
               TZ: ${TIMEZONE}
               LOG_LEVEL: "info"
