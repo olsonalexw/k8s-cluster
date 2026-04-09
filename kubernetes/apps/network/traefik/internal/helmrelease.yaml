@@ -130,6 +130,19 @@ spec:
         allowExternalNameServices: true
         publishedService:
           enabled: true
+      kubernetesGateway:
+        enabled: true
+        labelSelector: "traefik-instance=internal"
+        statusAddress:
+          service:
+            enabled: true
+    gateway:
+      enabled: false
+    gatewayClass:
+      enabled: true
+      name: traefik-internal
+      labels:
+        traefik-instance: internal
     topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname
