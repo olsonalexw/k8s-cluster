@@ -19,6 +19,7 @@ spec:
     remediation:
       retries: 3
   upgrade:
+    crds: Skip
     cleanupOnFail: true
     remediation:
       strategy: rollback
