@@ -6,7 +6,7 @@ metadata:
 spec:
   gatewayClassName: traefik-internal
   listeners:
-    - name: https
+    - name: websecure
       protocol: HTTPS
       port: 443
       hostname: "*.${SECRET_DOMAIN}"
