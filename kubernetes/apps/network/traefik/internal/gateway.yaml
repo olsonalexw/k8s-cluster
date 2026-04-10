@@ -8,7 +8,7 @@ spec:
   listeners:
     - name: websecure
       protocol: HTTPS
-      port: 443
+      port: 8443
       hostname: "*.${SECRET_DOMAIN}"
       tls:
         mode: Terminate
