@@ -18,6 +18,12 @@ spec:
   hostnames:
     - "sonarr.${SECRET_DOMAIN}"
   rules:
-    - backendRefs:
+    - filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: chain-no-auth-restrict-networks
+      backendRefs:
         - name: sonarr
           port: 8989
