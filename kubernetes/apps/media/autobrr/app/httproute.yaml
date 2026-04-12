@@ -1,0 +1,29 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: autobrr
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Autobrr
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: autobrr.png
+    gethomepage.dev/description: IRC Watcher
+    gethomepage.dev/href: https://autobrr.${SECRET_DOMAIN}
+spec:
+  parentRefs:
+    - name: internal
+      namespace: network
+      sectionName: websecure
+  hostnames:
+    - "autobrr.${SECRET_DOMAIN}"
+  rules:
+    - filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: chain-no-auth-restrict-networks
+      backendRefs:
+        - name: autobrr
+          port: 80

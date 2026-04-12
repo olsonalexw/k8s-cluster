@@ -73,31 +73,6 @@ spec:
         serviceName: autobrr
         endpoints:
           - port: metrics
-    ingress:
-      main:
-        enabled: true
-        className: traefik-internal
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Autobrr
-          gethomepage.dev/group: Media
-          gethomepage.dev/icon: autobrr.png
-          gethomepage.dev/description: IRC Watcher
-          gethomepage.dev/href: https://autobrr.${SECRET_DOMAIN}
-
-        hosts:
-          - host: &host "autobrr.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
-        tls:
-          - hosts:
-              - *host
-            secretName: "${SECRET_DOMAIN/./-}-production-tls"
     persistence:
       config:
         enabled: true
