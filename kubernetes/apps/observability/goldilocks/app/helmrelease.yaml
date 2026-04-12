@@ -130,25 +130,3 @@ spec:
         limits:
           memory: 2048M
       replicaCount: 1
-      ingress:
-        enabled: true
-        ingressClassName: "traefik-internal"
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Goldilocks
-          gethomepage.dev/group: Observability
-          gethomepage.dev/icon: goldilocks.png
-          gethomepage.dev/description: Goldilocks Utility
-          gethomepage.dev/href: https://goldilocks.${SECRET_DOMAIN}
-          gethomepage.dev/pod-selector: "app.kubernetes.io/name=goldilocks"
-        hosts:
-          - host: &host "goldilocks.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                type: Prefix
-        tls:
-          - hosts:
-              - *host
-            secretName: "${SECRET_DOMAIN/./-}-production-tls"
