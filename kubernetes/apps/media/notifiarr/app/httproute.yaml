@@ -1,0 +1,30 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: notifiarr
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Notifiarr
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: notifiarr.png
+    gethomepage.dev/description: Notify Agent
+    gethomepage.dev/href: https://notifiarr.${SECRET_DOMAIN}
+spec:
+  parentRefs:
+    - name: internal
+      namespace: network
+      sectionName: websecure
+  hostnames:
+    - "notifiarr.${SECRET_DOMAIN}"
+  rules:
+    - filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: chain-no-auth-restrict-networks
+      backendRefs:
+        - name: notifiarr
+          port: 5454
+

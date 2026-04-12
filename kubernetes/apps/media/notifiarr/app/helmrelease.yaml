@@ -71,30 +71,6 @@ spec:
           http:
             port: 5454
 
-    ingress:
-      main:
-        enabled: true
-        className: traefik-internal
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Notifiarr
-          gethomepage.dev/group: Media
-          gethomepage.dev/icon: notifiarr.png
-          gethomepage.dev/description: Notify Agent
-          gethomepage.dev/href: https://notifiarr.${SECRET_DOMAIN}
-        hosts:
-          - host: "notifiarr.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
-        tls:
-          - hosts:
-              - "notifiarr.${SECRET_DOMAIN}"
-            secretName: "${SECRET_DOMAIN/./-}-production-tls"
     persistence:
       config:
         enabled: true
