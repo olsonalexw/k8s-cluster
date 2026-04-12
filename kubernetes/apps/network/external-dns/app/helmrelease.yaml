@@ -42,7 +42,7 @@ spec:
       - --ignore-ingress-tls-spec
       - --ingress-class=traefik-external
     policy: sync
-    sources: ["crd", "ingress"]
+    sources: ["crd", "ingress", "gateway-httproute"]
     txtPrefix: k8s.
     txtOwnerId: default
     domainFilters: ["${SECRET_DOMAIN}"]
