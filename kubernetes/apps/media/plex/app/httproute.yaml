@@ -1,0 +1,29 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: plex
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Plex
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: plex.png
+    gethomepage.dev/description: Media Player
+    gethomepage.dev/href: https://plex.${SECRET_DOMAIN}
+spec:
+  parentRefs:
+    - name: external
+      namespace: network
+      sectionName: websecure
+  hostnames:
+    - "plex.${SECRET_DOMAIN}"
+  rules:
+    - filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: chain-no-auth
+      backendRefs:
+        - name: plex
+          port: 32400
