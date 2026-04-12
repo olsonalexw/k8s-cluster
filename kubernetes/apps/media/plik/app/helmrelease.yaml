@@ -45,50 +45,6 @@ spec:
         ports:
           http:
             port: 8080
-    ingress:
-      main:
-        enabled: true
-        className: traefik-internal
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Plik
-          gethomepage.dev/group: Media
-          gethomepage.dev/icon: plik.png
-          gethomepage.dev/description: Temp File Hosting
-          gethomepage.dev/href: https://plik.${SECRET_DOMAIN}
-          gethomepage.dev/pod-selector: "app.kubernetes.io/name=plik"
-        hosts:
-          - host: &host "plik.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
-        tls:
-          - hosts:
-              - *host
-            secretName: "${SECRET_DOMAIN/./-}-production-tls"
-      download:
-        enabled: true
-        className: traefik-external
-        annotations:
-          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
-        hosts:
-          - host: &host2 "dl.${SECRET_DOMAIN}"
-            paths:
-              - path: /file
-                pathType: Prefix
-                service:
-                  identifier: main
-                  port: http
-        tls:
-          - hosts:
-              - *host2
-            secretName: "${SECRET_DOMAIN/./-}-production-tls"
     persistence:
       config:
         enabled: true
