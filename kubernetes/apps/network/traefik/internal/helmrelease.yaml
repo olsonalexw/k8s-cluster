@@ -49,7 +49,6 @@ spec:
       enabled: true
       type: LoadBalancer
       annotations:
-        external-dns.alpha.kubernetes.io/hostname: "internal.${SECRET_DOMAIN}"
         io.cilium/lb-ipam-ips: "${IPAM_IP_TRAEFIK_INTERNAL}"
       spec:
         externalTrafficPolicy: Cluster
