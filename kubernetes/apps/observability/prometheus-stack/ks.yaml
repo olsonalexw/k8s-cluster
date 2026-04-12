@@ -10,6 +10,8 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: observability-middlewares
   path: ./kubernetes/apps/observability/prometheus-stack/app
   prune: false # never should be deleted
   sourceRef:
