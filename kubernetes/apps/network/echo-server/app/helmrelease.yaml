@@ -31,7 +31,7 @@ spec:
               repository: ghcr.io/mendhak/http-https-echo
               tag: 40
             env:
-              HTTP_PORT: &port 8080 # was 8080
+              HTTP_PORT: &port 8080
               LOG_WITHOUT_NEWLINE: true
               LOG_IGNORE_PATH: /healthz
               PROMETHEUS_ENABLED: true
@@ -78,23 +78,3 @@ spec:
             path: /metrics
             interval: 1m
             scrapeTimeout: 10s
-    ingress:
-      app:
-        enabled: true
-        className: traefik-external                                                                  # Decides if it's exposed to the internet (traefik-external vs traefik-internal)
-        annotations:
-          # cert-manager.io/cluster-issuer: letsencrypt-production                                   # Used in non-wildcard configuration
-          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"                       # creates CNAME in Cloudflare, only useful if using traefik-external
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
-        hosts:
-          - host: &host "{{ .Release.Name }}.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: app
-                  port: http # means port 80
-        tls:
-          - hosts:
-              - *host
-            secretName: "${SECRET_DOMAIN/./-}-production-tls" # "echo-server-production-tls"
