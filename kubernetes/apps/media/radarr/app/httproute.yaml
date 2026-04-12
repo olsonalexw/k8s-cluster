@@ -1,0 +1,30 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: radarr
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Radarr
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: radarr.png
+    gethomepage.dev/description: Movie Manager
+    gethomepage.dev/href: https://radarr.${SECRET_DOMAIN}
+spec:
+  parentRefs:
+    - name: internal
+      namespace: network
+      sectionName: websecure
+  hostnames:
+    - "radarr.${SECRET_DOMAIN}"
+  rules:
+    - filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: chain-no-auth-restrict-networks
+      backendRefs:
+        - name: radarr
+          port: 7878
+

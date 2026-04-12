@@ -42,30 +42,6 @@ spec:
         ports:
           http:
             port: 7878
-    ingress:
-      main:
-        enabled: true
-        className: traefik-internal
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Radarr
-          gethomepage.dev/group: Media
-          gethomepage.dev/icon: radarr.png
-          gethomepage.dev/description: Movie Manager
-          gethomepage.dev/href: https://radarr.${SECRET_DOMAIN}
-        hosts:
-          - host: "radarr.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
-        tls:
-          - hosts:
-              - "radarr.${SECRET_DOMAIN}"
-            secretName: "${SECRET_DOMAIN/./-}-production-tls"
     persistence:
       config:
         enabled: true
