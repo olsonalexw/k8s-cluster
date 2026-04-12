@@ -26,4 +26,4 @@ spec:
             name: chain-no-auth
       backendRefs:
         - name: seerr
-          port: 5055
+          port: 80
