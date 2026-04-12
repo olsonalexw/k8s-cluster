@@ -85,30 +85,6 @@ spec:
             port: 1080
           metrics:
             port: 9090
-    ingress:
-      sabnzbd:
-        enabled: true
-        className: traefik-internal
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Sabnzbd
-          gethomepage.dev/group: Media
-          gethomepage.dev/icon: sabnzbd.png
-          gethomepage.dev/description: Newsgroup Downloader
-          gethomepage.dev/href: https://sabnzbd.${SECRET_DOMAIN}
-        hosts:
-          - host: "sabnzbd.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: sabnzbd
-                  port: http
-        tls:
-          - hosts:
-              - "sabnzbd.${SECRET_DOMAIN}"
-            secretName: "${SECRET_DOMAIN/./-}-production-tls"
     persistence:
       config:
         enabled: true
