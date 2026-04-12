@@ -72,30 +72,6 @@ spec:
         ports:
           http:
             port: &port 80
-    ingress:
-      main:
-        enabled: true
-        className: traefik-internal
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Vaultwarden
-          gethomepage.dev/group: Security
-          gethomepage.dev/icon: vaultwarden.png
-          gethomepage.dev/description: Password Manager
-          gethomepage.dev/href: https://vaultwarden.${SECRET_DOMAIN}
-        hosts:
-          - host: &host "vaultwarden.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
-        tls:
-          - hosts:
-              - *host
-            secretName: "${SECRET_DOMAIN/./-}-production-tls"
     persistence:
       config:
         enabled: true
