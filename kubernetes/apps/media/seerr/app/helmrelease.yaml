@@ -58,31 +58,6 @@ spec:
         ports:
           http:
             port: *port
-    ingress:
-      seerr:
-        enabled: true
-        className: traefik-external
-        annotations:
-          external-dns.alpha.kubernetes.io/target: "external.${SECRET_DOMAIN}"
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth@kubernetescrd"
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Seerr
-          gethomepage.dev/group: Media
-          gethomepage.dev/icon: seerr.png
-          gethomepage.dev/description: Media Request Agent
-          gethomepage.dev/href: https://seerr.${SECRET_DOMAIN}
-        hosts:
-          - host: &host "seerr.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: seerr
-                  port: http
-        tls:
-          - hosts:
-              - *host
-            secretName: "${SECRET_DOMAIN/./-}-production-tls"
     persistence:
       config:
         enabled: true
