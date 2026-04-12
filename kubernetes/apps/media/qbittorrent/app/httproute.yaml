@@ -1,0 +1,30 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: qbittorrent
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: qbittorrent
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: qbittorrent.png
+    gethomepage.dev/description: BitTorrent Client
+    gethomepage.dev/href: https://qbittorrent.${SECRET_DOMAIN}
+spec:
+  parentRefs:
+    - name: internal
+      namespace: network
+      sectionName: websecure
+  hostnames:
+    - "qbittorrent.${SECRET_DOMAIN}"
+  rules:
+    - filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: chain-no-auth-restrict-networks
+      backendRefs:
+        - name: qbittorrent
+          port: 8080
+
