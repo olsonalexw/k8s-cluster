@@ -1,0 +1,30 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: prowlarr
+  annotations:
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: Prowlarr
+    gethomepage.dev/group: Media
+    gethomepage.dev/icon: prowlarr.png
+    gethomepage.dev/description: Indexer Manager
+    gethomepage.dev/href: https://prowlarr.${SECRET_DOMAIN}
+spec:
+  parentRefs:
+    - name: internal
+      namespace: network
+      sectionName: websecure
+  hostnames:
+    - "prowlarr.${SECRET_DOMAIN}"
+  rules:
+    - filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: traefik.io
+            kind: Middleware
+            name: chain-no-auth-restrict-networks
+      backendRefs:
+        - name: prowlarr
+          port: 9696
+

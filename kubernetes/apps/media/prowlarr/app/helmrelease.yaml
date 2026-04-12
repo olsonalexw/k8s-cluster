@@ -43,30 +43,6 @@ spec:
         ports:
           http:
             port: 9696
-    ingress:
-      main:
-        enabled: true
-        className: traefik-internal
-        annotations:
-          traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-          traefik.ingress.kubernetes.io/router.middlewares: "network-chain-no-auth-restrict-networks@kubernetescrd"
-          gethomepage.dev/enabled: "true"
-          gethomepage.dev/name: Prowlarr
-          gethomepage.dev/group: Media
-          gethomepage.dev/icon: prowlarr.png
-          gethomepage.dev/description: Indexer Manager
-          gethomepage.dev/href: https://prowlarr.${SECRET_DOMAIN}
-        hosts:
-          - host: "prowlarr.${SECRET_DOMAIN}"
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
-        tls:
-          - hosts:
-              - "prowlarr.${SECRET_DOMAIN}"
-            secretName: "${SECRET_DOMAIN/./-}-production-tls"
     persistence:
       config:
         enabled: true
