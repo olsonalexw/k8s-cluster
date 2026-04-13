@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/traefik/traefik-helm-chart/refs/tags/v39.0.7/traefik/values.schema.json
----
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -27,13 +25,9 @@ spec:
   uninstall:
     keepHistory: false
   values:
-    deployment:
-      kind: Deployment
     updateStrategy:
-      type: RollingUpdate
       rollingUpdate:
         maxUnavailable: 1
-        maxSurge: 1
     autoscaling:
       enabled: true
       minReplicas: 1
@@ -46,8 +40,6 @@ spec:
             type: Utilization
             averageUtilization: 80
     service:
-      enabled: true
-      type: LoadBalancer
       annotations:
         io.cilium/lb-ipam-ips: "${IPAM_IP_TRAEFIK_EXTERNAL}"
       spec:
@@ -56,8 +48,6 @@ spec:
       - name: TZ
         value: "${TIMEZONE}"
     logs:
-      general:
-        level: INFO
       access:
         enabled: true
     ingressRoute:
@@ -73,9 +63,6 @@ spec:
     additionalArguments:
       - "--serversTransport.insecureSkipVerify=true"
     ports:
-      traefik:
-        expose:
-          default: false
       web:
         http:
           redirections:
@@ -89,7 +76,6 @@ spec:
       websecure:
         http:
           tls:
-            enabled: true
             options: default
         transport:
           respondingTimeouts:
@@ -150,9 +136,6 @@ spec:
             - 2c0f:f248::/32
         http3:
           enabled: true
-      metrics:
-        expose:
-          default: false
     metrics:
       prometheus:
         entryPoint: metrics
@@ -160,20 +143,15 @@ spec:
           enabled: true
     providers:
       kubernetesCRD:
-        enabled: true
         allowCrossNamespace: true
       kubernetesIngress:
         enabled: false
       kubernetesGateway:
         enabled: true
         labelSelector: "traefik-instance=external"
-        statusAddress:
-          service:
-            enabled: true
     gateway:
       enabled: false
     gatewayClass:
-      enabled: true
       name: traefik-external
       labels:
         traefik-instance: external
@@ -191,27 +169,3 @@ spec:
         memory: 549M
       limits:
         memory: 1G
-    # experimental:
-    #   plugins:
-    #     ldapAuth:
-    #       moduleName: "github.com/wiltonsr/ldapAuth"
-    #       version: "v0.1.8"
-    #     themepark:
-    #       moduleName: "github.com/packruler/traefik-themepark"
-    #       version: "v1.4.0"
-    #     bouncer:
-    #       moduleName: "github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin"
-    #       version: "v1.3.5"
-    #     traefik-plugin-blockuseragent:
-    #       moduleName: "github.com/agence-gaya/traefik-plugin-blockuseragent"
-    #       version: "v0.1.7"
-    # volumes:
-    #   - name: crowdsec-bouncer-tls
-    #     mountPath: /etc/traefik/crowdsec-certs/
-    #     type: secret
-    #   - name: ban-html-page
-    #     mountPath: /ban/
-    #     type: configMap
-    #   - name: captcha-html-page
-    #     mountPath: /captcha/
-    #     type: configMap
