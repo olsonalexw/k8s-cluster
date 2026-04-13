@@ -59,9 +59,6 @@ spec:
               to: websecure
               scheme: https
               permanent: true
-        transport:
-          respondingTimeouts:
-            readTimeout: "0"
       websecure:
         http:
           tls:
@@ -74,13 +71,6 @@ spec:
             - 10.0.0.0/8
             - 172.16.0.0/12
             - 192.168.0.0/16
-        proxyProtocol:
-          trustedIPs:
-            - 10.0.0.0/8
-            - 172.16.0.0/12
-            - 192.168.0.0/16
-        http3:
-          enabled: true
     metrics:
       prometheus:
         entryPoint: metrics
@@ -90,7 +80,6 @@ spec:
       kubernetesCRD:
         ingressClass: traefik-internal
         allowCrossNamespace: true
-        allowExternalNameServices: true
       kubernetesIngress:
         ingressClass: traefik-internal
         allowExternalNameServices: true
