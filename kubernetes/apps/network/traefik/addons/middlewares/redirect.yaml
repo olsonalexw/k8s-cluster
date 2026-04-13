@@ -26,11 +26,3 @@ metadata:
 spec:
   addPrefix:
     prefix: "/web"
----
-apiVersion: traefik.io/v1alpha1
-kind: Middleware
-metadata:
-  name: traefik-middleware-dashboard-addprefix
-spec:
-  addPrefix:
-    prefix: /dashboard
