@@ -70,11 +70,6 @@ spec:
         - piped
       password:
         type: AlphaNumeric
-    - name: nextcloud
-      databases:
-        - nextcloud
-      password:
-        type: AlphaNumeric
     - name: immich
       databases:
         - immich
