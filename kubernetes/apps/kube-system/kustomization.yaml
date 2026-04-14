@@ -8,6 +8,7 @@ resources:
   - ./coredns/ks.yaml
   - ./generic-device-plugin/ks.yaml
   - ./metrics-server/ks.yaml
+  - ./middlewares/ks.yaml
   - ./node-feature-discovery/ks.yaml
   - ./reflector/ks.yaml
   - ./reloader/ks.yaml
