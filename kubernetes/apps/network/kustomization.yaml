@@ -7,6 +7,4 @@ resources:
   - ./cloudflared/ks.yaml
   - ./echo-server/ks.yaml
   - ./external-dns/ks.yaml
-  # - ./external-services/ks.yaml
-  # - ./pia-tun/ks.yaml
   - ./traefik/ks.yaml
