@@ -33,19 +33,14 @@ spec:
     stsIncludeSubdomains: false
     stsPreload: true
     forceSTSHeader: true
-    customFrameOptionsValue: "allow-from https://${SECRET_DOMAIN}"
     contentTypeNosniff: true
-    browserXssFilter: true
-    frameDeny: true
     referrerPolicy: "same-origin"
     contentSecurityPolicy: "upgrade-insecure-requests;"
     customResponseHeaders:
-      permissionsPolicy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+      Permissions-Policy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
       X-Frame-Options: "SAMEORIGIN"
       X-Robots-Tag: "noindex,nofollow,noarchive,nosnippet,notranslate,noimageindex"
       X-Permitted-Cross-Domain-Policies: "none"
-      X-Forwarded-Proto: "https"
-      City: X-GEO-City
       X-Powered-By: ""
       server: ""
 ---
@@ -74,18 +69,13 @@ spec:
     stsIncludeSubdomains: false
     stsPreload: true
     forceSTSHeader: true
-    customFrameOptionsValue: "allow-from https://${SECRET_DOMAIN}"
     contentTypeNosniff: true
-    browserXssFilter: true
-    frameDeny: true
     referrerPolicy: "same-origin"
     contentSecurityPolicy: "default-src 'self' https:; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' https: data:; font-src 'self' https:;"
     customResponseHeaders:
-      permissionsPolicy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
+      Permissions-Policy: "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()"
       X-Frame-Options: "SAMEORIGIN"
       X-Robots-Tag: "noindex,nofollow,noarchive,nosnippet,notranslate,noimageindex"
       X-Permitted-Cross-Domain-Policies: "none"
-      X-Forwarded-Proto: "https"
-      City: X-GEO-City
       X-Powered-By: ""
       server: ""
