@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./httproute.yaml
-  - ./sabnzbd-secret.sops.yaml
+  - ./externalsecret.yaml
