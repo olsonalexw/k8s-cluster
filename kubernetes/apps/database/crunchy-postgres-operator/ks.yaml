@@ -4,7 +4,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname crunchy-postgres-operator
-  namespace: flux-system
 spec:
   targetNamespace: database
   commonMetadata:
@@ -17,17 +16,14 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
-  # dependsOn:
-  #   - name: onepassword-store
-  #     namespace: external-secrets
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname crunchy-postgres-operator-cluster
-  namespace: flux-system
 spec:
   targetNamespace: database
   commonMetadata:
@@ -40,24 +36,14 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
-  # postBuild:
-  #   substituteFrom:
-  #     - kind: Secret
-  #       name: crunchy-postgres-r2
-  #       optional: false
-  dependsOn:
-    - name: crunchy-postgres-operator
-      namespace: flux-system # database
-    # - name: onepassword-store
-    #   namespace: external-secrets
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname crunchy-postgres-operator-secretstore
-  namespace: flux-system
 spec:
   targetNamespace: database
   commonMetadata:
@@ -70,19 +56,14 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
-  dependsOn:
-    - name: crunchy-postgres-operator-cluster
-      namespace: flux-system # database
-    - name: external-secrets
-      namespace: flux-system # external-secrets
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: &appname crunchy-postgres-userinit-controller
-  namespace: flux-system
 spec:
   targetNamespace: database
   commonMetadata:
@@ -95,4 +76,5 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false

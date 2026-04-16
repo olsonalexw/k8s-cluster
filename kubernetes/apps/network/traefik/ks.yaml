@@ -3,11 +3,11 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: network-traefik-certificates
-  namespace: flux-system
 spec:
   targetNamespace: network
   dependsOn:
     - name: cert-manager-issuers
+      namespace: cert-manager
   commonMetadata:
     labels:
       app.kubernetes.io/name: &app traefik-certificates
@@ -16,6 +16,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: true
   interval: 10m
   timeout: 5m
@@ -24,7 +25,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: network-traefik-external
-  namespace: flux-system
 spec:
   targetNamespace: network
   dependsOn:
@@ -37,6 +37,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 10m
   timeout: 5m
@@ -45,7 +46,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: network-traefik-internal
-  namespace: flux-system
 spec:
   targetNamespace: network
   dependsOn:
@@ -58,6 +58,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 10m
   timeout: 5m
@@ -66,7 +67,6 @@ apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: network-traefik-addons
-  namespace: flux-system
 spec:
   targetNamespace: network
   dependsOn:
@@ -80,6 +80,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
+    namespace: flux-system
   wait: false
   interval: 10m
   timeout: 5m
