@@ -5,6 +5,6 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./homepage-config.yaml
-  - ./homepage-secret.sops.yaml
+  - ./externalsecret.yaml
   - ./httproute.yaml
   - ./rbac.yaml

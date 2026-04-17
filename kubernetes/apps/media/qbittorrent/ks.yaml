@@ -11,6 +11,8 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: media-middlewares
+    - name: openbao-secretstore
+      namespace: external-secrets
   path: ./kubernetes/apps/media/qbittorrent/app
   prune: true
   sourceRef:
@@ -31,6 +33,9 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: openbao-secretstore
+      namespace: external-secrets
   path: ./kubernetes/apps/media/qbittorrent/manage
   prune: true
   sourceRef:

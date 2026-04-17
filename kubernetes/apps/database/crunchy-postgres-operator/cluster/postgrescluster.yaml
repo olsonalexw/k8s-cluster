@@ -90,7 +90,7 @@ spec:
     pgbackrest:
       configuration: &backupConfig
         - secret:
-            name: crunchy-postgres-secret
+            name: postgres
       global: &backupFlag
         compress-type: "bz2"
         compress-level: "9"

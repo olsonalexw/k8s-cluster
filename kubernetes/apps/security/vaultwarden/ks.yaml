@@ -11,6 +11,8 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: security-middlewares
+    - name: openbao-secretstore
+      namespace: external-secrets
   path: ./kubernetes/apps/security/vaultwarden/app
   prune: true
   sourceRef:

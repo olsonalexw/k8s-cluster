@@ -38,7 +38,7 @@ spec:
               HOMEPAGE_ALLOWED_HOSTS: &host "homepage.${SECRET_DOMAIN}"
             envFrom:
               - secretRef:
-                  name: homepage-secret
+                  name: homepage
             resources:
               requests:
                 cpu: 11m

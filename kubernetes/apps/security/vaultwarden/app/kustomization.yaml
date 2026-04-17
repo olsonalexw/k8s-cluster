@@ -5,4 +5,4 @@ kind: Kustomization
 resources:
   - ./helmrelease.yaml
   - ./httproute.yaml
-  - ./vaultwarden-secret.sops.yaml
+  - ./externalsecret.yaml

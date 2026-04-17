@@ -11,6 +11,8 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: external-dns
+    - name: openbao-secretstore
+      namespace: external-secrets
   path: ./kubernetes/apps/network/cloudflared/app
   prune: true
   sourceRef:

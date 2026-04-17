@@ -6,4 +6,4 @@ resources:
   - ./helmrelease.yaml
   - ./qbit-manage-configmap.yaml
   - ./qbittorrent-trim-script.yaml
-  - ./qbittorrent-login-secret.sops.yaml
+  - ./externalsecret.yaml

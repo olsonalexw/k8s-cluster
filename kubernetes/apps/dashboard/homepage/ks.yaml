@@ -11,6 +11,8 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: dashboard-middlewares
+    - name: openbao-secretstore
+      namespace: external-secrets
   path: ./kubernetes/apps/dashboard/homepage/app
   prune: true
   sourceRef:

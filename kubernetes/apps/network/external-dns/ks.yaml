@@ -9,6 +9,9 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
+  dependsOn:
+    - name: openbao-secretstore
+      namespace: external-secrets
   path: ./kubernetes/apps/network/external-dns/app
   prune: true
   sourceRef:

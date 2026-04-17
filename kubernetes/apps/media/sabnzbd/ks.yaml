@@ -11,6 +11,8 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: media-middlewares
+    - name: openbao-secretstore
+      namespace: external-secrets
   path: ./kubernetes/apps/media/sabnzbd/app
   prune: true
   sourceRef:

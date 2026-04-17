@@ -29,6 +29,9 @@ spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *appname
+  dependsOn:
+    - name: openbao-secretstore
+      namespace: external-secrets
   interval: 30m
   timeout: 5m
   path: ./kubernetes/apps/database/crunchy-postgres-operator/cluster

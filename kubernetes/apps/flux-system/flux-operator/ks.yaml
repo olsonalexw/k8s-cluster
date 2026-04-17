@@ -31,6 +31,8 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: flux-system-middlewares
+    - name: openbao-secretstore
+      namespace: external-secrets
   path: ./kubernetes/apps/flux-system/flux-operator/instance
   prune: false # never should be deleted
   sourceRef:

@@ -34,7 +34,7 @@ spec:
       main:
         annotations:
           reloader.stakater.com/auto: "true"
-          # secret.reloader.stakater.com/reload: vaultwarden-db-secret
+          secret.reloader.stakater.com/reload: vaultwarden
         containers:
           main:
             image:
@@ -57,9 +57,7 @@ spec:
               # SMTP_SECURITY: "off"
             envFrom:
               - secretRef:
-                  name: vaultwarden-secret
-            #   - secretRef:
-            #       name: vaultwarden-db-secret
+                  name: vaultwarden
             resources:
               requests:
                 cpu: 15m
