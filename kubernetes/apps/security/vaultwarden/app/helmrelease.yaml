@@ -45,6 +45,7 @@ spec:
               ICON_CACHE_FOLDER: data/icon_cache
               ATTACHMENTS_FOLDER: data/attachments
               DOMAIN: "https://vaultwarden.${SECRET_DOMAIN}"
+              DISABLE_ICON_DOWNLOAD: "true"
               TZ: "${TIMEZONE}"
               SIGNUPS_ALLOWED: "false"
               WEBSOCKET_ENABLED: "true"

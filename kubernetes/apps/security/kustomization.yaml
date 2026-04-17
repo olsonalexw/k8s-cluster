@@ -7,3 +7,5 @@ resources:
   - ./middlewares/ks.yaml
   - ./namespace.yaml
   - ./vaultwarden/ks.yaml
+components:
+  - ../../components/default-deny
