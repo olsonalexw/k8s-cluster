@@ -7,6 +7,15 @@ spec:
     kind: OCIRepository
     name: kube-prometheus-stack
   interval: 1h
+  valuesFrom:
+    - kind: Secret
+      name: grafana
+      valuesKey: user
+      targetPath: grafana.adminUser
+    - kind: Secret
+      name: grafana
+      valuesKey: pass
+      targetPath: grafana.adminPassword
   values:
     cleanPrometheusOperatorObjectNames: true
     alertmanager:
@@ -64,8 +73,6 @@ spec:
       fullnameOverride: kube-state-metrics
     grafana:
       enabled: true
-      adminUser: ${GRAFANA_USER}
-      adminPassword: "${GRAFANA_PASS}"
       sidecar:
         dashboards:
           enabled: true

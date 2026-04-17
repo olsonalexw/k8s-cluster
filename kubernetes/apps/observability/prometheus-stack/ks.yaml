@@ -11,8 +11,10 @@ spec:
       app.kubernetes.io/name: *app
   dependsOn:
     - name: observability-middlewares
+    - name: openbao-secretstore
+      namespace: external-secrets
   path: ./kubernetes/apps/observability/prometheus-stack/app
-  prune: false # never should be deleted
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system
