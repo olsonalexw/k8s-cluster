@@ -5,5 +5,7 @@ metadata:
   name: default-deny
 spec:
   endpointSelector: {}
-  ingress: []
-  egress: []
+  ingress:
+    - {}
+  egress:
+    - {}
