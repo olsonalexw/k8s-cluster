@@ -1,0 +1,11 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: openebs
+spec:
+  endpointSelector:
+    matchLabels:
+      app: localpv-provisioner
+  egress:
+    - toEntities:
+        - kube-apiserver
