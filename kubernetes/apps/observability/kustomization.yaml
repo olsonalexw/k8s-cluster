@@ -8,3 +8,6 @@ resources:
   - ./middlewares/ks.yaml
   - ./namespace.yaml
   - ./prometheus-stack/ks.yaml
+components:
+  - ../../components/default-deny
+  - ../../components/allow-dns

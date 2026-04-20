@@ -1,0 +1,183 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: prometheus
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: traefik-internal-network
+            io.kubernetes.pod.namespace: network
+        - matchLabels:
+            app.kubernetes.io/name: grafana
+            io.kubernetes.pod.namespace: observability
+        - matchLabels:
+            app.kubernetes.io/name: vpa   # vpa tracks history for more accurate recommendations
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+  egress:
+    - toCIDR:
+        - 192.168.1.0/24
+    - toEntities:
+        - cluster
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: prometheus-operator
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: prometheus-operator
+  ingress:
+    - fromEntities:
+        - kube-apiserver  # admission webhook - new ServiceMonitor resources
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "10250"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - kube-apiserver
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: prometheus-operator-webhook
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: prometheus-operator-webhook  # helm upgrade job
+  egress:
+    - toEntities:
+        - kube-apiserver
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kube-state-metrics
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: kube-state-metrics
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - kube-apiserver
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: node-exporter
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: node-exporter
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "9100"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: grafana
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: traefik-internal-network
+            io.kubernetes.pod.namespace: network
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "9090"
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: alertmanager
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "9093"
+    - toEntities:
+        - kube-apiserver
+    - toFQDNs:
+        - matchName: grafana.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: alertmanager
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: alertmanager
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: traefik-internal-network
+            io.kubernetes.pod.namespace: network
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+            io.kubernetes.pod.namespace: observability
+        - matchLabels:
+            app.kubernetes.io/name: grafana
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "9093"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+  egress:
+    - toCIDR:
+        - 192.168.1.0/24
+    - toEntities:
+        - cluster

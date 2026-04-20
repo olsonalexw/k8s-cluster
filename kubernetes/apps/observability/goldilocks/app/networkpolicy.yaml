@@ -1,0 +1,39 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: goldilocks
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: goldilocks
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: traefik-internal-network
+            io.kubernetes.pod.namespace: network
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - kube-apiserver
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: vpa
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: vpa
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus  # vpa tracks history for more accurate recommendations
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "9090"
+    - toEntities:
+        - kube-apiserver
