@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ./gateway.yaml
   - ./helmrelease.yaml
+  - ./networkpolicy.yaml
 # configMapGenerator:
 #   - name: ban-html-page
 #     files:
