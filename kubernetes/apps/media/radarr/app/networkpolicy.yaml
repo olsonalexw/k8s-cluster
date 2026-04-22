@@ -1,0 +1,64 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: radarr
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: radarr
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: traefik-internal-network
+            io.kubernetes.pod.namespace: network
+        - matchLabels:
+            app.kubernetes.io/name: prowlarr
+            io.kubernetes.pod.namespace: media
+        - matchLabels:
+            app.kubernetes.io/name: notifiarr
+            io.kubernetes.pod.namespace: media
+        - matchLabels:
+            app.kubernetes.io/name: seerr
+            io.kubernetes.pod.namespace: media
+      toPorts:
+        - ports:
+            - port: "7878"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prowlarr
+            io.kubernetes.pod.namespace: media
+      toPorts:
+        - ports:
+            - port: "9696"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: notifiarr
+            io.kubernetes.pod.namespace: media
+      toPorts:
+        - ports:
+            - port: "5454"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: qbittorrent
+            io.kubernetes.pod.namespace: media
+        - matchLabels:
+            app.kubernetes.io/name: sabnzbd
+            io.kubernetes.pod.namespace: media
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: api.themoviedb.org
+        - matchName: image.tmdb.org
+        - matchName: api.radarr.video
+        - matchName: webservice.fanart.tv
+        - matchPattern: "*.servarr.com"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

@@ -1,0 +1,41 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: plex
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: plex
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: traefik-external-network
+            io.kubernetes.pod.namespace: network
+        - matchLabels:
+            app.kubernetes.io/name: seerr
+            io.kubernetes.pod.namespace: media
+        - matchLabels:
+            app.kubernetes.io/name: notifiarr
+            io.kubernetes.pod.namespace: media
+      toPorts:
+        - ports:
+            - port: "32400"
+              protocol: TCP
+            - port: "32400"
+              protocol: UDP
+  egress:
+    - toFQDNs:
+        - matchName: api.themoviedb.org
+        - matchName: api.thetvdb.com
+        - matchName: api4.thetvdb.com
+        - matchName: artworks.thetvdb.com
+        - matchName: image.tmdb.org
+        - matchName: plex.tv
+        - matchPattern: "*.plexapp.com"
+        - matchPattern: "*.plex.tv"
+        - matchPattern: "*.plex.direct"
+        - matchPattern: "*.*.*.plex.bz"
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

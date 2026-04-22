@@ -31,11 +31,13 @@ spec:
           pia-tun:
             image:
               repository: ghcr.io/x0lie/pia-tun
-              tag: develop@sha256:e4623931abb0b6e3b3f4511087fe40caaf431b6686196b266ffb1e399dba2bd3
+              tag: develop@sha256:02937b709284c5c82de888685a6c3bb444f93f89353159ae43b7a85ecb9521dc
             env:
               TZ: ${TIMEZONE}
               LOG_LEVEL: "debug"
-              LOCAL_NETWORKS: "10.69.0.0/16"
+              BOOTSTRAP_DNS: "10.96.0.10"
+              DNS: "tls://one.one.one.one, dns9.quad9.net"
+              LOCAL_NETWORKS: "10.69.0.0/16, 10.96.0.10/32"
               SOCKS5_ENABLED: "true"
             envFrom:
               - secretRef:

@@ -1,0 +1,65 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: sabnzbd
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: sabnzbd
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: traefik-internal-network
+            io.kubernetes.pod.namespace: network
+        - matchLabels:
+            app.kubernetes.io/name: sonarr
+            io.kubernetes.pod.namespace: media
+        - matchLabels:
+            app.kubernetes.io/name: radarr
+            io.kubernetes.pod.namespace: media
+        - matchLabels:
+            app.kubernetes.io/name: prowlarr
+            io.kubernetes.pod.namespace: media
+        - matchLabels:
+            app.kubernetes.io/name: notifiarr
+            io.kubernetes.pod.namespace: media
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prowlarr
+            io.kubernetes.pod.namespace: media
+        - matchLabels:
+            app.kubernetes.io/name: autobrr
+            io.kubernetes.pod.namespace: media
+      toPorts:
+        - ports:
+            - port: "1080"
+              protocol: TCP
+  egress:
+    - toFQDNs:
+        - matchName: www.privateinternetaccess.com
+        - matchName: serverlist.piaservers.net
+        - matchName: api.ipify.org
+        - matchName: icanhazip.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toCIDR:
+        - 129.6.15.29/32
+        - 132.163.97.2/32
+      toPorts:
+        - ports:
+            - port: "13"
+              protocol: TCP
+    - toEntities:
+        - world
+      toPorts:
+        - ports:
+            - port: "1337"
+              protocol: UDP
+            - port: "1337"
+              protocol: TCP

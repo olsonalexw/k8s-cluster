@@ -1,0 +1,24 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: qbit-manage
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: qbit-manage
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: qbittorrent
+            io.kubernetes.pod.namespace: media
+      toPorts:
+        - ports:
+            - port: "8080"
+              protocol: TCP
+    - toFQDNs:
+        - matchName: raw.githubusercontent.com
+        - matchName: pypi.org
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

@@ -6,3 +6,4 @@ resources:
   - ./arr-filter-configmap.yaml
   - ./helmrelease.yaml
   - ./httproute.yaml
+  - ./networkpolicy.yaml

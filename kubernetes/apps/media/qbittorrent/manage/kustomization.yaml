@@ -7,3 +7,4 @@ resources:
   - ./qbit-manage-configmap.yaml
   - ./qbittorrent-trim-script.yaml
   - ./externalsecret.yaml
+  - ./networkpolicy.yaml
