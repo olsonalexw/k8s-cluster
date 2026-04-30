@@ -1,0 +1,36 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: spegel
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: spegel
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: spegel
+            io.kubernetes.pod.namespace: kube-system
+      toPorts:
+        - ports:
+            - port: "5001"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: spegel
+            io.kubernetes.pod.namespace: kube-system
+      toPorts:
+        - ports:
+            - port: "5001"
+              protocol: TCP
+    - toEntities:
+        - kube-apiserver

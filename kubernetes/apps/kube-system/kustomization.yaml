@@ -15,3 +15,6 @@ resources:
   - ./reloader/ks.yaml
   - ./spegel/ks.yaml
   - ./nvidia/ks.yaml
+components:
+  - ../../components/default-deny
+  - ../../components/allow-dns
