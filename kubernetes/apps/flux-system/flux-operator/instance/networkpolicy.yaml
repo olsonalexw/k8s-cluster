@@ -1,0 +1,120 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: helm-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: helm-controller
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/component: source-controller
+            io.kubernetes.pod.namespace: flux-system
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+    - toEntities:
+        - kube-apiserver
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: kustomize-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: kustomize-controller
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/component: source-controller
+            io.kubernetes.pod.namespace: flux-system
+        - matchLabels:
+            app.kubernetes.io/component: notification-controller
+            io.kubernetes.pod.namespace: flux-system
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+    - toEntities:
+        - kube-apiserver
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: notification-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: notification-controller
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/component: source-controller
+            io.kubernetes.pod.namespace: flux-system
+        - matchLabels:
+            app.kubernetes.io/component: kustomize-controller
+            io.kubernetes.pod.namespace: flux-system
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: traefik-external-network
+            io.kubernetes.pod.namespace: network
+      toPorts:
+        - ports:
+            - port: "9292"
+              protocol: TCP
+  egress:
+    - toEntities:
+        - kube-apiserver
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: source-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: source-controller
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/component: kustomize-controller
+            io.kubernetes.pod.namespace: flux-system
+        - matchLabels:
+            app.kubernetes.io/component: helm-controller
+            io.kubernetes.pod.namespace: flux-system
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/component: notification-controller
+            io.kubernetes.pod.namespace: flux-system
+      toPorts:
+        - ports:
+            - port: "9090"
+              protocol: TCP
+    - toFQDNs:
+        - matchPattern: "*.github.io"
+        - matchName: github.com
+        - matchName: ghcr.io
+        - matchName: raw.githubusercontent.com
+        - matchName: helm.cilium.io
+        - matchName: helm.traefik.io
+        - matchName: charts.fairwinds.com
+        - matchName: charts.jetstack.io
+        - matchName: registry.developers.crunchydata.com
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toEntities:
+        - kube-apiserver
