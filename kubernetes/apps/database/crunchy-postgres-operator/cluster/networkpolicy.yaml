@@ -1,0 +1,105 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: crunchy-postgres
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: crunchy-postgres
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: crunchy-postgres-pgbouncer
+            io.kubernetes.pod.namespace: database
+        - matchLabels:
+            app.kubernetes.io/name: crunchy-userinit-controller
+            io.kubernetes.pod.namespace: database
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: crunchy-postgres-backup
+            io.kubernetes.pod.namespace: database
+      toPorts:
+        - ports:
+            - port: "8432"
+              protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: prometheus
+            io.kubernetes.pod.namespace: observability
+      toPorts:
+        - ports:
+            - port: "9187"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: crunchy-postgres-backup
+            io.kubernetes.pod.namespace: database
+      toPorts:
+        - ports:
+            - port: "8432"
+              protocol: TCP
+    - toEntities:
+        - kube-apiserver
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: crunchy-postgres-pgbouncer
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: crunchy-postgres-pgbouncer
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: seerr
+            io.kubernetes.pod.namespace: media
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: crunchy-postgres
+            io.kubernetes.pod.namespace: database
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+    - toEntities:
+        - kube-apiserver
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: crunchy-postgres-backup
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: crunchy-postgres-backup
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: crunchy-postgres
+            io.kubernetes.pod.namespace: database
+      toPorts:
+        - ports:
+            - port: "8432"
+              protocol: TCP
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: crunchy-postgres
+            io.kubernetes.pod.namespace: database
+      toPorts:
+        - ports:
+            - port: "8432"
+              protocol: TCP
+    - toEntities:
+        - kube-apiserver

@@ -1,0 +1,19 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: crunchy-userinit-controller
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: crunchy-userinit-controller
+  egress:
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: crunchy-postgres
+            io.kubernetes.pod.namespace: database
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP
+    - toEntities:
+        - kube-apiserver
