@@ -6,3 +6,6 @@ namespace: external-secrets
 resources:
   - ./namespace.yaml
   - ./external-secrets/ks.yaml
+components:
+  - ../../components/default-deny
+  - ../../components/allow-dns
