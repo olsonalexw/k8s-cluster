@@ -7,6 +7,7 @@ resources:
   - ./flux-operator/ks.yaml
   - ./middlewares/ks.yaml
   - ./namespace.yaml
+  - ./networkpolicy.yaml
 components:
   - ../../components/default-deny
   - ../../components/allow-dns
