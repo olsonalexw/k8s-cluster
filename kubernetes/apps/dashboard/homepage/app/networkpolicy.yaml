@@ -1,0 +1,33 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: homepage
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: homepage
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: traefik-internal-network
+            io.kubernetes.pod.namespace: network
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+  egress:
+    - toFQDNs:
+        - matchName: api.weatherapi.com
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP
+    - toCIDR:
+        - 192.168.1.1/32
+        - 192.168.1.2/32
+      toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP
+    - toEntities:
+        - kube-apiserver

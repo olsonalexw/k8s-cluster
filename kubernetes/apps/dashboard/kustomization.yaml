@@ -7,3 +7,6 @@ resources:
   - ./homepage/ks.yaml
   - ./namespace.yaml
   - ./middlewares/ks.yaml
+components:
+  - ../../components/default-deny
+  - ../../components/allow-dns
