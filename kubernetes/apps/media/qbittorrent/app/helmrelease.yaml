@@ -29,7 +29,7 @@ spec:
           pia-tun:
             image:
               repository: ghcr.io/x0lie/pia-tun
-              tag: develop@sha256:02937b709284c5c82de888685a6c3bb444f93f89353159ae43b7a85ecb9521dc
+              tag: develop@sha256:19a16ca6525c7ab3cc35d82b780453171a2c05df3503236211dc9537a66639b1
             env:
               TZ: ${TIMEZONE}
               LOG_LEVEL: "debug"
