@@ -135,6 +135,7 @@ spec:
         - matchPattern: "*.github.io"
         - matchName: github.com
         - matchName: ghcr.io
+        - matchName: pkg-containers.githubusercontent.com
         - matchName: raw.githubusercontent.com
         - matchName: helm.cilium.io
         - matchName: helm.traefik.io
