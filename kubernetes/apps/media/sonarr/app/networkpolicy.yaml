@@ -60,15 +60,5 @@ spec:
         - ports:
             - port: "8080"
               protocol: TCP
-    - toFQDNs:
-        - matchName: api.thetvdb.com
-        - matchName: api4.thetvdb.com
-        - matchName: artworks.thetvdb.com
-        - matchName: image.tmdb.org
-        - matchName: thexem.info
-        - matchPattern: "*.servarr.com"
-        - matchPattern: "*.sonarr.tv"
-      toPorts:
-        - ports:
-            - port: "443"
+            - port: "1080"
               protocol: TCP

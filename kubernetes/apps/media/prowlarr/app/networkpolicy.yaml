@@ -67,9 +67,3 @@ spec:
               protocol: TCP
             - port: "1080"
               protocol: TCP
-    - toFQDNs:
-        - matchPattern: "*.servarr.com"
-      toPorts:
-        - ports:
-            - port: "443"
-              protocol: TCP
