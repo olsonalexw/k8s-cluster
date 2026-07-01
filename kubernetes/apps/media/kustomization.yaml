@@ -17,6 +17,7 @@ resources:
   - ./radarr/ks.yaml
   - ./sabnzbd/ks.yaml
   - ./sonarr/ks.yaml
+  - ./unpackerr/ks.yaml
   - ./plik/ks.yaml
 components:
   - ../../components/default-deny
