@@ -30,6 +30,16 @@ spec:
             env:
               TZ: "America/Detroit"
               RADARR__APPLICATION_URL: "https://radarr.${SECRET_DOMAIN}"
+              RADARR__POSTGRES__HOST: postgres-pgbouncer.database.svc.cluster.local
+              RADARR__POSTGRES__PORT: 5432
+              RADARR__POSTGRES__MAINDB: radarr-main
+              RADARR__POSTGRES__LOGDB: radarr-log
+              RADARR__POSTGRES__USER: radarr
+              RADARR__POSTGRES__PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: radarr-db-secret
+                    key: password
             resources:
               requests:
                 cpu: 15m

@@ -85,6 +85,12 @@ spec:
         - seerr
       password:
         type: AlphaNumeric
+    - name: radarr
+      databases:
+        - radarr-main
+        - radarr-log
+      password:
+        type: AlphaNumeric
 
   backups:
     pgbackrest:
