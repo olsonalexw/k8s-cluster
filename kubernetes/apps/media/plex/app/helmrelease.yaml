@@ -85,9 +85,7 @@ spec:
       config:
         enabled: true
         type: persistentVolumeClaim
-        storageClass: nfs-csi
-        accessMode: ReadWriteMany
-        size: 2Gi
+        existingClaim: plex-config-local
       media:
         enabled: true
         existingClaim: nfs-media-pvc
