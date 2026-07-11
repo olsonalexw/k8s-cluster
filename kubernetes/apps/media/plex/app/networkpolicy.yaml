@@ -39,6 +39,7 @@ spec:
         - matchName: plex.tv
         - matchPattern: "*.plexapp.com"
         - matchPattern: "*.plex.tv"
+        - matchPattern: "*.*.plex.tv"
         - matchPattern: "*.plex.direct"
         - matchPattern: "*.*.*.plex.bz"
       toPorts:
