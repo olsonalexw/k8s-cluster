@@ -65,3 +65,11 @@ spec:
               protocol: TCP
             - port: "1080"
               protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: crunchy-postgres-pgbouncer
+            io.kubernetes.pod.namespace: database
+      toPorts:
+        - ports:
+            - port: "5432"
+              protocol: TCP

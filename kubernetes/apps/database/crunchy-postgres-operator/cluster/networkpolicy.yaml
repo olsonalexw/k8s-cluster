@@ -62,6 +62,9 @@ spec:
         - matchLabels:
             app.kubernetes.io/name: radarr
             io.kubernetes.pod.namespace: media
+        - matchLabels:
+            app.kubernetes.io/name: sonarr
+            io.kubernetes.pod.namespace: media
       toPorts:
         - ports:
             - port: "5432"

@@ -32,6 +32,16 @@ spec:
             env:
               TZ: "America/Detroit"
               SONARR__APPLICATION_URL: "https://sonarr.${SECRET_DOMAIN}"
+              SONARR__POSTGRES__HOST: postgres-pgbouncer.database.svc.cluster.local
+              SONARR__POSTGRES__PORT: 5432
+              SONARR__POSTGRES__MAINDB: sonarr-main
+              SONARR__POSTGRES__LOGDB: sonarr-log
+              SONARR__POSTGRES__USER: sonarr
+              SONARR__POSTGRES__PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: sonarr-db-secret
+                    key: password
             resources:
               requests:
                 cpu: 15m

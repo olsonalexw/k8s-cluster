@@ -91,6 +91,12 @@ spec:
         - radarr-log
       password:
         type: AlphaNumeric
+    - name: sonarr
+      databases:
+        - sonarr-main
+        - sonarr-log
+      password:
+        type: AlphaNumeric
 
   backups:
     pgbackrest:
