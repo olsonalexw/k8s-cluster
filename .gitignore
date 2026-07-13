@@ -2,6 +2,8 @@ Brewfile.lock.json
 Thumbs.db
 kubeconfig
 talosconfig
+baoaddr
+baotoken
 wiki
 .DS_Store
 .decrypted~*.yaml
