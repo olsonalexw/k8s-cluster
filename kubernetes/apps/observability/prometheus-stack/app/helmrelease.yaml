@@ -26,6 +26,8 @@ spec:
         #   name: alertmanager
         #   global:
         #     resolveTimeout: 5m
+        alertmanagerConfigMatcherStrategy:
+          type: None
         storage:
           volumeClaimTemplate:
             spec:
