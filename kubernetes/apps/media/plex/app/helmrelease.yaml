@@ -52,7 +52,7 @@ spec:
               # repository: ghcr.io/home-operations/plex
               # repository: plexinc/pms-docker
               repository: linuxserver/plex
-              tag: 1.42.2@sha256:1720efa8e919a724ff3003cce7c1c0ae91a54e097ca3c8f6713a780c6fd73432
+              tag: 1.42.2@sha256:937a04f1cfc72fe6580970b1965325310d7e61d3d97ea3d2adb269e70d32e10b
             env:
               TZ: ${TIMEZONE}
               PUID: "1001"
