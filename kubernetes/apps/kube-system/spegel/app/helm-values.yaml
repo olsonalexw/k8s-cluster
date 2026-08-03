@@ -9,3 +9,9 @@ serviceMonitor:
 spegel:
   containerdSock: /run/containerd/containerd.sock
   containerdRegistryConfigPath: /etc/cri/conf.d/hosts
+resources:
+  requests:
+    cpu: 15m
+    memory: 298M
+  limits:
+    memory: 298M
