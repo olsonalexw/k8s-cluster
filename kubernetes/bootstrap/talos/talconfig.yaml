@@ -28,8 +28,10 @@ nodes:
     installDisk: "/dev/vda"
     machineSpec:
       secureboot: false
-    talosImageURL: factory.talos.dev/installer/ce4c980550dd2ab1b17bbf2b08801c7eb59418eafe8f279833297925d67c7515
+    talosImageURL: factory.talos.dev/installer/914b38adefad3d77212f565745ed52013bf3a424e7da2730e9e7dad8ee297342
     controlPlane: true
+    patches:
+      - "@./patches/kube01/nvidia-modules.yaml"
     networkInterfaces:
       - deviceSelector:
           hardwareAddr: "00:a0:98:30:e7:14"
