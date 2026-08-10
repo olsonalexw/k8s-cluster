@@ -98,10 +98,26 @@ spec:
         - ports:
             - port: "8432"
               protocol: TCP
+    - fromEndpoints:
+        - matchLabels:
+            postgres-operator.crunchydata.com/pgbackrest-restore: ""
+            io.kubernetes.pod.namespace: database
+      toPorts:
+        - ports:
+            - port: "8432"
+              protocol: TCP
   egress:
     - toEndpoints:
         - matchLabels:
             app.kubernetes.io/name: crunchy-postgres
+            io.kubernetes.pod.namespace: database
+      toPorts:
+        - ports:
+            - port: "8432"
+              protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            postgres-operator.crunchydata.com/pgbackrest-dedicated: ""
             io.kubernetes.pod.namespace: database
       toPorts:
         - ports:
