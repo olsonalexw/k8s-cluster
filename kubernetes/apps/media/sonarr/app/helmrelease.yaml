@@ -65,7 +65,7 @@ spec:
         existingClaim: nfs-media-pvc
       downloads:
         enabled: true
-        existingClaim: nfs-downloads-pvc
+        existingClaim: nfs-torrents-pvc
 
     defaultPodOptions:
       securityContext:

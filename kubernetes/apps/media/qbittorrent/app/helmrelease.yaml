@@ -109,6 +109,6 @@ spec:
           - path: /media
       downloads:
         enabled: true
-        existingClaim: nfs-downloads-pvc
+        existingClaim: nfs-torrents-pvc
         globalMounts:
           - path: /downloads

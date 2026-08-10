@@ -7,7 +7,6 @@ resources:
   - ./namespace.yaml
   - ./middlewares/ks.yaml
   - ./autobrr/ks.yaml
-  - ./downloads-pv.yaml
   - ./media-pv.yaml
   - ./seerr/ks.yaml
   - ./notifiarr/ks.yaml
@@ -19,6 +18,7 @@ resources:
   - ./sonarr/ks.yaml
   - ./unpackerr/ks.yaml
   - ./plik/ks.yaml
+  - ./torrents-pv.yaml
 components:
   - ../../components/default-deny
   - ../../components/allow-dns
