@@ -56,6 +56,7 @@ spec:
               QBT_SHARE_LIMITS: "false"
               QBT_TAG_UPDATE: "true"
               QBT_CAT_UPDATE: "true"
+              QBT_RECHECK: "true"
             envFrom:
               - secretRef:
                   name: qbittorrent-login
@@ -94,33 +95,6 @@ spec:
             runAsNonRoot: true
             runAsUser: 1001
             seccompProfile: { type: RuntimeDefault }
-      recheck:
-        type: cronjob
-        cronjob:
-          <<: *cronJobSpec
-          schedule: "@daily"
-        initContainers:
-          copy-config:
-            image:
-              repository: busybox
-              tag: latest
-            command:
-              - sh
-              - -c
-              - cp /tmp/config.yml /config/config.yml || true && chmod 664 /config/config.yml || true
-        containers:
-          app:
-            env:
-              TZ: ${TIMEZONE}
-              QBT_CONFIG_DIR: /config
-              QBT_RECHECK: "true"
-            envFrom:
-              - secretRef:
-                  name: qbittorrent-login
-            image: *image
-            resources: *resources
-            securityContext: *securityContext
-        pod: *podSecurityContext
 
     persistence:
       config-dir:
