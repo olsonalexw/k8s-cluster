@@ -29,30 +29,6 @@ spec:
     - name: qbittorrent
       namespace: media
   values:
-    initContainers:
-      - name: symlink-large-pool
-        image: busybox:1.37
-        command:
-          - sh
-          - -c
-          - |
-            # Create symlink if /media mount exists
-            if [ -d "/media/downloads/qbittorrent" ]; then
-              mkdir -p /downloads/manual
-              ln -s /media/downloads/qbittorrent/complete /downloads/manual/complete
-              ln -s /media/downloads/qbittorrent/incomplete /downloads/manual/incomplete
-              echo "Symlinked /media to /downloads/manual"
-            else
-              echo "Warning: /media not mounted; skipping symlink"
-            fi
-        volumeMounts:
-          - name: downloads
-            mountPath: /downloads
-          - name: media
-            mountPath: /media
-        securityContext:
-          runAsUser: 1001
-
     controllers:
       main:
         type: cronjob
@@ -186,11 +162,6 @@ spec:
         globalMounts:
           - path: /config/trim_seeders.py
             subPath: trim_seeders.py
-      media:
-        enabled: true
-        existingClaim: nfs-media-pvc
-        globalMounts:
-          - path: /media
       downloads:
         enabled: true
         existingClaim: nfs-torrents-pvc

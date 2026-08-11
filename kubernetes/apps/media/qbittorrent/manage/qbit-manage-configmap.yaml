@@ -10,35 +10,13 @@ data:
       pass: !ENV QBT_PASS
 
     directory:
-      root_dir: /downloads/qbittorrent/complete  # Base for orphaned/noHL/unregistered checks
-      remote_dir: /downloads  # Optional: Host path if qbit_manage is outside qBittorrent Docker
-      recycle_bin: /downloads/qbittorrent/complete/.RecycleBin  # For deleted file staging
-      torrents_dir: /config/qBittorrent/BT_backup  # Optional: qBittorrent's .torrent dir for backups
-      orphaned_dir: /downloads/qbittorrent/complete/orphaned_data  # Disposable orphaned files
+      root_dir: /downloads/complete
 
-    cat:  # Mandatory: Map ALL qBittorrent categories to their complete save paths
-      uncategorized: /downloads/qbittorrent/*  # Catch-all for uncategorized
-      manual: /media/downloads/qbittorrent/complete/manual/*
-      series: /downloads/qbittorrent/complete/series/*  # Use * for subdirs (e.g., seasons)
-      movies: /downloads/qbittorrent/complete/movies/*
-      ratio: /downloads/qbittorrent/complete/ratio/*
-
-    nohardlinks:  # NEW: List of categories to check for external hardlinks
-      - uncategorized:  # Catch-all
-          ignore_root_dir: true  # Ignore internal links in complete/
-          # exclude_tags: [noHL, ~share_limit]  # Optional: Skip these tags (uncomment/add if needed)
-      - manual:
-          ignore_root_dir: true
-          # exclude_tags: []
-      - series:
-          ignore_root_dir: true
-          # exclude_tags: []
-      - movies:
-          ignore_root_dir: true
-          # exclude_tags: []
-      - ratio:
-          ignore_root_dir: true
-          # exclude_tags: []
+    cat:
+      manual: /downloads/complete/manual/*
+      series: /downloads/complete/series/*
+      movies: /downloads/complete/movies/*
+      ratio: /downloads/complete/ratio/*
 
     tracker:
       stackoverflow.tech:
@@ -47,63 +25,3 @@ data:
         tag: iptorrents
       bgp.technology:
         tag: iptorrents
-
-    share_limits:
-      ipt:
-        priority: 1
-        include_any_tags: ["iptorrents"]
-        max_ratio: 1.1
-        max_seeding_time: 337h
-        cleanup: false
-        min_seeding_time: 0h
-        min_num_seeds: 0
-        resume_torrent_after_change: true
-        add_group_to_tag: true
-
-    recyclebin:
-      enable: true
-      empty_after_x_days: 7
-      save_torrents: false
-      split_by_category: false
-
-    orphaned:
-      empty_after_x_days: 7
-      exclude_patterns: ["*/incomplete/*", "*/manual/*"]
-      max_orphaned_files_to_delete: 50
-      min_file_age_minutes: 0
-
-    settings:
-      # Category update settings
-      cat_update_all: true  # bool: Update all categories, not just configured ones
-      cat_filter_completed: true  # bool: Filter completed torrents for category updates
-
-      # Force AutoTMM settings
-      force_auto_tmm: false  # bool: Force torrents to use AutoTMM regardless of qBittorrent setting
-      force_auto_tmm_ignore_tags: []  # list[str]: Tags to ignore when forcing AutoTMM
-
-      # Stalled torrent tagging
-      tag_stalled_torrents: true  # bool: Tag stalled downloading torrents (your custom override)
-      stalled_tag: stalledDL  # str: Tag name for stalled torrents
-
-      # Tracker error tagging
-      tracker_error_tag: issue  # str: Tag name for torrents with tracker errors (your custom)
-      tag_tracker_error_filter_completed: true  # bool: Filter completed torrents for tracker error tagging
-
-      # Remove unregistered torrents
-      rem_unregistered_grace_minutes: 10  # int: Grace period in minutes before removing unregistered torrents
-      rem_unregistered_ignore_list: []  # list[str]: List of torrent names/hashes to ignore for removal
-      rem_unregistered_filter_completed: false  # bool: Filter completed torrents for unregistered removal
-
-      # No hardlinks tagging
-      nohardlinks_tag: noHL  # str: Tag name for torrents without hardlinks (your custom)
-      tag_nohardlinks_filter_completed: true  # bool: Filter completed torrents for no-hardlinks tagging
-
-      # Share limits
-      share_limits_tag: ~share_limit  # str: Tag name for torrents hitting share limits (your custom)
-      share_limits_filter_completed: true  # bool: Filter completed torrents for share limits
-      share_limits_min_seeding_time_tag: MinSeedTimeNotReached  # str: Tag for min seeding time not met
-      share_limits_min_num_seeds_tag: MinSeedsNotMet  # str: Tag for min seeds not met
-      share_limits_last_active_tag: LastActiveLimitNotReached  # str: Tag for last active limit not reached
-
-      # qBittorrent defaults override
-      disable_qbt_default_share_limits: true  # bool: Disable qBittorrent's built-in share ratio limits (your custom)
