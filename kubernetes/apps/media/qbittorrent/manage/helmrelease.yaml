@@ -47,8 +47,7 @@ spec:
               - sh
               - -c
               - cp /tmp/config.yml /config/config.yml || true && chmod 664 /config/config.yml || true
-        containers:
-          app:
+          tag:
             env:
               TZ: ${TIMEZONE}
               QBT_CONFIG_DIR: /config
@@ -74,6 +73,19 @@ spec:
               allowPrivilegeEscalation: false
               capabilities: { drop: ["ALL"] }
               readOnlyRootFilesystem: true
+        containers:
+          trim:
+            command:
+              - python3
+              - /config/trim_seeders.py
+            env:
+              TZ: ${TIMEZONE}
+            envFrom:
+              - secretRef:
+                  name: qbittorrent-login
+            image: *image
+            resources: *resources
+            securityContext: *securityContext
         pod: &podSecurityContext
           automountServiceAccountToken: false
           securityContext:
@@ -108,32 +120,6 @@ spec:
             image: *image
             resources: *resources
             securityContext: *securityContext
-        pod: *podSecurityContext
-      trim:
-        type: cronjob
-        cronjob:
-          <<: *cronJobSpec
-          schedule: "@daily"
-        containers:
-          app:
-            command:
-              - sh
-              - -c
-              - |
-                pip install --user qbittorrent-api && python /config/trim_seeders.py
-            env:
-              TZ: ${TIMEZONE}
-              HOME: /tmp  # Writable for --user install
-            envFrom:
-              - secretRef:
-                  name: qbittorrent-login
-            image:
-              repository: python
-              tag: 3.14-slim
-            resources: *resources
-            securityContext:
-              <<: *securityContext
-              readOnlyRootFilesystem: false
         pod: *podSecurityContext
 
     persistence:

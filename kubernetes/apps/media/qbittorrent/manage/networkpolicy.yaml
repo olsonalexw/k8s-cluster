@@ -17,7 +17,6 @@ spec:
               protocol: TCP
     - toFQDNs:
         - matchName: raw.githubusercontent.com
-        - matchName: pypi.org
       toPorts:
         - ports:
             - port: "443"
