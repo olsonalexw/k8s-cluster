@@ -15,7 +15,7 @@ data:
     username = os.getenv('QBT_USER')
     password = os.getenv('QBT_PASS')
     if username and password:
-        client = Client(host='qbittorrent.media.svc.cluster.local', port=80, username=username, password=password)
+        client = Client(host='qbittorrent.media.svc.cluster.local', port=8080, username=username, password=password)
     else:
         raise ValueError("QBT_USER and QBT_PASS env vars must be set")
 
