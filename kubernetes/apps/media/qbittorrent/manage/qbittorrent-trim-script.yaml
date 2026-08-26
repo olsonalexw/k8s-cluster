@@ -19,14 +19,15 @@ data:
     else:
         raise ValueError("QBT_USER and QBT_PASS env vars must be set")
 
-    # Constants (unchanged)
-    MIN_RATIO = 1.1
-    MIN_SEEDING_HOURS = 337
-    MAX_SEEDERS = 15
-    IPT_TAG = 'iptorrents'
     DRY_RUN = False
 
-    # History file (unchanged)
+    # Processed sequentially, grouped by tag
+    TRACKER_POOLS = [
+        {"tag": "iptorrents", "min_ratio": 1.1, "min_seeding_hours": 337, "max_seeders": 15},
+        {"tag": "torrentday", "min_ratio": 1.1, "min_seeding_hours": 73, "max_seeders": 15},
+    ]
+
+    # History file (shared across all pools)
     history_file = '/downloads/seeder_history.json'
     try:
         with open(history_file, 'r') as f:
@@ -35,65 +36,66 @@ data:
         history = {}
 
     current_ts = time.time()
-
-    # Get seeding torrents (unchanged)
-    torrents = client.torrents_info(status_filter='seeding', tag=IPT_TAG)
-
-    # Prepare data (unchanged, but add content_path)
-    torrent_data = []
-    torrent_paths = {}  # Store paths for later deletion
-    for t in torrents:
-        h = t.hash
-        current_up = t.uploaded
-        current_st = t.seeding_time
-        delta_up = current_up
-        delta_st = current_st
-        if h in history and history[h]:
-            hist_list = sorted(history[h], key=lambda x: x['ts'])
-            three_days_ago = current_ts - 3 * 86400
-            for entry in hist_list:
-                if entry['ts'] >= three_days_ago:
-                    delta_up = current_up - entry['up']
-                    delta_st = current_st - entry['st']
-                    break
-        prod_hours = max(delta_st / 3600.0, 1e-6)
-        productivity = (delta_up / 1e9) / prod_hours
-        seeding_hours = current_st / 3600.0
-        is_eligible = t.ratio >= MIN_RATIO or seeding_hours >= MIN_SEEDING_HOURS
-        torrent_data.append((productivity, is_eligible, h, t.name, seeding_hours, t.ratio, t.category))
-        torrent_paths[h] = t.content_path  # Capture path for manual delete
-
-    # Update history (unchanged)
     new_history = {}
-    for t in torrents:
-        h = t.hash
-        if h not in new_history:
-            new_history[h] = []
-        if h in history:
-            new_history[h] = history[h][:]
-        new_history[h].append({'ts': current_ts, 'up': t.uploaded, 'st': t.seeding_time})
-        hist_list = sorted(new_history[h], key=lambda x: x['ts'])
-        prune_ts = current_ts - 5 * 86400
-        hist_list = [e for e in hist_list if e['ts'] >= prune_ts]
-        new_history[h] = hist_list
 
-    with open(history_file, 'w') as f:
-        json.dump(new_history, f)
+    def process_pool(tag, min_ratio, min_seeding_hours, max_seeders):
+        print(f"\n{'=' * 80}")
+        print(f"Processing tracker pool: tag='{tag}' (min_ratio={min_ratio}, min_seeding_hours={min_seeding_hours}, max_seeders={max_seeders})")
+        print(f"{'=' * 80}")
 
-    total = len(torrent_data)
-    print(f"Total seeding torrents with tag '{IPT_TAG}': {total}")
-    print("\nProductivity report:")
-    print("-" * 80)
-    print(f"{'Name':<50} {'Prod (GB/h)':<12} {'Hours':<8} {'Ratio':<6} {'Eligible'}")
-    print("-" * 80)
-    sorted_for_print = sorted(torrent_data, key=lambda x: x[0], reverse=True)
-    for prod, eligible, hash_val, name, hours, ratio, category in sorted_for_print:
-        print(f"{name[:49]:<50} {prod:<12.4f} {hours:<8.1f} {ratio:<6.3f} {eligible}")
+        torrents = client.torrents_info(status_filter='seeding', tag=tag)
 
-    if total <= MAX_SEEDERS:
-        print(f"\nTotal at or below {MAX_SEEDERS}; no deletions needed.")
-    else:
-        excess = total - MAX_SEEDERS
+        torrent_data = []
+        torrent_paths = {}  # Store paths for later deletion
+        for t in torrents:
+            h = t.hash
+            current_up = t.uploaded
+            current_st = t.seeding_time
+            delta_up = current_up
+            delta_st = current_st
+            if h in history and history[h]:
+                hist_list = sorted(history[h], key=lambda x: x['ts'])
+                three_days_ago = current_ts - 3 * 86400
+                for entry in hist_list:
+                    if entry['ts'] >= three_days_ago:
+                        delta_up = current_up - entry['up']
+                        delta_st = current_st - entry['st']
+                        break
+            prod_hours = max(delta_st / 3600.0, 1e-6)
+            productivity = (delta_up / 1e9) / prod_hours
+            seeding_hours = current_st / 3600.0
+            is_eligible = t.ratio >= min_ratio or seeding_hours >= min_seeding_hours
+            torrent_data.append((productivity, is_eligible, h, t.name, seeding_hours, t.ratio, t.category))
+            torrent_paths[h] = t.content_path  # Capture path for manual delete
+
+        # Update history for this pool's torrents
+        for t in torrents:
+            h = t.hash
+            if h not in new_history:
+                new_history[h] = []
+            if h in history:
+                new_history[h] = history[h][:]
+            new_history[h].append({'ts': current_ts, 'up': t.uploaded, 'st': t.seeding_time})
+            hist_list = sorted(new_history[h], key=lambda x: x['ts'])
+            prune_ts = current_ts - 5 * 86400
+            hist_list = [e for e in hist_list if e['ts'] >= prune_ts]
+            new_history[h] = hist_list
+
+        total = len(torrent_data)
+        print(f"Total seeding torrents with tag '{tag}': {total}")
+        print("\nProductivity report:")
+        print("-" * 80)
+        print(f"{'Name':<50} {'Prod (GB/h)':<12} {'Hours':<8} {'Ratio':<6} {'Eligible'}")
+        print("-" * 80)
+        sorted_for_print = sorted(torrent_data, key=lambda x: x[0], reverse=True)
+        for prod, eligible, hash_val, name, hours, ratio, category in sorted_for_print:
+            print(f"{name[:49]:<50} {prod:<12.4f} {hours:<8.1f} {ratio:<6.3f} {eligible}")
+
+        if total <= max_seeders:
+            print(f"\nTotal at or below {max_seeders}; no deletions needed.")
+            return
+
+        excess = total - max_seeders
         print(f"\nExcess torrents: {excess}. Identifying candidates for deletion...")
 
         sorted_torrents = sorted(torrent_data, key=lambda x: x[0])
@@ -136,3 +138,9 @@ data:
 
         final_total = total - num_to_delete
         print(f"\nProcessed {total} torrents. Will have {final_total} seeding torrents remaining.")
+
+    for pool in TRACKER_POOLS:
+        process_pool(pool["tag"], pool["min_ratio"], pool["min_seeding_hours"], pool["max_seeders"])
+
+    with open(history_file, 'w') as f:
+        json.dump(new_history, f)
