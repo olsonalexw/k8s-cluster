@@ -31,7 +31,7 @@ spec:
           main:
             image:
               repository: ghcr.io/notifiarr/notifiarr
-              tag: v0.9.1@sha256:10c9d20bc359f61d610461c11fb3b719cee75b7d4a0d8a3e5b3d00b9a31c48dd
+              tag: v0.9.7@sha256:2b0a8784d8a43177cbc5a19110e7eb066d9321572c3352eda79c0a89898c7735
             env:
               TZ: ${TIMEZONE}
             probes:
